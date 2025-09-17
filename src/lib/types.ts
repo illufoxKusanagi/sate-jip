@@ -14,3 +14,15 @@ export interface LocationData {
   eCat: string;
   status: "active" | "inactive" | "maintenance";
 }
+
+export interface AdminData {
+  id: string;
+  nama: string;
+  jabatan: string;
+  instansi: string;
+  email: string;
+  noTelp: string;
+  alamat: string;
+  tanggalBergabung: string;
+  status: "aktif" | "non-aktif";
+}
