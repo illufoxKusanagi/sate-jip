@@ -2,7 +2,7 @@
 
 import MapSearch from "@/components/map/map-search";
 import MapStyles from "@/components/map/map-styles";
-import { AppSidebar } from "@/components/ui/app-sidebar";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,8 +14,24 @@ import { AdminTable } from "@/components/chart/admin-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MainMap from "@/components/map/main-map";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChevronDown, ChevronsUpDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Home() {
+  const user = {
+    name: "arief",
+    email: "ariefsatria@gmail.com",
+    avatar: "",
+  };
+
   return (
     <>
       <SidebarProvider defaultOpen={true}>
@@ -23,15 +39,41 @@ export default function Home() {
           <AppSidebar />
           <SidebarTrigger className="ml-4 mt-4" size={"lg"} />
           <main className="flex-1 overflow-y-auto relative">
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 flex flex-row gap-4">
               <ModeToggle />
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button size={"md"} variant={"outline"}>
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback className="rounded-lg">IK</AvatarFallback>
+                    </Avatar>
+                    <div className="flex text-left justify-center">
+                      <span className="truncate body-small-regular">
+                        halo, {user.name}
+                      </span>
+                    </div>
+                    <ChevronDown className="ml-auto size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Team</DropdownMenuItem>
+                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* <div className="flex flex-row gap-4 items-center"> */}
+              {/* </div> */}
             </div>
             <div className="flex flex-col mx-20 my-10 rounded-lg">
               <Tabs defaultValue="map">
                 <TabsList>
-                  <TabsTrigger value="map">Map</TabsTrigger>
-                  <TabsTrigger value="admins">Admin</TabsTrigger>
-                  <TabsTrigger value="locations">Locations</TabsTrigger>
+                  <TabsTrigger value="map">Dashboard</TabsTrigger>
+                  <TabsTrigger value="admins">Penanggungjawab</TabsTrigger>
+                  <TabsTrigger value="locations">Titik Lokasi</TabsTrigger>
                 </TabsList>
                 <TabsContent value="map">
                   <div className="flex flex-col gap-4">
@@ -45,11 +87,11 @@ export default function Home() {
                   </div>
                 </TabsContent>
                 <TabsContent value="admins">
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 p-4">
                     <div className="flex justify-between items-center">
-                      <h2 className="text-2xl font-bold">Admin Management</h2>
+                      <p className="heading-3">Dasbor Penanggungjawab</p>
                       <Button asChild>
-                        <Link href="/internetData">Add Admin</Link>
+                        <Link href="/internetData">Tambahkan PIC</Link>
                       </Button>
                     </div>
                     <AdminTable />
@@ -59,10 +101,10 @@ export default function Home() {
                   <div className="flex flex-col gap-4">
                     <div className="flex justify-between items-center">
                       <h2 className="text-2xl font-bold">
-                        Location Management
+                        Dasbor Titik Lokasi
                       </h2>
                       <Button asChild>
-                        <Link href="/internetData">Add Location</Link>
+                        <Link href="/internetData">Tambahkan Lokasi</Link>
                       </Button>
                     </div>
                     <LocationsTable />

@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "../ui/badge";
 import { LocationData } from "@/lib/types";
-import { locationData } from "@/lib/data/locations";
+// import { locationData } from "@/lib/data/locations";
 
 interface LocationsTableProps {
   onViewLocation?: (location: LocationData) => void;
@@ -65,7 +65,7 @@ export const columns: ColumnDef<LocationData>[] = [
     },
     cell: ({ row }) => (
       <div
-        className="font-medium max-w-[200px] truncate"
+        className="font-medium w-[200px] truncate"
         title={row.getValue("locationName")}
       >
         {row.getValue("locationName")}
@@ -97,10 +97,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "opdPengampu",
     header: "OPD Pengampu",
     cell: ({ row }) => (
-      <div
-        className="max-w-[150px] truncate"
-        title={row.getValue("opdPengampu")}
-      >
+      <div className="w-[150px] text-wrap" title={row.getValue("opdPengampu")}>
         {row.getValue("opdPengampu")}
       </div>
     ),
@@ -109,7 +106,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "ispName",
     header: "ISP Provider",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("ispName")}</div>
+      <div className="font-medium ">{row.getValue("ispName")}</div>
     ),
   },
   {
@@ -143,6 +140,30 @@ export const columns: ColumnDef<LocationData>[] = [
 ];
 
 export function LocationsTable({ onViewLocation }: LocationsTableProps) {
+  const [locationData, setlocationData] = React.useState<LocationData[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  // Fetch admin data from API
+  React.useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const response = await fetch("/api/locations");
+        if (response.ok) {
+          const data = await response.json();
+          setlocationData(data);
+        } else {
+          console.error("Failed to fetch locations");
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocation();
+  }, []);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -223,6 +244,13 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
     },
   });
 
+  if (loading) {
+    return (
+      <>
+        <p>Loading...</p>
+      </>
+    );
+  }
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">

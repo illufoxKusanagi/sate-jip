@@ -44,6 +44,7 @@ import {
   Plus,
   Search,
   Settings,
+  Ticket,
   User,
 } from "lucide-react";
 
@@ -61,7 +62,8 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { NavUser } from "./nav-user";
+import { NavUser } from "../ui/nav-user";
+import Link from "next/link";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -74,14 +76,14 @@ export function AppSidebar() {
 
   const items = [
     {
-      title: "Home",
+      title: "Dashboard",
       url: "#",
       icon: Home,
     },
     {
       title: "Inbox",
       url: "#",
-      icon: Inbox,
+      icon: Ticket,
     },
     {
       title: "Calendar",
@@ -136,10 +138,10 @@ export function AppSidebar() {
                 {items.map((item) => (
                   <SidebarHeader key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarHeader>
                 ))}
