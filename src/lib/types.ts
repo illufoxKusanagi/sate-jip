@@ -18,8 +18,11 @@ export interface LocationData {
 export interface AdminData {
   id: string;
   nama: string;
-  nip: string;
   jabatan: string;
   instansi: string;
-  whatsapp: string;
+  email: string;
+  noTelp: string;
+  alamat: string;
+  tanggalBergabung: string;
+  status: "aktif" | "non-aktif";
 }

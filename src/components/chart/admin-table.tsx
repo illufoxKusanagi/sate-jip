@@ -43,106 +43,103 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "../ui/badge";
 import { AdminData } from "@/lib/types";
-// import { adminData } from "@/lib/data/admins";
+import { adminData } from "@/lib/data/admins";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
   {
     accessorKey: "nama",
     header: ({ column }) => {
       return (
-        <div className="flex flex-row gap-2 items-center">
-          <p className="body-medium-regular">Nama</p>
-          <Button
-            variant="outline"
-            size={"icon"}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="justify-center"
-          >
-            <ArrowUpDown />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0 font-semibold"
+        >
+          Nama
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="w-[200px] font-medium text-wrap">
-        {row.getValue("nama")}
-      </div>
+      <div className="font-medium">{row.getValue("nama")}</div>
     ),
   },
   {
     accessorKey: "jabatan",
     header: "Jabatan",
     cell: ({ row }) => (
-      <div className="w-[240px] text-wrap" title={row.getValue("jabatan")}>
+      <div className="max-w-[180px] truncate" title={row.getValue("jabatan")}>
         {row.getValue("jabatan")}
       </div>
     ),
   },
   {
-    accessorKey: "nip",
-    header: "NIP",
-    cell: ({ row }) => (
-      <div className="w-[120px] text-wrap" title={row.getValue("nip")}>
-        {row.getValue("nip")}
-      </div>
-    ),
-  },
-  {
     accessorKey: "instansi",
-    header: "Nama Perangkat Daerah",
+    header: "Instansi",
     cell: ({ row }) => (
-      <div className="w-[240px] text-wrap" title={row.getValue("instansi")}>
+      <div className="max-w-[200px] truncate" title={row.getValue("instansi")}>
         {row.getValue("instansi")}
       </div>
     ),
   },
   {
-    accessorKey: "whatsapp",
-    header: "No. WhatsApp",
+    accessorKey: "email",
+    header: "Email",
     cell: ({ row }) => (
-      <div className="w-[100px]" title={row.getValue("whatsapp")}>
-        {row.getValue("whatsapp")}
+      <div
+        className="font-mono text-sm max-w-[200px] truncate"
+        title={row.getValue("email")}
+      >
+        {row.getValue("email")}
       </div>
     ),
+  },
+  {
+    accessorKey: "noTelp",
+    header: "No. Telepon",
+    cell: ({ row }) => (
+      <div className="font-mono text-sm">{row.getValue("noTelp")}</div>
+    ),
+  },
+  {
+    accessorKey: "tanggalBergabung",
+    header: "Tanggal Bergabung",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("tanggalBergabung"));
+      return (
+        <div className="text-sm">
+          {date.toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      const variants = {
+        aktif: "bg-green-100 text-green-800 border-green-300",
+        "non-aktif": "bg-red-100 text-red-800 border-red-300",
+      };
+
+      return (
+        <Badge
+          variant="outline"
+          className={variants[status as keyof typeof variants]}
+        >
+          {status}
+        </Badge>
+      );
+    },
   },
 ];
 
 export function AdminTable() {
-  const [adminData, setAdminData] = React.useState<AdminData[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-
-  // Fetch admin data from API
-  React.useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const response = await fetch("/api/admins");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          throw new Error("Response is not JSON");
-        }
-
-        const data = await response.json();
-        setAdminData(data);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch admins"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAdmins();
-  }, []);
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -176,7 +173,13 @@ export function AdminTable() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => (window.location.href = `tel:${admin.whatsapp}`)}
+                onClick={() => (window.location.href = `mailto:${admin.email}`)}
+              >
+                <Mail className="mr-2 h-4 w-4" />
+                Send Email
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => (window.location.href = `tel:${admin.noTelp}`)}
               >
                 <Phone className="mr-2 h-4 w-4" />
                 Call Phone
@@ -216,27 +219,11 @@ export function AdminTable() {
     },
   });
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div>Loading admins...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
         <Input
-          placeholder="Cari PIC..."
+          placeholder="Cari admin..."
           value={(table.getColumn("nama")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("nama")?.setFilterValue(event.target.value)
@@ -278,7 +265,7 @@ export function AdminTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-semibold p-4">
+                    <TableHead key={header.id} className="font-semibold">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -300,7 +287,7 @@ export function AdminTable() {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -324,7 +311,10 @@ export function AdminTable() {
       </div>
 
       <div className="flex items-center justify-between space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground"></div>
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
