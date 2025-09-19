@@ -81,25 +81,25 @@ export function AppSidebar() {
       icon: Home,
     },
     {
-      title: "Inbox",
+      title: "E-TIcketing",
       url: "#",
       icon: Ticket,
     },
     {
-      title: "Calendar",
+      title: "Kalender Kegiatan",
       url: "#",
       icon: Calendar,
     },
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-    },
+    // {
+    //   title: "Search",
+    //   url: "#",
+    //   icon: Search,
+    // },
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: Settings,
+    // },
   ];
   return (
     <Sidebar variant="floating" collapsible="icon">

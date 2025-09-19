@@ -24,8 +24,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChartPieLegend } from "@/components/chart/pie-chart";
-import { ChartPieLabelWithLegend } from "@/components/chart/pie-chart-new";
 
 export default function Home() {
   const user = {
@@ -44,17 +42,19 @@ export default function Home() {
             <div className="absolute top-4 right-4 flex flex-row gap-4">
               <ModeToggle />
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex flex-row gap-3 px-4 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">IK</AvatarFallback>
-                  </Avatar>
-                  <div className="flex text-left justify-center">
-                    <span className="truncate body-small-regular">
-                      halo, {user.name}
-                    </span>
-                  </div>
-                  <ChevronDown className="ml-auto size-4" />
+                <DropdownMenuTrigger>
+                  <Button size={"md"} variant={"outline"}>
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback className="rounded-lg">IK</AvatarFallback>
+                    </Avatar>
+                    <div className="flex text-left justify-center">
+                      <span className="truncate body-small-regular">
+                        halo, {user.name}
+                      </span>
+                    </div>
+                    <ChevronDown className="ml-auto size-4" />
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -65,6 +65,8 @@ export default function Home() {
                   <DropdownMenuItem>Subscription</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              {/* <div className="flex flex-row gap-4 items-center"> */}
+              {/* </div> */}
             </div>
             <div className="flex flex-col mx-20 my-10 rounded-lg">
               <Tabs defaultValue="map">
@@ -79,8 +81,8 @@ export default function Home() {
                       <MainMap />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
+                      <ChartBarLabel />
                       <ChartAreaInteractive />
-                      <ChartPieLabelWithLegend />
                     </div>
                   </div>
                 </TabsContent>
