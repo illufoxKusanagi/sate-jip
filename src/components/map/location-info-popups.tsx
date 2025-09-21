@@ -70,13 +70,13 @@ export function LocationInfoPopup({
         </div>
 
         <div className="space-y-3 text-sm">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="min-w-0">
+          <div className="flex flex-row gap-3 justify-between">
+            <div className="min-w-0 text-wrap max-w-40">
               <span className="text-muted-foreground text-xs font-medium block mb-1">
                 OPD Pengampu
               </span>
               <p
-                className="font-medium text-sm truncate"
+                className="font-medium text-sm text-wrap"
                 title={location.opdPengampu}
               >
                 {location.opdPengampu}
@@ -109,7 +109,7 @@ export function LocationInfoPopup({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-row gap-3 justify-between">
               <div>
                 <span className="text-muted-foreground text-xs font-medium block mb-1">
                   Ratio
@@ -152,11 +152,14 @@ export function LocationInfoPopup({
         </div>
 
         <div className="mt-4 pt-3 border-t">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="font-mono">ID: {location.id}</span>
-            <span className="font-mono">
-              {location.latitude}, {location.longitude}
-            </span>
+          <div className="flex flex-row justify-between text-xs text-muted-foreground">
+            <p className="font-mono text-wrap max-w-40">ID: {location.id}</p>
+            {/* <span className="font-mono">ID: {location.id}</span> */}
+            <div className="flex flex-col font-mono justify-end self-end">
+              <p className="">Koordinat:</p>
+              <p>{location.latitude}</p>
+              <p>{location.longitude}</p>
+            </div>
           </div>
         </div>
       </div>

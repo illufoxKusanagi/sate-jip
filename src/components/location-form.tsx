@@ -29,15 +29,14 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
 
 const formSchema = z.object({
   locationName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  coordinate: z.email({
-    message: "Please enter a valid email address.",
-  }),
+  latitude: z.string().min(1, { message: "Please enter latitude" }),
+  longitude: z.string().min(1, { message: "Please enter longitude" }),
   opdPengampu: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
@@ -68,11 +67,13 @@ const formSchema = z.object({
 });
 
 export function LocationForm({ className, ...props }: ComponentProps<"div">) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       locationName: "",
-      coordinate: "",
+      latitude: "",
+      longitude: "",
       opdPengampu: "",
       opdType: "",
       ispName: "",
@@ -86,6 +87,13 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    try {
+      const locationData = {
+        locationName: values.locationName,
+        coordinate: `${values.latitude}`,
+      };
+    } catch (error) {}
     console.log(values);
     // Handle form submission here
   }
@@ -118,7 +126,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="coordinate"
+                    name="latitude"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>Latitude (Garis Lintang) *</FormLabel>
@@ -136,7 +144,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
                   />
                   <FormField
                     control={form.control}
-                    name="coordinate"
+                    name="longitude"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>Longitude (Garis Bujur) *</FormLabel>

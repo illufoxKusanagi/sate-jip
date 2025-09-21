@@ -41,31 +41,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "../ui/badge";
 import { AdminData } from "@/lib/types";
 import { useEffect, useState } from "react";
-// import { adminData } from "@/lib/data/admins";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
   {
     accessorKey: "nama",
     header: ({ column }) => {
       return (
-        <div className="flex flex-row gap-2 items-center">
-          <p className="body-medium-regular">Nama</p>
-          <Button
-            variant="outline"
-            size={"icon"}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="justify-center"
-          >
-            <ArrowUpDown />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto font-semibold"
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="w-[200px] font-medium text-wrap">
+      <div className="w-[200px] font-medium text-wrap px-3">
         {row.getValue("nama")}
       </div>
     ),
@@ -113,7 +108,6 @@ export function AdminTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch admin data from API
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
@@ -222,14 +216,6 @@ export function AdminTable() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
@@ -276,7 +262,7 @@ export function AdminTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-semibold p-4">
+                    <TableHead key={header.id} className="font-semibold p-2">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -298,7 +284,7 @@ export function AdminTable() {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4">
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -321,8 +307,7 @@ export function AdminTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-between space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground"></div>
+      <div className="flex items-center justify-end space-x-2">
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>

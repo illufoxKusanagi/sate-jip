@@ -1,14 +1,9 @@
 "use client";
 
-import MapSearch from "@/components/map/map-search";
-import MapStyles from "@/components/map/map-styles";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartBarLabel } from "@/components/chart/chart-bar-label";
-import { ChartAreaInteractive } from "@/components/chart/chart-area-label";
-import { DataTableDemo } from "@/components/chart/data-table-demo";
 import { LocationsTable } from "@/components/chart/locations-table";
 import { AdminTable } from "@/components/chart/admin-table";
 import { Button } from "@/components/ui/button";
@@ -80,17 +75,17 @@ export default function Home() {
                     <div className="flex flex-row w-full gap-4">
                       <ChartPie
                         dataKey="infrastructureDistribution"
-                        title="Infra jaringan"
+                        title="Diagram Infrastruktur Jaringan"
                         className="w-full"
                       />
                       <ChartPie
                         dataKey="ispDistributions"
-                        title="Custom ISP Chart"
+                        title="Diagram Persebaran ISP"
                         className="w-full"
                       />
                       <ChartPie
                         dataKey="internetSpeed"
-                        title="Kecepatan"
+                        title="Diagram Kecepatan Internet"
                         className="w-full"
                       />
                     </div>

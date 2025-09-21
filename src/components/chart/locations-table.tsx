@@ -43,7 +43,7 @@ import {
 import { Badge } from "../ui/badge";
 import { LocationData } from "@/lib/types";
 import { useEffect, useState } from "react";
-// import { locationData } from "@/lib/data/locations";
+import { Checkbox } from "../ui/checkbox";
 
 interface LocationsTableProps {
   onViewLocation?: (location: LocationData) => void;
@@ -66,7 +66,7 @@ export const columns: ColumnDef<LocationData>[] = [
     },
     cell: ({ row }) => (
       <div
-        className="font-medium w-[200px] truncate"
+        className="font-medium w-[200px] text-wrap px-3"
         title={row.getValue("locationName")}
       >
         {row.getValue("locationName")}
@@ -114,9 +114,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "internetSpeed",
     header: "Speed",
     cell: ({ row }) => (
-      <div className="text-center font-mono">
-        {row.getValue("internetSpeed")}
-      </div>
+      <div className="text-left font-mono">{row.getValue("internetSpeed")}</div>
     ),
   },
   {
@@ -127,9 +125,35 @@ export const columns: ColumnDef<LocationData>[] = [
   {
     accessorKey: "jip",
     header: "JIP",
-    cell: ({ row }) => (
-      <div className="font-mono text-sm">{row.getValue("jip")}</div>
-    ),
+    cell: ({ row }) => {
+      let checked = row.getValue("jip") == "checked";
+      return (
+        <div>
+          <Checkbox id="name" checked={checked} />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "dropPoint",
+    header: "Drop point",
+    cell: ({ row }) => {
+      let value = row.getValue("dropPoint") as string;
+      if (value === "") {
+        value = "empty";
+      }
+      const variants = {
+        MMR: "bg-green-100 text-green-800 border-green-300",
+        empty: "bg-red-100 text-red-800 border-red-300 w-12 h-6",
+        MPP: "bg-yellow-100 text-yellow-800 border-yellow-300",
+        // maintenance: "bg-yellow-100 text-yellow-800 border-yellow-300",
+      };
+      return (
+        <Badge className={variants[value as keyof typeof variants]}>
+          {value == "empty" ? "" : value}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "eCat",
@@ -144,7 +168,6 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
   const [locationData, setlocationData] = useState<LocationData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch admin data from API
   useEffect(() => {
     const fetchLocation = async () => {
       try {
@@ -152,6 +175,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         if (response.ok) {
           const data = await response.json();
           setlocationData(data);
+          console.log(data);
         } else {
           console.error("Failed to fetch locations");
         }
@@ -297,7 +321,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-semibold">
+                    <TableHead key={header.id} className="font-semibold p-2">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -342,11 +366,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         </Table>
       </div>
 
-      <div className="flex items-center justify-between space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
+      <div className="flex items-center justify-end space-x-2">
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
