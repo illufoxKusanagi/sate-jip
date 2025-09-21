@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MapProvider from "@/lib/mapbox/provider";
 import MapSearch from "./map-search";
 import MapControls from "./map-control";
@@ -11,6 +11,44 @@ import { LocationData } from "@/lib/types";
 import { LocationInfoPopup } from "./location-info-popus";
 
 export default function MainMap() {
+  const [locationData, setLocationData] = useState<LocationData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch admin data from API
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const response = await fetch("/api/locations");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setLocationData(data);
+        } else {
+          console.error("Received data is not an array:", data);
+          setLocationData([]); // Fallback to empty array
+          setError("Invalid data format received");
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+        setLocationData([]); // Ensure it's always an array
+        setError(
+          error instanceof Error ? error.message : "Failed to fetch locations"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocation();
+  }, []);
+
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
     null

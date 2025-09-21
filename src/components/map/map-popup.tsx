@@ -2,11 +2,11 @@
 
 import { useMap } from "@/app/context/map-context";
 import mapboxgl from "mapbox-gl";
-import { useCallback, useEffect, useMemo } from "react";
+import { ReactNode, useCallback, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 
 type PopupProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   latitude?: number;
   longitude?: number;
   onClose?: () => void;

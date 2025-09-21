@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "../ui/badge";
 import { LocationData } from "@/lib/types";
+import { useEffect, useState } from "react";
 import { locationData } from "@/lib/data/locations";
 
 interface LocationsTableProps {
@@ -143,13 +144,34 @@ export const columns: ColumnDef<LocationData>[] = [
 ];
 
 export function LocationsTable({ onViewLocation }: LocationsTableProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [locationData, setlocationData] = useState<LocationData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch admin data from API
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const response = await fetch("/api/locations");
+        if (response.ok) {
+          const data = await response.json();
+          setlocationData(data);
+        } else {
+          console.error("Failed to fetch locations");
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocation();
+  }, []);
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const columnsWithActions: ColumnDef<LocationData>[] = [
     ...columns,

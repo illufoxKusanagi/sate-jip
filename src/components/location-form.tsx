@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "./ui/label";
 import {
   Form,
   FormControl,
@@ -28,8 +27,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod"; // FIXED: Proper import
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ComponentProps } from "react";
 
 const formSchema = z.object({
   locationName: z.string().min(2, {
@@ -67,10 +67,7 @@ const formSchema = z.object({
   }),
 });
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LocationForm({ className, ...props }: ComponentProps<"div">) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

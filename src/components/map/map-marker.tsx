@@ -1,7 +1,7 @@
 "use client";
 
 import mapboxgl, { MarkerOptions } from "mapbox-gl";
-import React, { useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import { LocationFeature } from "@/lib/mapbox/utils";
 import { useMap } from "@/app/context/map-context";
 
@@ -40,7 +40,7 @@ type Props = {
   //     marker: mapboxglde,.Marker;
   //     data: LocationFeature;
   //   }) => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
 } & MarkerOptions;
 
 export default function Marker({

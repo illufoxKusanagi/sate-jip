@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "../ui/badge";
 import { AdminData } from "@/lib/types";
+import { useEffect, useState } from "react";
 import { adminData } from "@/lib/data/admins";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
