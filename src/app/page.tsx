@@ -24,8 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChartPieLegend } from "@/components/chart/pie-chart";
-import { ChartPieLabelWithLegend } from "@/components/chart/pie-chart-new";
+import { ChartPie } from "@/components/chart/chart-pie";
 
 export default function Home() {
   const user = {
@@ -78,9 +77,22 @@ export default function Home() {
                     <div className="w-full h-[40rem] rounded-4xl">
                       <MainMap />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <ChartAreaInteractive />
-                      <ChartPieLabelWithLegend />
+                    <div className="flex flex-row w-full gap-4">
+                      <ChartPie
+                        dataKey="infrastructureDistribution"
+                        title="Infra jaringan"
+                        className="w-full"
+                      />
+                      <ChartPie
+                        dataKey="ispDistributions"
+                        title="Custom ISP Chart"
+                        className="w-full"
+                      />
+                      <ChartPie
+                        dataKey="internetSpeed"
+                        title="Kecepatan"
+                        className="w-full"
+                      />
                     </div>
                   </div>
                 </TabsContent>
@@ -89,7 +101,7 @@ export default function Home() {
                     <div className="flex justify-between items-center">
                       <p className="heading-3">Dasbor Penanggungjawab</p>
                       <Button asChild>
-                        <Link href="/internetData">Tambahkan PIC</Link>
+                        <Link href="/adminData">Tambahkan PIC</Link>
                       </Button>
                     </div>
                     <AdminTable />

@@ -91,7 +91,7 @@ export default function Home() {
                     <div className="flex justify-between items-center">
                       <p className="heading-3">Dasbor Penanggungjawab</p>
                       <Button asChild>
-                        <Link href="/internetData">Tambahkan PIC</Link>
+                        <Link href="/adminData">Tambahkan PIC</Link>
                       </Button>
                     </div>
                     <AdminTable />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   MapIcon,
   MoonIcon,
@@ -15,7 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 type StyleOption = {
   id: string;
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 };
 
 const STYLE_OPTIONS: StyleOption[] = [

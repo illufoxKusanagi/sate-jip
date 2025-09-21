@@ -1,6 +1,5 @@
+import { PicForm } from "@/components/pic-form";
 import { GalleryVerticalEnd } from "lucide-react";
-
-import { LocationForm } from "@/components/location-form";
 
 export default function LoginPage() {
   return (
@@ -12,7 +11,7 @@ export default function LoginPage() {
           </div>
           Dinas Kominfo Kabupaten Madiun
         </a>
-        <LocationForm className="w-2xl" />
+        <PicForm className="w-2xl" />
       </div>
     </div>
   );

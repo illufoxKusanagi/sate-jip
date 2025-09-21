@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MapProvider from "@/lib/mapbox/provider";
 import MapSearch from "./map-search";
 import MapControls from "./map-control";
@@ -12,12 +12,12 @@ import { LocationInfoPopup } from "./location-info-popups";
 import React from "react";
 
 export default function MainMap() {
-  const [locationData, setLocationData] = React.useState<LocationData[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [locationData, setLocationData] = useState<LocationData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch admin data from API
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchLocation = async () => {
       try {
         const response = await fetch("/api/locations");

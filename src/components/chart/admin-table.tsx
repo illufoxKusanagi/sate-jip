@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "../ui/badge";
 import { AdminData } from "@/lib/types";
+import { useEffect, useState } from "react";
 // import { adminData } from "@/lib/data/admins";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
@@ -108,12 +109,12 @@ export const adminColumns: ColumnDef<AdminData>[] = [
 ];
 
 export function AdminTable() {
-  const [adminData, setAdminData] = React.useState<AdminData[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [adminData, setAdminData] = useState<AdminData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch admin data from API
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchAdmins = async () => {
       try {
         const response = await fetch("/api/admins");
@@ -143,13 +144,10 @@ export function AdminTable() {
     fetchAdmins();
   }, []);
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const columnsWithActions: ColumnDef<AdminData>[] = [
     ...adminColumns,
