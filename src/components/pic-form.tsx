@@ -28,27 +28,35 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
+  fullName: z.string().min(4, {
+    message: "Full name must be at least 4 characters.",
   }),
-  idNumber: z.email({
-    message: "Please enter a valid email address.",
-  }),
-  position: z.string().min(10, {
-    message: "Phone number must be at least 10 digits.",
+  idNumber: z
+    .string()
+    .min(18, { message: "NIP must be at least 18 characters." })
+    .max(18, { message: "NIP must be exactly 18 characters." })
+    .regex(/^\d+$/, { message: "NIP must contain only numbers." }),
+  position: z.string({
+    message: "Enter a valid position.",
   }),
   opdName: z.string({
-    message: "Please select a opdName.",
+    message: "Enter a valid Nama OPD.",
   }),
-  whatsappNumber: z.string().min(2, {
-    message: "whatsappNumber must be at least 2 characters.",
-  }),
+  whatsappNumber: z
+    .string()
+    .min(10, { message: "WhatsApp number must be at least 10 digits." })
+    .max(15, { message: "WhatsApp number must not exceed 15 digits." })
+    .regex(/^\d+$/, { message: "WhatsApp number must contain only numbers." }),
 });
 
 export function PicForm({ className, ...props }: ComponentProps<"div">) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,9 +68,40 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Handle form submission here
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    try {
+      const picData = {
+        fullName: values.fullName,
+        idNumber: values.idNumber,
+        position: values.position,
+        opdName: values.opdName,
+        whatsappNumber: values.whatsappNumber,
+      };
+      const response = await fetch("/api/admins", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(picData),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create location");
+      }
+      const result = await response.json();
+      toast.success("Admin creation successful!!");
+      form.reset();
+      console.log("Admin created:", result); // Add this for debugging
+    } catch (error) {
+      console.error("Error creating admin: ", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create admin"
+      );
+    } finally {
+      setIsSubmitting(false);
+      router.push("/");
+    }
   }
 
   return (
@@ -81,7 +120,9 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nama Lengkap *</FormLabel>
+                      <FormLabel>
+                        Nama Lengkap <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="John Doe bin Kamis Wage"
@@ -98,7 +139,10 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                   name="idNumber"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>NIP *</FormLabel>
+                      <FormLabel>
+                        NIP
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <div className="flex flex-col gap-2">
                           <Input placeholder="20230129031129" {...field} />
@@ -113,7 +157,10 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                   name="position"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Jabatan *</FormLabel>
+                      <FormLabel>
+                        Jabatan
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <div className="flex flex-col gap-2">
                           <Input placeholder="Staff muda" {...field} />
@@ -127,11 +174,32 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                   control={form.control}
                   name="opdName"
                   render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>
+                        Nama Perangkat Daerah
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="flex flex-col gap-2">
+                          <Input
+                            placeholder="Dinas Komunikasi dan Informatika"
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="opdName"
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Nama Perangkat Daerah *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl className="w-full">
                           <SelectTrigger>
@@ -142,25 +210,28 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                           <SelectItem value="engineering">
                             Dinas Komunikasi dan Informatika
                           </SelectItem>
-                          <SelectItem value="marketing">Marketing</SelectItem>
-                          <SelectItem value="sales">Sales</SelectItem>
-                          <SelectItem value="hr">Human Resources</SelectItem>
-                          <SelectItem value="finance">Finance</SelectItem>
-                          <SelectItem value="operations">Operations</SelectItem>
+                          <SelectItem value="marketing">Dinas Kesehatan</SelectItem>
+                          <SelectItem value="sales">Dinas Perhubungan</SelectItem>
+                          <SelectItem value="hr">Dinas Pekerjaan Umum dan Penataan Ruang</SelectItem>
+                          <SelectItem value="finance">Kecamatan Wu</SelectItem>
+                          <SelectItem value="operations"></SelectItem>
                           <SelectItem value="design">Design</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
                 <FormField
                   control={form.control}
                   name="whatsappNumber"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Nomor Whatsapp *</FormLabel>
+                      <FormLabel>
+                        Nomor Whatsapp
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <div className="flex flex-col gap-2">
                           <Input placeholder="Staff muda" {...field} />
@@ -172,8 +243,8 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Submit
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Mengirim..." : "Tambah Penanggungjawab"}
               </Button>
             </form>
           </Form>

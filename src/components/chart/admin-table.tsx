@@ -128,7 +128,7 @@ export function AdminTable() {
       } catch (error) {
         console.error("Error fetching admins:", error);
         setError(
-          error instanceof Error ? error.message : "Failed to fetch admins"
+          error instanceof Error ? error.message : "Failed to fetch admins",
         );
       } finally {
         setLoading(false);
@@ -267,7 +267,7 @@ export function AdminTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -287,7 +287,7 @@ export function AdminTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

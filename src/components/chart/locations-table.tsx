@@ -95,6 +95,24 @@ export const columns: ColumnDef<LocationData>[] = [
     },
   },
   {
+    accessorKey: "longitude",
+    header: "Garis Bujur",
+    cell: ({ row }) => (
+      <div className="w-[150px] text-wrap" title="Koordinat">
+        {row.getValue("longitude")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "latitude",
+    header: "Garis Lintang",
+    cell: ({ row }) => (
+      <div className="w-[150px] text-wrap" title="Koordinat">
+        {row.getValue("latitude")}
+      </div>
+    ),
+  },
+  {
     accessorKey: "opdPengampu",
     header: "OPD Pengampu",
     cell: ({ row }) => (
@@ -126,33 +144,30 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "jip",
     header: "JIP",
     cell: ({ row }) => {
-      let checked = row.getValue("jip") == "checked";
-      return (
-        <div>
-          <Checkbox id="name" checked={checked} />
-        </div>
-      );
+      const raw = row.getValue("jip");
+      const checked =
+        String(raw).trim().toLowerCase() === "true" ||
+        ["1", "yes", "ya", "checked"].includes(
+          String(raw).trim().toLowerCase()
+        );
+      return <Checkbox checked={checked} disabled aria-readonly />;
     },
   },
+
   {
     accessorKey: "dropPoint",
     header: "Drop point",
     cell: ({ row }) => {
-      let value = row.getValue("dropPoint") as string;
-      if (value === "") {
-        value = "empty";
-      }
-      const variants = {
-        MMR: "bg-green-100 text-green-800 border-green-300",
-        empty: "bg-red-100 text-red-800 border-red-300 w-12 h-6",
-        MPP: "bg-yellow-100 text-yellow-800 border-yellow-300",
-        // maintenance: "bg-yellow-100 text-yellow-800 border-yellow-300",
-      };
-      return (
-        <Badge className={variants[value as keyof typeof variants]}>
-          {value == "empty" ? "" : value}
-        </Badge>
-      );
+      const raw = row.getValue("dropPoint");
+      const dp =
+        typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : null;
+      const classes =
+        dp === "MMR"
+          ? "bg-green-100 text-green-800 border-green-300"
+          : dp === "MPP"
+          ? "bg-yellow-100 text-yellow-800 border-yellow-300"
+          : "bg-gray-100 text-gray-800 border-gray-300 w-12 h-6";
+      return <Badge className={classes}>{dp ?? ""}</Badge>;
     },
   },
   {
