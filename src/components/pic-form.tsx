@@ -38,13 +38,13 @@ const formSchema = z.object({
   }),
   idNumber: z
     .string()
-    .min(18, { message: "NIP must be at least 18 characters." })
-    .max(18, { message: "NIP must be exactly 18 characters." })
+    .length(18, { message: "NIP must be at least 18 characters." })
+    // .max(18, { message: "NIP must be exactly 18 characters." })
     .regex(/^\d+$/, { message: "NIP must contain only numbers." }),
-  position: z.string({
+  position: z.string().min(1, {
     message: "Enter a valid position.",
   }),
-  opdName: z.string({
+  opdName: z.string().min(1, {
     message: "Enter a valid Nama OPD.",
   }),
   whatsappNumber: z
@@ -87,12 +87,13 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create location");
+        throw new Error(errorData.error || "Failed to create PIC");
       }
       const result = await response.json();
       toast.success("Admin creation successful!!");
       form.reset();
-      console.log("Admin created:", result); // Add this for debugging
+      console.log("Admin created:", result);
+      router.push("/");
     } catch (error) {
       console.error("Error creating admin: ", error);
       toast.error(
@@ -100,7 +101,6 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
       );
     } finally {
       setIsSubmitting(false);
-      router.push("/");
     }
   }
 
@@ -234,7 +234,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                       </FormLabel>
                       <FormControl>
                         <div className="flex flex-col gap-2">
-                          <Input placeholder="Staff muda" {...field} />
+                          <Input placeholder="08123456789" {...field} />
                         </div>
                       </FormControl>
                       <FormMessage />

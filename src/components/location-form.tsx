@@ -113,8 +113,16 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create location");
+        // const errorData = await response.json();
+        // throw new Error(errorData.error || "Failed to create location");
+        let errorMessage = "Failed to create location";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // If JSON parsing fails, use default error message
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
@@ -122,6 +130,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       toast.success("Location created successfully!");
       form.reset(); // Reset form after successful submission
       console.log("Location created:", result);
+      router.push("/");
     } catch (error) {
       console.error("Error creating location:", error);
       toast.error(
@@ -129,7 +138,6 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       );
     } finally {
       setIsSubmitting(false);
-      router.push("/");
     }
   }
 

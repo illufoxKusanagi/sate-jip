@@ -97,21 +97,55 @@ export const columns: ColumnDef<LocationData>[] = [
   {
     accessorKey: "longitude",
     header: "Garis Bujur",
-    cell: ({ row }) => (
-      <div className="w-[150px] text-wrap" title="Koordinat">
-        {row.getValue("longitude")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const longitude = row.getValue("longitude") as number;
+      const formattedLongitude =
+        longitude != null ? `${longitude.toFixed(6)}°` : "N/A";
+      return (
+        <div
+          className="w-[150px] text-wrap"
+          title={`Garis Bujur: ${formattedLongitude}`}
+        >
+          {formattedLongitude}
+        </div>
+      );
+    },
   },
+  // {
+  //   accessorKey: "longitude",
+  //   header: "Garis Bujur",
+  //   cell: ({ row }) => (
+  //     <div className="w-[150px] text-wrap" title="Koordinat">
+  //       {row.getValue("longitude")}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "latitude",
     header: "Garis Lintang",
-    cell: ({ row }) => (
-      <div className="w-[150px] text-wrap" title="Koordinat">
-        {row.getValue("latitude")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const latitude = row.getValue("latitude") as number;
+      const formattedLatitude =
+        latitude != null ? `${latitude.toFixed(6)}°` : "N/A";
+      return (
+        <div
+          className="w-[150px] text-wrap"
+          title={`Garis Lintang: ${formattedLatitude}`}
+        >
+          {formattedLatitude}
+        </div>
+      );
+    },
   },
+  // {
+  //   accessorKey: "latitude",
+  //   header: "Garis Lintang",
+  //   cell: ({ row }) => (
+  //     <div className="w-[150px] text-wrap" title="Koordinat">
+  //       {row.getValue("latitude")}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "opdPengampu",
     header: "OPD Pengampu",
@@ -190,7 +224,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         if (response.ok) {
           const data = await response.json();
           setlocationData(data);
-          console.log(data);
+          // console.log(data);
         } else {
           console.error("Failed to fetch locations");
         }

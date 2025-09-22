@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db/connection";
 import { admins } from "@/lib/db/schema";
 import { asc } from "drizzle-orm";
-import router from "next/navigation";
 
 export async function GET() {
   try {
@@ -23,16 +22,14 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     const newAdmin = {
-      nama: data.fullName,
-      nip: data.idNumber,
-      jabatan: data.position,
-      instansi: data.opdName,
-      whatsapp: data.whatsappNumber,
+      nama: data.fullName || "",
+      nip: data.idNumber || "",
+      jabatan: data.position || "",
+      instansi: data.opdName || "",
+      whatsapp: data.whatsappNumber || "",
     };
 
     const result = await db.insert(admins).values(newAdmin);
-
-    // router.push("/");
     return NextResponse.json({ success: true, result });
   } catch (error) {
     console.error("Error creating admin:", error);
