@@ -53,8 +53,7 @@ export const admins = mysqlTable("admins", {
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 50 })
     .primaryKey()
-    .$defaultFn(() => uuidv4())
-    .primaryKey(),
+    .$defaultFn(() => uuidv4()),
   username: varchar("username", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -66,3 +65,4 @@ export type NewLocation = typeof locations.$inferInsert;
 export type Admin = typeof admins.$inferSelect;
 export type NewAdmin = typeof admins.$inferInsert;
 export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
