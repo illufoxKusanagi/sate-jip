@@ -18,13 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -39,7 +32,6 @@ const formSchema = z.object({
   idNumber: z
     .string()
     .length(18, { message: "NIP must be at least 18 characters." })
-    // .max(18, { message: "NIP must be exactly 18 characters." })
     .regex(/^\d+$/, { message: "NIP must contain only numbers." }),
   position: z.string().min(1, {
     message: "Enter a valid position.",

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "e67d4cc4-2aa7-470e-aed5-aa909e80ab19",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d78e3cfd-0882-4955-a4f4-73b4ccfa8b72",
+  "prevId": "2b63f144-b434-4986-a7c6-e28652162136",
   "tables": {
     "admins": {
       "name": "admins",
@@ -224,11 +224,18 @@
           "notNull": true,
           "autoincrement": false
         },
-        "usename": {
-          "name": "usename",
+        "username": {
+          "name": "username",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -250,7 +257,14 @@
           ]
         }
       },
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "columns": [
+            "username"
+          ]
+        }
+      },
       "checkConstraint": {}
     }
   },
