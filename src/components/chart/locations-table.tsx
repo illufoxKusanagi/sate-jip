@@ -95,57 +95,23 @@ export const columns: ColumnDef<LocationData>[] = [
     },
   },
   {
-    accessorKey: "longitude",
-    header: "Garis Bujur",
-    cell: ({ row }) => {
-      const longitude = row.getValue("longitude") as number;
-      const formattedLongitude =
-        longitude != null ? `${longitude.toFixed(6)}°` : "N/A";
-      return (
-        <div
-          className="w-[150px] text-wrap"
-          title={`Garis Bujur: ${formattedLongitude}`}
-        >
-          {formattedLongitude}
-        </div>
-      );
-    },
-  },
-  // {
-  //   accessorKey: "longitude",
-  //   header: "Garis Bujur",
-  //   cell: ({ row }) => (
-  //     <div className="w-[150px] text-wrap" title="Koordinat">
-  //       {row.getValue("longitude")}
-  //     </div>
-  //   ),
-  // },
-  {
     accessorKey: "latitude",
     header: "Garis Lintang",
-    cell: ({ row }) => {
-      const latitude = row.getValue("latitude") as number;
-      const formattedLatitude =
-        latitude != null ? `${latitude.toFixed(6)}°` : "N/A";
-      return (
-        <div
-          className="w-[150px] text-wrap"
-          title={`Garis Lintang: ${formattedLatitude}`}
-        >
-          {formattedLatitude}
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="w-[100px] text-wrap" title="Koordinat">
+        {row.getValue("latitude")}
+      </div>
+    ),
   },
-  // {
-  //   accessorKey: "latitude",
-  //   header: "Garis Lintang",
-  //   cell: ({ row }) => (
-  //     <div className="w-[150px] text-wrap" title="Koordinat">
-  //       {row.getValue("latitude")}
-  //     </div>
-  //   ),
-  // },
+  {
+    accessorKey: "longitude",
+    header: "Garis Bujur",
+    cell: ({ row }) => (
+      <div className="w-[100px] text-wrap" title="Koordinat">
+        {row.getValue("longitude")}
+      </div>
+    ),
+  },
   {
     accessorKey: "opdPengampu",
     header: "OPD Pengampu",

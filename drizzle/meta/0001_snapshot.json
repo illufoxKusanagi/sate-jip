@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "e67d4cc4-2aa7-470e-aed5-aa909e80ab19",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "f8d4699f-3722-4153-84b7-fb5f949c4d61",
+  "prevId": "e67d4cc4-2aa7-470e-aed5-aa909e80ab19",
   "tables": {
     "admins": {
       "name": "admins",
@@ -226,6 +226,13 @@
         },
         "usename": {
           "name": "usename",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,

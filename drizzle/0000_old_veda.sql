@@ -29,3 +29,10 @@ CREATE TABLE `locations` (
 	`updated_at` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `locations_id` PRIMARY KEY(`id`)
 );
+--> statement-breakpoint
+CREATE TABLE `users` (
+	`id` varchar(50) NOT NULL,
+	`usename` varchar(255),
+	`created_at` timestamp DEFAULT (now()),
+	CONSTRAINT `users_id` PRIMARY KEY(`id`)
+);

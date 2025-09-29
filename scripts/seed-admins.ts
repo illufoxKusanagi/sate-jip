@@ -1,8 +1,40 @@
 // scripts/seed-admins.ts
 import { db } from "../src/lib/db/connection";
-import { admins, locations } from "../src/lib/db/schema";
+import { admins, locations, users } from "../src/lib/db/schema";
 import { adminData } from "../src/lib/data/admins";
 import { locationData } from "../src/lib/data/locations";
+import bcrypt from "bcryptjs";
+import { adminUser } from "@/lib/data/users";
+
+async function seedUsers() {
+  try {
+    console.log("🔐 Starting user data seeding...");
+
+    // Clear existing user data
+    console.log("🗑️ Clearing existing user data...");
+    await db.delete(users);
+
+    // Insert user data with hashed passwords
+    console.log("👤 Inserting user data...");
+    for (const user of adminUser) {
+      // Hash the password
+      const saltRounds = 12; // Higher is more secure but slower
+      const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+
+      await db.insert(users).values({
+        username: user.username,
+        password: hashedPassword,
+      });
+
+      console.log(`✅ Created user: ${user.username}`);
+    }
+
+    console.log(`✅ Successfully seeded ${adminUser.length} users`);
+  } catch (error) {
+    console.error("❌ User seeding failed:", error);
+    throw error;
+  }
+}
 
 async function seedAdmins() {
   try {
@@ -71,6 +103,7 @@ async function seedAll() {
   try {
     await seedAdmins();
     await seedLocations();
+    await seedUsers();
     console.log("🎉 All data seeded successfully!");
     process.exit(0);
   } catch (error) {
