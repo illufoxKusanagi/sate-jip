@@ -218,7 +218,25 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
                     )}
                   />
                 </div>
-
+                <FormField
+                  control={form.control}
+                  name="locationName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Tanggal aktivasi <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="date"
+                          placeholder="Pilih tanggal"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="opdPengampu"

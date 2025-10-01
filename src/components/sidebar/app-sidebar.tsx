@@ -38,6 +38,7 @@
 "use client";
 import {
   Calendar,
+  Cog,
   Home,
   Inbox,
   LogOut,
@@ -81,6 +82,11 @@ export function AppSidebar() {
       icon: Home,
     },
     {
+      title: "Config",
+      url: "/dataConfig",
+      icon: Cog,
+    },
+    {
       title: "E-TIcketing",
       url: "#",
       icon: Ticket,
@@ -90,6 +96,7 @@ export function AppSidebar() {
       url: "#",
       icon: Calendar,
     },
+
     // {
     //   title: "Search",
     //   url: "#",
@@ -101,6 +108,26 @@ export function AppSidebar() {
     //   icon: Settings,
     // },
   ];
+
+  // TODO : Masukkan config berikut ke database nanti
+  const opdConfig = [
+    { opdName: "Dinas Kominfo", address: "Jl Mastrip", opdType: "OPD Utama" },
+    { opdName: "Dinas KB", address: "Jalan Raya Solo", opdType: "OPD Utama" },
+  ];
+
+  const ispConfig = [
+    {
+      ispName: "Telkomsel",
+      address: "Unknown",
+      pic: "Satria",
+    },
+    {
+      ispName: "Indosat",
+      address: "Unknown",
+      pic: "Arief",
+    },
+  ];
+
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader

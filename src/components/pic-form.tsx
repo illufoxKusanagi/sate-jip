@@ -100,7 +100,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Form titik internet</CardTitle>
+          <CardTitle className="text-xl">Form PIC JIP</CardTitle>
           <CardDescription>Isi form dengan benar</CardDescription>
         </CardHeader>
         <CardContent>

@@ -4,6 +4,7 @@ import {
   decimal,
   mysqlEnum,
   timestamp,
+  json,
 } from "drizzle-orm/mysql-core";
 import { v4 as uuidv4 } from "uuid";
 export const locations = mysqlTable("locations", {
@@ -59,6 +60,15 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const dataConfig = mysqlTable("answer_config", {
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  dataType: varchar("data_type", { length: 50 }).notNull(),
+  dataConfig: json("data_config").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Export types
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
@@ -66,3 +76,5 @@ export type Admin = typeof admins.$inferSelect;
 export type NewAdmin = typeof admins.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+export type AnswerConfig = typeof dataConfig.$inferSelect;
+export type NewAnswerConfig = typeof dataConfig.$inferInsert;
