@@ -33,6 +33,7 @@ import { ComponentProps, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ConfigData } from "@/lib/types";
+import { id } from "zod/v4/locales";
 
 const formSchema = z.object({
   locationName: z
@@ -88,6 +89,11 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
   const fetchOpdOptions = async () => {
     try {
       const response = await fetch("/api/configs");
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch congis: ${response.status}`);
+      }
+
       const allData: ConfigData[] = await response.json();
 
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
@@ -97,6 +103,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       setIspData(ispConfigs);
     } catch (error) {
       console.error("Unexpected error: ", error);
+      toast.error("Failed to load OPD and ISP data. Please refresh the page.");
     }
   };
 
@@ -161,8 +168,8 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
     }
   }
 
+  const selectedOpdName = form.watch("opdPengampu");
   useEffect(() => {
-    const selectedOpdName = form.watch("opdPengampu");
     if (selectedOpdName) {
       const selectedOpd = opdData.find(
         (opd) => opd.dataConfig.name === selectedOpdName
@@ -173,7 +180,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
     } else {
       form.setValue("opdType", "");
     }
-  }, [form.watch("opdPengampu"), opdData, form]);
+  }, [selectedOpdName, opdData, form]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

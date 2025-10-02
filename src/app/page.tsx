@@ -117,7 +117,7 @@ export default function Home() {
                     </div>
                   </div>
                 </TabsContent>
-                {isAuthenticated ?? (
+                {isAuthenticated && (
                   <>
                     <TabsContent value="admins">
                       <div className="flex flex-col gap-4 p-4">
