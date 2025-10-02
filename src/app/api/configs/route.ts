@@ -31,7 +31,6 @@ export async function POST(request: Request) {
     }
 
     const newConfig = await db.insert(dataConfig).values({
-      id: uuidv4(),
       dataType,
       dataConfig: config,
     });
