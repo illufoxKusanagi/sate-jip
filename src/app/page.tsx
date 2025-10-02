@@ -26,15 +26,6 @@ import {
 export default function Home() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
 
-  const getUserInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   const handleLogout = () => {
     logout();
   };
@@ -64,7 +55,9 @@ export default function Home() {
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
                         className="rounded-full"
-                        src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+                          user?.username || "default"
+                        )}`}
                         alt={user?.username || "Admin"}
                       />
                       <AvatarFallback className="rounded-lg">IK</AvatarFallback>
@@ -124,30 +117,34 @@ export default function Home() {
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="admins">
-                  <div className="flex flex-col gap-4 p-4">
-                    <div className="flex justify-between items-center">
-                      <p className="heading-3">Dasbor Penanggungjawab</p>
-                      <Button asChild>
-                        <Link href="/adminData">Tambahkan PIC</Link>
-                      </Button>
-                    </div>
-                    <AdminTable />
-                  </div>
-                </TabsContent>
-                <TabsContent value="locations">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-2xl font-bold">
-                        Dasbor Titik Lokasi
-                      </h2>
-                      <Button asChild>
-                        <Link href="/internetData">Tambahkan Lokasi</Link>
-                      </Button>
-                    </div>
-                    <LocationsTable />
-                  </div>
-                </TabsContent>
+                {isAuthenticated ?? (
+                  <>
+                    <TabsContent value="admins">
+                      <div className="flex flex-col gap-4 p-4">
+                        <div className="flex justify-between items-center">
+                          <p className="heading-3">Dasbor Penanggungjawab</p>
+                          <Button asChild>
+                            <Link href="/adminData">Tambahkan PIC</Link>
+                          </Button>
+                        </div>
+                        <AdminTable />
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="locations">
+                      <div className="flex flex-col gap-4">
+                        <div className="flex justify-between items-center">
+                          <h2 className="text-2xl font-bold">
+                            Dasbor Titik Lokasi
+                          </h2>
+                          <Button asChild>
+                            <Link href="/internetData">Tambahkan Lokasi</Link>
+                          </Button>
+                        </div>
+                        <LocationsTable />
+                      </div>
+                    </TabsContent>
+                  </>
+                )}
               </Tabs>
             </div>
           </main>

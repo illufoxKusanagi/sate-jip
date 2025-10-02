@@ -1,4 +1,3 @@
-// src/components/location-form.tsx
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -543,18 +542,6 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
           </Form>
         </CardContent>
       </Card>
-
-      <div className="text-muted-foreground text-center text-xs text-balance">
-        By submitting this form, you agree to our{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Terms of Service
-        </a>{" "}
-        and{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Privacy Policy
-        </a>
-        .
-      </div>
     </div>
   );
 }

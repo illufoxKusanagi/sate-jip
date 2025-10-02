@@ -9,8 +9,22 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!params.id) {
+      return NextResponse.json(
+        { error: "Missing id parameter" },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const { dataType, dataConfig: config } = body;
+
+    if (!dataType || !config) {
+      return NextResponse.json(
+        { error: "Missing required fields: dataType, dataConfig" },
+        { status: 400 }
+      );
+    }
 
     await db
       .update(dataConfig)
