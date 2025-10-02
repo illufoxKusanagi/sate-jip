@@ -23,3 +23,15 @@ export interface AdminData {
   instansi: string;
   whatsapp: string;
 }
+
+export interface ConfigData {
+  id: string;
+  dataType: string;
+  dataConfig: {
+    name: string;
+    address?: string;
+    opdType?: string;
+    pic?: string;
+  };
+  createdAt: string;
+}

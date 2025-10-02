@@ -7,14 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -22,16 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
@@ -44,18 +27,8 @@ import { ChevronDown, LogOut, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../context/auth-context";
+import { ConfigData } from "@/lib/types";
 
-interface ConfigData {
-  id: string;
-  dataType: string;
-  dataConfig: {
-    name: string;
-    address?: string;
-    opdType?: string;
-    pic?: string;
-  };
-  createdAt: string;
-}
 const opdColumns: ColumnDef<ConfigData>[] = [
   {
     accessorKey: "dataConfig",
@@ -95,7 +68,7 @@ const ispColumns: ColumnDef<ConfigData>[] = [
 ];
 
 export default function InputDataConfigPage() {
-  const { isAuthenticated, isLoading, logout, user } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const [isConfigLoading, setIsConfigLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ConfigData | null>(null);
@@ -236,7 +209,7 @@ export default function InputDataConfigPage() {
                 </Avatar>
                 <div className="flex text-left justify-center">
                   <span className="truncate body-small-regular">
-                    halo, {user?.username}
+                    Selamat Datang, {user?.username}
                   </span>
                 </div>
                 <ChevronDown className="ml-auto size-4" />

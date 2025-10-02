@@ -183,37 +183,6 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="opdName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nama Perangkat Daerah *</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl className="w-full">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Pilih Perangkat Daerah" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="engineering">
-                            Dinas Komunikasi dan Informatika
-                          </SelectItem>
-                          <SelectItem value="marketing">Dinas Kesehatan</SelectItem>
-                          <SelectItem value="sales">Dinas Perhubungan</SelectItem>
-                          <SelectItem value="hr">Dinas Pekerjaan Umum dan Penataan Ruang</SelectItem>
-                          <SelectItem value="finance">Kecamatan Wu</SelectItem>
-                          <SelectItem value="operations"></SelectItem>
-                          <SelectItem value="design">Design</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
 
                 <FormField
                   control={form.control}
@@ -242,18 +211,6 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
           </Form>
         </CardContent>
       </Card>
-
-      <div className="text-muted-foreground text-center text-xs text-balance">
-        By submitting this form, you agree to our{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Terms of Service
-        </a>{" "}
-        and{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Privacy Policy
-        </a>
-        .
-      </div>
     </div>
   );
 }
