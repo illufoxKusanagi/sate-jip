@@ -80,9 +80,6 @@ export default function InputDataConfigPage() {
         const opdConfigs = allData.filter((item) => item.dataType === "OPD");
         const ispConfigs = allData.filter((item) => item.dataType === "ISP");
 
-        console.log("OPD datas: ", opdConfigs);
-        console.log("ISP datas: ", ispConfigs);
-
         setOpdData(opdConfigs);
         setIspData(ispConfigs);
       } catch (error) {

@@ -38,6 +38,7 @@ const formSchema = z.object({
   locationName: z
     .string()
     .min(2, "Location name must be at least 2 characters."),
+  activationDate: z.string().min(1, "Please select an activation date."),
   latitude: z.coerce
     .number<number>({ message: "Please enter a valid latitude number" })
     .min(-90, { message: "Latitude must be ≥ -90" })
@@ -89,6 +90,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       // Transform form data to match your API schema
       const locationData = {
         locationName: values.locationName,
+        activationDate: values.activationDate,
         longitude: values.longitude,
         latitude: values.latitude,
         opdPengampu: values.opdPengampu,
@@ -220,7 +222,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
                 </div>
                 <FormField
                   control={form.control}
-                  name="locationName"
+                  name="activationDate"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>

@@ -92,10 +92,11 @@ const columns: ColumnDef<ConfigData>[] = [
     },
   },
   {
-    accessorKey: "dataConfig",
+    id: "name",
+    accessorFn: (row) => row.dataConfig.name,
     header: "Name",
     cell: ({ row }) => {
-      const config = row.getValue("dataConfig") as ConfigData["dataConfig"];
+      const config = row.original.dataConfig;
       return (
         <div className="font-medium w-[200px] text-wrap">{config.name}</div>
       );
