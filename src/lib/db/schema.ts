@@ -69,6 +69,20 @@ export const dataConfig = mysqlTable("answer_config", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const activityCalendar = mysqlTable("activity_calendar", {
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  title: varchar("title", { length: 255 }).notNull(),
+  opdName: varchar("opd_name", { length: 100 }).notNull(),
+  description: varchar("description", { length: 255 }),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  color: varchar("color", { length: 20 }).default("#3b82f6"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+});
+
 // Export types
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
@@ -78,3 +92,5 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type AnswerConfig = typeof dataConfig.$inferSelect;
 export type NewAnswerConfig = typeof dataConfig.$inferInsert;
+export type CalendarEvent = typeof activityCalendar.$inferSelect;
+export type NewCalendarEvent = typeof activityCalendar.$inferInsert;
