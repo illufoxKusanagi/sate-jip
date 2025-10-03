@@ -1,0 +1,1 @@
+ALTER TABLE `answer_config` ADD `data_type` varchar(50) NOT NULL;

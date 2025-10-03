@@ -38,6 +38,7 @@
 "use client";
 import {
   Calendar,
+  Cog,
   Home,
   Inbox,
   LogOut,
@@ -77,8 +78,13 @@ export function AppSidebar() {
   const items = [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: Home,
+    },
+    {
+      title: "Config",
+      url: "/dataConfig",
+      icon: Cog,
     },
     {
       title: "E-TIcketing",
@@ -90,6 +96,7 @@ export function AppSidebar() {
       url: "#",
       icon: Calendar,
     },
+
     // {
     //   title: "Search",
     //   url: "#",
@@ -101,6 +108,7 @@ export function AppSidebar() {
     //   icon: Settings,
     // },
   ];
+
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader
