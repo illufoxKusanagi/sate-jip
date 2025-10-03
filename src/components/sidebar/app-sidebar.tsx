@@ -93,7 +93,7 @@ export function AppSidebar() {
     },
     {
       title: "Kalender Kegiatan",
-      url: "#",
+      url: "/activityCalendar",
       icon: Calendar,
     },
 
