@@ -4,13 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { cn } from "@/lib/utils";
 import { useCalendar } from "../contexts/calendar-context";
-import {
-  CalendarRange,
-  List,
-  Columns,
-  Grid3X3,
-  Grid2X2,
-} from "lucide-react";
+import { CalendarRange, List, Columns, Grid3X3, Grid2X2 } from "lucide-react";
 import { TCalendarView } from "../types";
 import { memo } from "react";
 
@@ -20,11 +14,11 @@ const tabs = [
     value: "agenda",
     icon: () => <CalendarRange className="h-4 w-4" />,
   },
-  {
-    name: "Day",
-    value: "day",
-    icon: () => <List className="h-4 w-4" />,
-  },
+  // {
+  //   name: "Day",
+  //   value: "day",
+  //   icon: () => <List className="h-4 w-4" />,
+  // },
   {
     name: "Week",
     value: "week",

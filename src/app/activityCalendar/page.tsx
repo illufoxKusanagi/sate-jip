@@ -15,8 +15,6 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ChevronDown, LogOut } from "lucide-react";
 import { useAuth } from "../context/auth-context";
 import { Calendar } from "@/modules/components/calendar/calendar";
-import { Suspense } from "react";
-import { CalendarSkeleton } from "@/modules/components/calendar/skeletons/calendar-skeleton";
 
 export default function ActivityCalendar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -61,9 +59,7 @@ export default function ActivityCalendar() {
         </div>
         <div className="m-20 flex flex-col gap-4">
           <p className="heading-1">Kalender Kegiatan</p>
-          <Suspense fallback={<CalendarSkeleton />}>
-            <Calendar />
-          </Suspense>
+          <Calendar />
         </div>
       </div>
     </SidebarProvider>

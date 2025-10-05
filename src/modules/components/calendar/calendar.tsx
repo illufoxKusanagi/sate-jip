@@ -1,22 +1,45 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { CalendarBody } from "@/modules/components/calendar/calendar-body";
 import { CalendarProvider } from "@/modules/components/calendar/contexts/calendar-context";
 import { DndProvider } from "@/modules/components/calendar/contexts/dnd-context";
 import { CalendarHeader } from "@/modules/components/calendar/header/calendar-header";
-import { getEvents, getUsers } from "@/modules/components/calendar/requests";
+import { getEvents } from "@/modules/components/calendar/requests";
+import type { IEvent } from "@/modules/components/calendar/interfaces";
 
-async function getCalendarData() {
-  return {
-    events: await getEvents(),
-    users: await getUsers(),
-  };
-}
+export function Calendar() {
+  const [events, setEvents] = useState<IEvent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-export async function Calendar() {
-  const { events, users } = await getCalendarData();
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await getEvents();
+        console.log("Fetched events:", data);
+        setEvents(data);
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full border rounded-xl p-8">
+        <div className="flex items-center justify-center text-muted-foreground">
+          Loading calendar...
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <CalendarProvider events={events} users={users} view="month">
+    <CalendarProvider events={events} view="month">
       <DndProvider showConfirmation={false}>
         <div className="w-full border rounded-xl">
           <CalendarHeader />

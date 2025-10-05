@@ -1,18 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  CalendarRange,
-  Columns,
-  Grid2X2,
-  Grid3X3,
-  LayoutList,
-  List,
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import {
   slideFromLeft,
   slideFromRight,
@@ -23,7 +14,7 @@ import { AddEditEventDialog } from "@/modules/components/calendar/dialogs/add-ed
 import { DateNavigator } from "@/modules/components/calendar/header/date-navigator";
 import FilterEvents from "@/modules/components/calendar/header/filter";
 import { TodayButton } from "@/modules/components/calendar/header/today-button";
-import { UserSelect } from "@/modules/components/calendar/header/user-select";
+// import { UserSelect } from "@/modules/components/calendar/header/user-select";
 import { Settings } from "@/modules/components/calendar/settings/settings";
 import Views from "./view-tabs";
 

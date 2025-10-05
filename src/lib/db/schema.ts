@@ -69,7 +69,7 @@ export const dataConfig = mysqlTable("answer_config", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const activityCalendar = mysqlTable("activity_calendar", {
+export const eventCalendar = mysqlTable("activity_calendar", {
   id: varchar("id", { length: 50 })
     .primaryKey()
     .$defaultFn(() => uuidv4()),
@@ -92,5 +92,5 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type AnswerConfig = typeof dataConfig.$inferSelect;
 export type NewAnswerConfig = typeof dataConfig.$inferInsert;
-export type CalendarEvent = typeof activityCalendar.$inferSelect;
-export type NewCalendarEvent = typeof activityCalendar.$inferInsert;
+export type CalendarEvent = typeof eventCalendar.$inferSelect;
+export type NewCalendarEvent = typeof eventCalendar.$inferInsert;

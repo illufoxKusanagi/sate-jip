@@ -1,12 +1,10 @@
-import {
-	CALENDAR_ITEMS_MOCK,
-	USERS_MOCK,
-} from "@/modules/components/calendar/mocks";
-
 export const getEvents = async () => {
-	return CALENDAR_ITEMS_MOCK;
+  const response = await fetch("/api/event");
+  if (!response.ok) throw new Error("Failed to fetch events");
+  return response.json();
 };
 
 export const getUsers = async () => {
-	return USERS_MOCK;
+  return [];
+  // return USERS_MOCK;
 };
