@@ -12,6 +12,9 @@ RUN npm install
 # Copy source code
 COPY . .
 
+CMD ["npm", "run", "build"]
+
+CMD ["npm", "run", "start"]
 # Expose port
 EXPOSE 3000
 
