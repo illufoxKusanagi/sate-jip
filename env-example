@@ -9,4 +9,4 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=12345678Haha
-DB_NAME=sate_jip_db
+DB_NAME=sate_jip_dbx
