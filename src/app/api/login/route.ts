@@ -1,4 +1,3 @@
-// src/app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db/connection";
@@ -14,11 +13,9 @@ const loginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse and validate request body
     const body = await request.json();
     const { username, password } = loginSchema.parse(body);
 
-    // Find admin user
     const [user] = await db
       .select()
       .from(users)
@@ -32,7 +29,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -41,7 +37,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate token
     const token = jwt.sign(
       {
         userId: user.id,
@@ -50,7 +45,6 @@ export async function POST(request: NextRequest) {
       process.env.JWT_SECRET || "your-secret-key",
       { expiresIn: "7d" }
     );
-    // Return success response
     const response = NextResponse.json({
       success: true,
       message: "Login successful",
@@ -61,19 +55,17 @@ export async function POST(request: NextRequest) {
       token,
     });
 
-    // Set token as HTTP-only cookie (optional)
     response.cookies.set("admin-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return response;
   } catch (error) {
     console.error("Login error:", error);
 
-    // Handle Zod validation errors
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

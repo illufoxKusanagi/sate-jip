@@ -123,7 +123,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
         opdPengampu: values.opdPengampu,
         opdType: values.opdType,
         ispName: values.ispName,
-        internetSpeed: values.internetSpeed, // Already a number due to coerce!
+        internetSpeed: values.internetSpeed,
         internetRatio: values.internetRatio,
         internetInfrastructure: values.internetInfrastructure,
         jip: values.jip === "true",
@@ -146,9 +146,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
         try {
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
-        } catch {
-          // If JSON parsing fails, use default error message
-        }
+        } catch {}
         throw new Error(errorMessage);
       }
 

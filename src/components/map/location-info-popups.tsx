@@ -154,7 +154,6 @@ export function LocationInfoPopup({
         <div className="mt-4 pt-3 border-t">
           <div className="flex flex-row justify-between text-xs text-muted-foreground">
             <p className="font-mono text-wrap max-w-40">ID: {location.id}</p>
-            {/* <span className="font-mono">ID: {location.id}</span> */}
             <div className="flex flex-col font-mono justify-end self-end">
               <p className="">Koordinat:</p>
               <p>{location.latitude}</p>

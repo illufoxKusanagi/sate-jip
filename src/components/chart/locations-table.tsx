@@ -190,7 +190,6 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         if (response.ok) {
           const data = await response.json();
           setlocationData(data);
-          // console.log(data);
         } else {
           console.error("Failed to fetch locations");
         }

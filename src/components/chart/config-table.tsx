@@ -73,7 +73,7 @@ export default function ConfigTable({
   columnVisibility = {},
   setColumnVisibility,
   searchPlaceholder = "Filter by name...",
-  searchColumn = "dataConfig", // Default search column
+  searchColumn = "dataConfig",
 }: ConfigTableProps) {
   const table = useReactTable({
     data,
@@ -94,7 +94,6 @@ export default function ConfigTable({
 
   return (
     <div className="space-y-4">
-      {/* Filters and Column Visibility */}
       <div className="flex items-center justify-between">
         <Input
           placeholder={searchPlaceholder}
@@ -138,7 +137,6 @@ export default function ConfigTable({
         )}
       </div>
 
-      {/* Table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -190,7 +188,6 @@ export default function ConfigTable({
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredRowModel().rows.length} row(s) total.

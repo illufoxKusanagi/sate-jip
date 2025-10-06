@@ -1,4 +1,3 @@
-// src/lib/db/connection.ts
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import * as schema from "./schema";
@@ -14,10 +13,9 @@ const connection = mysql.createPool({
   queueLimit: 0,
 });
 
-// Add the mode: "default" here
 export const db = drizzle(connection, {
   schema,
-  mode: "default", // This is what was missing!
+  mode: "default",
 });
 
 export default db;

@@ -5,7 +5,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
 
-// Ensure the access token is set
 if (process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 }
@@ -30,7 +29,6 @@ export default function MapProvider({
   const initialized = useRef(false);
 
   useEffect(() => {
-    // Prevent double initialization in Strict Mode
     if (
       initialized.current ||
       !mapContainerRef.current ||
@@ -44,7 +42,7 @@ export default function MapProvider({
     try {
       map.current = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/streets-v12", // FIXED: Use proper Mapbox style URL
+        style: "mapbox://styles/mapbox/streets-v12",
         center: [initialViewState.longitude, initialViewState.latitude],
         zoom: initialViewState.zoom,
         attributionControl: false,
@@ -74,7 +72,7 @@ export default function MapProvider({
       }
       initialized.current = false;
     };
-  }, []); // Remove dependencies to prevent re-initialization
+  }, []);
 
   return (
     <div className="relative w-full h-full">
@@ -89,64 +87,3 @@ export default function MapProvider({
     </div>
   );
 }
-
-// "use client";
-
-// import { MapContext } from "@/app/context/map-context";
-// import mapboxgl from "mapbox-gl";
-// import "mapbox-gl/dist/mapbox-gl.css";
-// import { useEffect, useRef, useState } from "react";
-
-// mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-
-// type MapComponentProps = {
-//   mapContainerRef: React.RefObject<HTMLDivElement | null>;
-//   initialViewState: {
-//     longitude: number;
-//     latitude: number;
-//     zoom: number;
-//   };
-//   children?: React.ReactNode;
-// };
-
-// export default function MapProvider({
-//   mapContainerRef,
-//   initialViewState,
-//   children,
-// }: MapComponentProps) {
-//   const map = useRef<mapboxgl.Map | null>(null);
-//   const [loaded, setLoaded] = useState(false);
-
-//   useEffect(() => {
-//     if (!mapContainerRef.current) return;
-//     map.current = new mapboxgl.Map({
-//       container: mapContainerRef.current,
-//       style: "mapbox://styles/mapbox/streets-v12", // FIXED: Use proper Mapbox style URL
-//       center: [initialViewState.longitude, initialViewState.latitude],
-//       zoom: initialViewState.zoom,
-//       attributionControl: false,
-//       logoPosition: "bottom-right",
-//     });
-//     map.current.on("load", () => {
-//       setLoaded(true);
-//     });
-//     return () => {
-//       if (map.current) {
-//         map.current.remove();
-//         map.current = null;
-//       }
-//     };
-//   }, [initialViewState, mapContainerRef]);
-//   return (
-//     <div>
-//       <MapContext.Provider value={{ map: map.current }}>
-//         {children}
-//       </MapContext.Provider>
-//       {!loaded && (
-//         <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-[1000]">
-//           <div className="text-lg font-medium">Loading map...</div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
