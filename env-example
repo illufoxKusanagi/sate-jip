@@ -1,0 +1,12 @@
+# Database Configuration
+DB_HOST=db
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_secure_password
+DB_NAME=sate_jip_db
+
+# Database URL
+DATABASE_URL=mysql://root:your_secure_password@db:3306/sate_jip_db
+
+# Mapbox Token
+NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
