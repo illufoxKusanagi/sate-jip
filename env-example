@@ -1,12 +1,12 @@
-# Database Configuration
-DB_HOST=db
+NEXT_PUBLIC_MAPBOX_TOKEN=pk.eyJ1IjoiaWxsdWZveDI0IiwiYSI6ImNtZm0zcmNobjA4cG8ya3Nmamg4MjlsbmwifQ.nAS1Grf2kBMkARYbXTN4ig
+NEXT_PUBLIC_MAPBOX_SESSION_TOKEN=sk.eyJ1IjoiaWxsdWZveDI0IiwiYSI6ImNtZm01Mmo0ZTBjdTUya3FzcW5uNDBteHMifQ.uBlc0zFoKicKPaxZn7lBGQ
+# Database
+DATABASE_URL="mysql://username:12345678Haha@localhost:3306/si_jip"
+
+# App
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=your_secure_password
+DB_PASSWORD=12345678Haha
 DB_NAME=sate_jip_db
-
-# Database URL
-DATABASE_URL=mysql://root:your_secure_password@db:3306/sate_jip_db
-
-# Mapbox Token
-NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
