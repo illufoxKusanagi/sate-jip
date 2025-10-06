@@ -119,22 +119,21 @@ export function CalendarProvider({
     updateSettings({ agendaModeGroupBy: groupBy });
   };
 
+  const applyColorFilter = (
+    eventsList: IEvent[],
+    colors: TEventColor[] = selectedColors
+  ) => {
+    if (colors.length === 0) return eventsList;
+    return eventsList.filter((event) => colors.includes(event.color || "blue"));
+  };
+
   const filterEventsBySelectedColors = (color: TEventColor) => {
     const isColorSelected = selectedColors.includes(color);
     const newColors = isColorSelected
       ? selectedColors.filter((c) => c !== color)
       : [...selectedColors, color];
 
-    if (newColors.length > 0) {
-      const filtered = allEvents.filter((event) => {
-        const eventColor = event.color || "blue";
-        return newColors.includes(eventColor);
-      });
-      setFilteredEvents(filtered);
-    } else {
-      setFilteredEvents(allEvents);
-    }
-
+    setFilteredEvents(applyColorFilter(allEvents, newColors));
     setSelectedColors(newColors);
   };
 
@@ -154,8 +153,9 @@ export function CalendarProvider({
   };
 
   const addEvent = (event: IEvent) => {
-    setAllEvents((prev) => [...prev, event]);
-    setFilteredEvents((prev) => [...prev, event]);
+    const nextEvents = [...allEvents, event];
+    setAllEvents(nextEvents);
+    setFilteredEvents(applyColorFilter(nextEvents));
   };
 
   const updateEvent = (event: IEvent) => {
@@ -165,15 +165,15 @@ export function CalendarProvider({
       endDate: new Date(event.endDate).toISOString(),
     };
 
-    setAllEvents((prev) => prev.map((e) => (e.id === event.id ? updated : e)));
-    setFilteredEvents((prev) =>
-      prev.map((e) => (e.id === event.id ? updated : e))
-    );
+    const nextEvents = allEvents.map((e) => (e.id === event.id ? updated : e));
+    setAllEvents(nextEvents);
+    setFilteredEvents(applyColorFilter(nextEvents));
   };
 
   const removeEvent = (eventId: string) => {
-    setAllEvents((prev) => prev.filter((e) => e.id !== eventId));
-    setFilteredEvents((prev) => prev.filter((e) => e.id !== eventId));
+    const nextEvents = allEvents.filter((e) => e.id !== eventId);
+    setAllEvents(nextEvents);
+    setFilteredEvents(applyColorFilter(nextEvents));
   };
 
   const clearFilter = () => {

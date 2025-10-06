@@ -2,7 +2,7 @@ import db from "@/lib/db/connection";
 import { eventCalendar } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
+import { z } from "zod";
 
 const eventSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -15,7 +15,7 @@ const eventSchema = z.object({
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const { id } = await params;
@@ -40,11 +40,20 @@ export async function PUT(
     if (validated.endDate) updateData.endDate = new Date(validated.endDate);
     if (validated.color) updateData.color = validated.color;
 
+    const existingEvent = await db
+      .select({ id: eventCalendar.id })
+      .from(eventCalendar)
+      .where(eq(eventCalendar.id, id))
+      .limit(1);
+
+    if (existingEvent.length === 0) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
     await db
       .update(eventCalendar)
       .set(updateData)
       .where(eq(eventCalendar.id, id));
-
     return NextResponse.json({
       success: true,
       message: "Success editing event",
@@ -111,32 +120,3 @@ export async function DELETE(
     );
   }
 }
-
-// export async function DELETE(
-//   request: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//   try {
-//     const { id } = await params;
-
-//     if (!id) {
-//       return NextResponse.json(
-//         { error: "Missing id parameter" },
-//         { status: 400 }
-//       );
-//     }
-
-//     await db.delete(eventCalendar).where(eq(eventCalendar.id, id));
-
-//     return NextResponse.json({
-//       success: true,
-//       message: "Event deleted successfully",
-//     });
-//   } catch (error) {
-//     console.error("Error deleting event: ", error);
-//     return NextResponse.json(
-//       { error: "Failed to delete event" },
-//       { status: 500 }
-//     );
-//   }
-// }

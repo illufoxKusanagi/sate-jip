@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addMinutes, format, set } from "date-fns";
-import { type ReactNode, useEffect, useMemo } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,7 @@ import {
   type TEventFormData,
 } from "@/modules/components/calendar/schemas";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { ConfigData } from "@/lib/types";
 
 interface IProps {
   children: ReactNode;
@@ -58,6 +59,7 @@ export function AddEditEventDialog({
   const { isOpen, onClose, onToggle } = useDisclosure();
   const { addEvent, updateEvent } = useCalendar();
   const isEditing = !!event;
+  const [opdData, setOpdData] = useState<ConfigData[]>([]);
 
   const initialDates = useMemo(() => {
     if (!isEditing && !event) {
@@ -106,6 +108,10 @@ export function AddEditEventDialog({
   }, [event, initialDates, form]);
 
   const onSubmit = async (values: TEventFormData) => {
+    if (values.endDate <= values.startDate) {
+      toast.error("End date must be after start date");
+      return;
+    }
     try {
       const payload = {
         title: values.title,
@@ -165,6 +171,22 @@ export function AddEditEventDialog({
     }
   };
 
+  useEffect(() => {
+    fetchOpdDatas();
+  }, []);
+  const fetchOpdDatas = async () => {
+    try {
+      const response = await fetch("/api/configs");
+      const allData: ConfigData[] = await response.json();
+
+      const opdConfigs = allData.filter((item) => item.dataType === "OPD");
+
+      setOpdData(opdConfigs);
+    } catch (error) {
+      console.error("Unexpected error: ", error);
+    }
+  };
+
   return (
     <Modal open={isOpen} onOpenChange={onToggle} modal={false}>
       <ModalTrigger asChild>{children}</ModalTrigger>
@@ -207,19 +229,28 @@ export function AddEditEventDialog({
             <FormField
               control={form.control}
               name="opdName"
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel htmlFor="opdName" className="required">
                     OPD Name
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="opdName"
-                      placeholder="Enter OPD name"
-                      {...field}
-                      className={fieldState.invalid ? "border-red-500" : ""}
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl className="w-full">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih OPD Pengampu" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {opdData.map((opd) => (
+                        <SelectItem value={opd.dataConfig.name} key={opd.id}>
+                          {opd.dataConfig.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

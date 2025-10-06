@@ -38,6 +38,13 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
     const newDate = new Date(currentDate);
 
     if (type === "hour") {
+      const currentHours = currentDate.getHours();
+      let nextHour = parseInt(value, 10);
+      if (!use24HourFormat) {
+        const isPM = currentHours >= 12;
+        nextHour = nextHour % 12;
+        if (isPM) nextHour += 12;
+      }
       newDate.setHours(parseInt(value, 10));
     } else if (type === "minute") {
       newDate.setMinutes(parseInt(value, 10));

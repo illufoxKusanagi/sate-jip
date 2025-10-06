@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
       endDate: event.endDate.toISOString(),
       title: event.title,
       description: event.description || "",
-      color: event.color || "blue",
+      color: event.color,
     }));
     return NextResponse.json(formattedEvents);
   } catch (error) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     console.error("Error adding event: ", error);
     return NextResponse.json(
       { error: "Failed to create new event" },
-      { status: 500 }
+      { status: 400 }
     );
   }
 }
