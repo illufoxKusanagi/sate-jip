@@ -6,16 +6,6 @@ export interface IUser {
   picturePath: string | null;
 }
 
-// export interface IEvent {
-//   id: number;
-//   user: IUser;
-//   startDate: string;
-//   endDate: string;
-//   title: string;
-//   color: TEventColor;
-//   description: string;
-// }
-
 export interface IEvent {
   id: string;
   opdName: string;

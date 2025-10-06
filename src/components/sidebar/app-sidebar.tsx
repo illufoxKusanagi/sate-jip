@@ -1,53 +1,5 @@
-// // Add this to your existing AppSidebar component
-
-// import { useAuth } from "@/app/context/auth-context";
-// import { Button } from "@/components/ui/button";
-// import { LogOut, User } from "lucide-react";
-
-// // Edited Here: Add user section to sidebar
-// export function AppSidebar() {
-//   const { user, logout, isAuthenticated } = useAuth();
-
-//   return (
-//     <div className="sidebar">
-//       {/* ...existing sidebar content... */}
-
-//       {/* Edited Here: Add user section at bottom of sidebar */}
-//       {isAuthenticated && user && (
-//         <div className="mt-auto p-4 border-t">
-//           <div className="flex items-center gap-2 mb-2">
-//             <User className="h-4 w-4" />
-//             <span className="text-sm font-medium">{user.name}</span>
-//           </div>
-//           <div className="text-xs text-muted-foreground mb-2">{user.email}</div>
-//           <Button
-//             variant="outline"
-//             size="sm"
-//             onClick={logout}
-//             className="w-full"
-//           >
-//             <LogOut className="h-4 w-4 mr-2" />
-//             Logout
-//           </Button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
 "use client";
-import {
-  Calendar,
-  Cog,
-  Home,
-  Inbox,
-  LogOut,
-  Plus,
-  Search,
-  Settings,
-  Ticket,
-  User,
-} from "lucide-react";
+import { Calendar, Cog, Home, Ticket } from "lucide-react";
 
 import {
   Sidebar,
@@ -55,15 +7,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { NavUser } from "../ui/nav-user";
 import Link from "next/link";
 
 export function AppSidebar() {
@@ -131,15 +80,6 @@ export function AppSidebar() {
         )}
       >
         <SidebarMenu>
-          {/* <SidebarMenuButton
-            variant="default"
-            className="h-10 px-4 py-3 justify-start gap-3 transition-colors"
-            asChild
-          >
-            <Plus size="icon" className="shrink-0" />
-            {open && <span className="body-medium-bold">Percakapan Baru</span>}
-          </SidebarMenuButton> */}
-
           <SidebarGroup>
             <SidebarGroupContent className="space-y-1">
               <SidebarMenu>
@@ -160,11 +100,15 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter
         className={cn(
-          "absolute bottom-0 w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
-          open ? "p-0" : "p-0"
+          "w-full bg-accent backdrop-blur supports-[backdrop-filter]:bg-background/60"
         )}
       >
-        {/* <NavUser user={user} /> */}
+        <p className="body-small-bold text-center">
+          Made with ❤️ by <br />
+          <Link href={"https://github.com/illufoxKusanagi"}>
+            <span className="hover:underline">Illufox Kasunagi</span>
+          </Link>
+        </p>
       </SidebarFooter>
     </Sidebar>
   );

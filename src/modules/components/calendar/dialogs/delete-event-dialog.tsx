@@ -32,7 +32,6 @@ export default function DeleteEventDialog({ eventId }: DeleteEventDialogProps) {
         throw new Error("Failed to delete event");
       }
 
-      // Update local state after successful deletion
       removeEvent(eventId);
       toast.success("Event deleted successfully.");
     } catch (error) {

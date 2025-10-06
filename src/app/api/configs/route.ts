@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db/connection";
 import { dataConfig } from "@/lib/db/schema";
-import { v4 as uuidv4 } from "uuid";
 
-// GET all configs
 export async function GET() {
   try {
     const configs = await db.select().from(dataConfig);
@@ -17,7 +15,6 @@ export async function GET() {
   }
 }
 
-// POST new config
 export async function POST(request: Request) {
   try {
     const body = await request.json();

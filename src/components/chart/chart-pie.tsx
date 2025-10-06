@@ -1,4 +1,3 @@
-// src/components/chart/pie-chart-new.tsx
 "use client";
 
 import { Pie, PieChart } from "recharts";
@@ -23,7 +22,7 @@ import { useEffect, useState } from "react";
 import { generateDistinctColors, createSafeKey } from "@/lib/utils/chart-utils";
 
 interface ChartData {
-  browser: string; // Keep using browser for compatibility
+  browser: string;
   visitors: number;
   fill: string;
 }
@@ -97,14 +96,13 @@ export function ChartPie({
 
         const colors = generateDistinctColors(rawData.length);
 
-        // KEY FIX: Transform data to use safe keys as browser values
         const transformedData: ChartData[] = rawData.map(
           (item: any, index: number) => {
             const originalName = String(item[nameField]) || `Item ${index + 1}`;
             const safeKey = createSafeKey(originalName, index);
 
             return {
-              browser: safeKey, // Use safe key for matching
+              browser: safeKey,
               visitors: Number(item[valueField]) || 0,
               fill: colors[index],
             };
@@ -119,7 +117,6 @@ export function ChartPie({
         setChartData(transformedData);
         setTotalCount(total);
 
-        // Store original names for display
         setOriginalNames(
           rawData.map((item: any, index: number) => ({
             safeKey: createSafeKey(
@@ -189,15 +186,13 @@ export function ChartPie({
     return null;
   };
 
-  // Generate chart config that matches the data keys exactly
   const chartConfig: ChartConfig = {
     visitors: { label: "Count" },
   };
 
-  // Add config for each data item using the same safe keys
   originalNames.forEach((item, index) => {
     chartConfig[item.safeKey] = {
-      label: item.originalName, // Display original name
+      label: item.originalName,
       color: chartData[index]?.fill || `hsl(var(--chart-${(index % 5) + 1}))`,
     };
   });
@@ -248,13 +243,9 @@ export function ChartPie({
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser" // This matches the safe key
-            />
+            <Pie data={chartData} dataKey="visitors" nameKey="browser" />
             <ChartLegend
-              content={<ChartLegendContent nameKey="browser" />} // This will now find matching keys
+              content={<ChartLegendContent nameKey="browser" />}
               className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
             />
           </PieChart>

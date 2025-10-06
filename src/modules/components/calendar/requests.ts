@@ -9,5 +9,4 @@ export const getEvents = async () => {
 
 export const getUsers = async () => {
   return [];
-  // return USERS_MOCK;
 };

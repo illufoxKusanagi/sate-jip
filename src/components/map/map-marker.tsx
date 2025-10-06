@@ -29,17 +29,6 @@ type Props = {
     marker: mapboxgl.Marker;
     data: LocationFeature;
   }) => void;
-  //   onHover?: ({
-  //     isHovered;
-  //     position;
-  //     marker;
-  //     data;
-  //   }: {
-  //     isHovered: boolean;
-  //     position: { longitude: number; latitude: number };
-  //     marker: mapboxglde,.Marker;
-  //     data: LocationFeature;
-  //   }) => void;
   children?: ReactNode;
 } & MarkerOptions;
 
@@ -95,7 +84,6 @@ export default function Marker({
       .addTo(map);
 
     return () => {
-      // Cleanup on unmount
       if (marker) marker.remove();
       if (markerEl) {
         markerEl.removeEventListener("mouseenter", handleMouseEnter);

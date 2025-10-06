@@ -24,8 +24,6 @@ interface ICalendarContext {
   setBadgeVariant: (variant: "dot" | "colored") => void;
   selectedColors: TEventColor[];
   filterEventsBySelectedColors: (colors: TEventColor) => void;
-  //   filterEventsBySelectedUser: (userId: IUser["id"] | "all") => void;
-  //   users: IUser[];
   events: IEvent[];
   addEvent: (event: IEvent) => void;
   updateEvent: (event: IEvent) => void;
@@ -137,16 +135,6 @@ export function CalendarProvider({
     setSelectedColors(newColors);
   };
 
-  //   const filterEventsBySelectedUser = (userId: IUser["id"] | "all") => {
-  //     setSelectedUserId(userId);
-  //     if (userId === "all") {
-  //       setFilteredEvents(allEvents);
-  //     } else {
-  //       const filtered = allEvents.filter((event) => event.user.id === userId);
-  //       setFilteredEvents(filtered);
-  //     }
-  //   };
-
   const handleSelectDate = (date: Date | undefined) => {
     if (!date) return;
     setSelectedDate(date);
@@ -189,10 +177,8 @@ export function CalendarProvider({
     setSelectedUserId,
     badgeVariant,
     setBadgeVariant,
-    // users,
     selectedColors,
     filterEventsBySelectedColors,
-    // filterEventsBySelectedUser,
     events: filteredEvents,
     view: currentView,
     use24HourFormat,

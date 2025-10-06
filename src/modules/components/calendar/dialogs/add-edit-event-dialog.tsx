@@ -133,7 +133,6 @@ export function AddEditEventDialog({
           throw new Error("Failed to update event");
         }
 
-        // Update local state
         const formattedEvent: IEvent = {
           id: event.id,
           ...payload,
@@ -141,7 +140,6 @@ export function AddEditEventDialog({
         updateEvent(formattedEvent);
         toast.success("Event updated successfully");
       } else {
-        // POST request to create event
         const response = await fetch("/api/event", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -154,9 +152,8 @@ export function AddEditEventDialog({
 
         const result = await response.json();
 
-        // Add to local state - API should return the created event with ID
         const formattedEvent: IEvent = {
-          id: result.id || Math.random().toString(), // Fallback if API doesn't return ID
+          id: result.id || Math.random().toString(),
           ...payload,
         };
         addEvent(formattedEvent);

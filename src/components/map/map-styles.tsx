@@ -46,13 +46,6 @@ export default function MapStyles() {
     map.setStyle(`mapbox://styles/mapbox/${value}`);
     setActiveStyle(value);
   };
-
-  // useEffect(() => {
-  //   if (activeStyle === "dark-v11") {
-  //     setTheme("dark");
-  //   } else setTheme("light");
-  // }, [activeStyle]);
-
   return (
     <aside className="absolute bottom-4 left-4 z-10">
       <Tabs value={activeStyle} onValueChange={handleChange}>

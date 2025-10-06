@@ -14,11 +14,6 @@ const tabs = [
     value: "agenda",
     icon: () => <CalendarRange className="h-4 w-4" />,
   },
-  // {
-  //   name: "Day",
-  //   value: "day",
-  //   icon: () => <List className="h-4 w-4" />,
-  // },
   {
     name: "Week",
     value: "week",

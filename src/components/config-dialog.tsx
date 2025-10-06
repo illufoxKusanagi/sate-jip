@@ -55,7 +55,6 @@ export function ConfigDialog({
   setFormData,
   onSubmit,
 }: ConfigDialogProps) {
-  // Dynamic field rendering based on dataType
   const renderDynamicFields = () => {
     if (formData.dataType === "OPD") {
       return (
@@ -121,7 +120,6 @@ export function ConfigDialog({
               <Select
                 value={formData.dataType}
                 onValueChange={(value) => {
-                  // Reset type-specific fields when changing dataType
                   setFormData({
                     ...formData,
                     dataType: value,
@@ -169,7 +167,6 @@ export function ConfigDialog({
               />
             </div>
 
-            {/* Dynamic fields based on dataType */}
             {renderDynamicFields()}
           </div>
 

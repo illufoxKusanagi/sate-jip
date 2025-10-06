@@ -3,7 +3,6 @@ import { db } from "@/lib/db/connection";
 import { dataConfig } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
-// PUT update config
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -46,7 +45,6 @@ export async function PUT(
   }
 }
 
-// DELETE config
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }

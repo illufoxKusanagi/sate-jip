@@ -1,4 +1,3 @@
-// src/app/context/auth-context.tsx
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
@@ -26,7 +25,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Check localStorage on mount
     const token = localStorage.getItem("adminToken");
     const userData = localStorage.getItem("adminUser");
 

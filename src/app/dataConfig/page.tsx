@@ -225,8 +225,8 @@ export default function InputDataConfigPage() {
             </DropdownMenu>
           ) : null}
         </div>
-        <div className="container m-20">
-          <div className="flex items-center justify-between mb-6">
+        <div className="container lg:m-20">
+          <div className="flex items-center justify-between lg:mb-6">
             <div>
               <h1 className="text-3xl font-bold">Data Configuration</h1>
               <p className="text-muted-foreground mt-2">

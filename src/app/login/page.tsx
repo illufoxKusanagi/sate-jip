@@ -1,4 +1,3 @@
-// src/app/login/page.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,6 @@ export default function LoginPage() {
         return;
       }
 
-      // FIXED: Use correct data from response
       login(result.user.username, result.token);
       toast.success(
         `Login berhasil, Okaerinasai, ${result.user.username}-san!`

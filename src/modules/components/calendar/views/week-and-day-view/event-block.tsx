@@ -60,7 +60,6 @@ export function EventBlock({ event, className }: IProps) {
   const start = parseISO(event.startDate);
   const end = parseISO(event.endDate);
   const durationInMinutes = differenceInMinutes(end, start);
-  // Ensure a sensible minimum so very short or bad data doesn’t collapse the block
   const MIN_EVENT_HEIGHT = 20;
   const computedHeight = (durationInMinutes / 60) * 96 - 8;
   const heightInPixels = Number.isFinite(computedHeight)

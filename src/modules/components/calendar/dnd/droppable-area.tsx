@@ -28,7 +28,6 @@ export function DroppableArea({
         isDragOver && "bg-primary/10"
       )}
       onDragOver={(e) => {
-        // Prevent default to allow drop
         e.preventDefault();
         setIsDragOver(true);
       }}

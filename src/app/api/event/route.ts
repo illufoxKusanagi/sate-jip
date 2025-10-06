@@ -15,8 +15,6 @@ const eventSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const events = await db.select().from(eventCalendar);
-    // .groupBy(eventCalendar.opdName)
-    // .orderBy(eventCalendar.startDate);
 
     const formattedEvents = events.map((event) => ({
       id: event.id,

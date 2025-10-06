@@ -69,7 +69,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const { id } = await params;
@@ -83,7 +83,6 @@ export async function DELETE(
 
     console.log("Attempting to delete event with ID:", id);
 
-    // First, check if the record exists
     const existingEvent = await db
       .select()
       .from(eventCalendar)
@@ -96,7 +95,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    // Perform the delete
     const deleteResult = await db
       .delete(eventCalendar)
       .where(eq(eventCalendar.id, id));
@@ -110,7 +108,6 @@ export async function DELETE(
   } catch (error) {
     console.error("Error deleting event: ", error);
 
-    // Return more detailed error info
     return NextResponse.json(
       {
         error: "Failed to delete event",

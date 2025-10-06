@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     const newLocation = {
-      // id: data.id || `loc_${Date.now()}`,
       locationName: data.locationName,
       latitude: data.latitude,
       longitude: data.longitude,
