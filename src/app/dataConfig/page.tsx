@@ -200,9 +200,15 @@ export default function InputDataConfigPage() {
         throw new Error(`HTTP Error! status: ${response.status}`);
       }
 
-      const allData: ConfigData[] = await response.json();
-      console.log("Fetched config data:", allData);
+      const rawData = await response.json();
 
+      // Parse dataConfig JSON string to object
+      const allData: ConfigData[] = rawData.map((item: any) => ({
+        ...item,
+        dataConfig: typeof item.dataConfig === 'string'
+          ? JSON.parse(item.dataConfig)
+          : item.dataConfig
+      }));
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
       const ispConfigs = allData.filter((item) => item.dataType === "ISP");
 
