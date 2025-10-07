@@ -40,9 +40,34 @@ interface CalendarSettings {
 
 const DEFAULT_SETTINGS: CalendarSettings = {
   badgeVariant: "colored",
-  view: "day",
+  view: "minggu",
   use24HourFormat: true,
   agendaModeGroupBy: "date",
+};
+
+// Migration function to handle old English view values
+const migrateViewValue = (view: string): TCalendarView => {
+  const viewMigrationMap: Record<string, TCalendarView> = {
+    day: "hari",
+    week: "minggu",
+    month: "bulan",
+    year: "tahun",
+    agenda: "agenda",
+  };
+
+  // If it's already an Indonesian value or a valid view, return it
+  if (["hari", "minggu", "bulan", "tahun", "agenda"].includes(view)) {
+    return view as TCalendarView;
+  }
+
+  // If it's an old English value, migrate it
+  if (viewMigrationMap[view]) {
+    return viewMigrationMap[view];
+  }
+
+  // Fallback to default
+  console.warn(`Unknown view value: ${view}, falling back to minggu`);
+  return "minggu";
 };
 
 const CalendarContext = createContext({} as ICalendarContext);
@@ -51,7 +76,7 @@ export function CalendarProvider({
   children,
   events,
   badge = "colored",
-  view = "day",
+  view = "minggu",
 }: {
   children: React.ReactNode;
   events: IEvent[];
@@ -67,12 +92,23 @@ export function CalendarProvider({
     }
   );
 
+  // Migrate view value if it's an old English value
+  const migratedView = migrateViewValue(settings.view);
+
+  // Update settings if migration occurred
+  if (migratedView !== settings.view) {
+    console.log(`Migrating view from ${settings.view} to ${migratedView}`);
+    setSettings({
+      ...settings,
+      view: migratedView,
+    });
+  }
+
   const [badgeVariant, setBadgeVariantState] = useState<"dot" | "colored">(
     settings.badgeVariant
   );
-  const [currentView, setCurrentViewState] = useState<TCalendarView>(
-    settings.view
-  );
+  const [currentView, setCurrentViewState] =
+    useState<TCalendarView>(migratedView);
   const [use24HourFormat, setUse24HourFormatState] = useState<boolean>(
     settings.use24HourFormat
   );

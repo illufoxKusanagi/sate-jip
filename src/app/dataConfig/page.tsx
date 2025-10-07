@@ -48,6 +48,7 @@ export default function InputDataConfigPage() {
   const [ispSorting, setIspSorting] = useState<SortingState>([]);
   const [opdFilter, setOpdFilter] = useState<ColumnFiltersState>([]);
   const [ispFilter, setIspFilter] = useState<ColumnFiltersState>([]);
+  const [isFetching, setIsFetching] = useState(false); // Prevent multiple simultaneous calls
 
   const handleEdit = (item: ConfigData) => {
     setEditingItem(item);
@@ -75,11 +76,19 @@ export default function InputDataConfigPage() {
         throw new Error(`HTTP Error! status: ${response.status}`);
       }
 
-      await fetchAllData();
+      // Optimistic update: remove item from local state instead of refetching
+      if (item.dataType === "OPD") {
+        setOpdData((prev) => prev.filter((config) => config.id !== item.id));
+      } else if (item.dataType === "ISP") {
+        setIspData((prev) => prev.filter((config) => config.id !== item.id));
+      }
+
       toast.success("Configuration deleted successfully!");
     } catch (error) {
       console.error("Delete error: ", error);
       toast.error("Failed to delete configuration");
+      // If delete failed, refetch to ensure consistency
+      fetchAllData();
     }
   };
 
@@ -191,9 +200,14 @@ export default function InputDataConfigPage() {
   ];
 
   const fetchAllData = async () => {
+    // Prevent multiple simultaneous calls
+    if (isFetching) {
+      return;
+    }
+
     try {
+      setIsFetching(true);
       setIsConfigLoading(true);
-      console.log("Fetching config data...");
       const response = await fetch("/api/configs");
 
       if (!response.ok) {
@@ -201,19 +215,11 @@ export default function InputDataConfigPage() {
       }
 
       const allData: ConfigData[] = await response.json();
-      console.log("Fetched config data:", allData);
-
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
       const ispConfigs = allData.filter((item) => item.dataType === "ISP");
 
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
-      console.log(
-        "OPD configs:",
-        opdConfigs.length,
-        "ISP configs:",
-        ispConfigs.length
-      );
     } catch (error) {
       console.error("Fetch error details:", error);
       toast.error(
@@ -221,6 +227,7 @@ export default function InputDataConfigPage() {
       );
     } finally {
       setIsConfigLoading(false);
+      setIsFetching(false);
     }
   };
 
@@ -259,8 +266,6 @@ export default function InputDataConfigPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log("Submitting form data:", formData);
-
       let payload: any;
       if (formData.dataType === "OPD") {
         payload = {
@@ -308,7 +313,33 @@ export default function InputDataConfigPage() {
       const result = await response.json();
       console.log("Submit result:", result);
 
-      await fetchAllData();
+      // Optimistic update: add/update item in local state instead of refetching
+      const configData = result.data;
+
+      if (editingItem) {
+        // Update existing item
+        if (formData.dataType === "OPD") {
+          setOpdData((prev) =>
+            prev.map((config) =>
+              config.id === editingItem.id ? configData : config
+            )
+          );
+        } else if (formData.dataType === "ISP") {
+          setIspData((prev) =>
+            prev.map((config) =>
+              config.id === editingItem.id ? configData : config
+            )
+          );
+        }
+      } else {
+        // Add new item
+        if (formData.dataType === "OPD") {
+          setOpdData((prev) => [...prev, configData]);
+        } else if (formData.dataType === "ISP") {
+          setIspData((prev) => [...prev, configData]);
+        }
+      }
+
       resetFormData();
       toast.success(
         editingItem
@@ -322,6 +353,8 @@ export default function InputDataConfigPage() {
           ? "Failed to update configuration. Please check your connection."
           : "Failed to create configuration. Please check your connection."
       );
+      // If operation failed, refetch to ensure consistency
+      fetchAllData();
     }
   };
 

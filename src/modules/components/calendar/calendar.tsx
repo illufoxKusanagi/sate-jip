@@ -59,7 +59,7 @@ export function Calendar() {
   }
 
   return (
-    <CalendarProvider events={events} view="month">
+    <CalendarProvider events={events} view="bulan">
       <DndProvider showConfirmation={false}>
         <div className="w-full border rounded-xl">
           <CalendarHeader />
