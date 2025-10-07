@@ -66,7 +66,7 @@ export const columns: ColumnDef<LocationData>[] = [
     },
     cell: ({ row }) => (
       <div
-        className="font-medium w-[200px] text-wrap px-3"
+        className="font-medium text-wrap px-3"
         title={row.getValue("locationName")}
       >
         {row.getValue("locationName")}
@@ -98,7 +98,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "latitude",
     header: "Garis Lintang",
     cell: ({ row }) => (
-      <div className="w-[100px] text-wrap" title="Koordinat">
+      <div className="text-wrap" title="Koordinat">
         {row.getValue("latitude")}
       </div>
     ),
@@ -107,7 +107,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "longitude",
     header: "Garis Bujur",
     cell: ({ row }) => (
-      <div className="w-[100px] text-wrap" title="Koordinat">
+      <div className="text-wrap" title="Koordinat">
         {row.getValue("longitude")}
       </div>
     ),
@@ -116,7 +116,7 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "opdPengampu",
     header: "OPD Pengampu",
     cell: ({ row }) => (
-      <div className="w-[150px] text-wrap" title={row.getValue("opdPengampu")}>
+      <div className="text-wrap" title={row.getValue("opdPengampu")}>
         {row.getValue("opdPengampu")}
       </div>
     ),
@@ -282,14 +282,14 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
 
   if (loading) {
     return (
-      <>
-        <p>Loading...</p>
-      </>
+      <div className="flex items-center justify-center p-6 sm:p-8">
+        <div className="text-sm sm:text-base">Loading locations...</div>
+      </div>
     );
   }
   return (
-    <div className="w-full space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-3 sm:space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           placeholder="Filter locations..."
           value={
@@ -298,15 +298,17 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
           onChange={(event) =>
             table.getColumn("locationName")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-full sm:max-w-xs text-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Columns</span>
+              <span className="sm:hidden">Cols</span>
+              <ChevronDown className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-40 sm:w-48">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -314,7 +316,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className="capitalize text-xs sm:text-sm"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -328,14 +330,17 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-semibold p-2">
+                    <TableHead
+                      key={header.id}
+                      className="font-semibold p-1 sm:p-2 text-xs sm:text-sm whitespace-nowrap"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -357,7 +362,10 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="p-1 sm:p-2 text-xs sm:text-sm"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -380,12 +388,12 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2">
-        <div className="flex items-center space-x-6 lg:space-x-8">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-6 lg:space-x-8">
+          <div className="flex items-center justify-between sm:justify-start space-x-2">
+            <p className="text-xs sm:text-sm font-medium">Rows per page</p>
             <select
-              className="h-8 w-[70px] rounded border border-input bg-transparent px-3 py-1 text-sm"
+              className="h-8 w-[70px] rounded border border-input bg-transparent px-2 py-1 text-xs sm:text-sm"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
@@ -398,48 +406,53 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
               ))}
             </select>
           </div>
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+          <div className="flex items-center justify-center text-xs sm:text-sm font-medium">
+            <span className="hidden sm:inline">
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </span>
+            <span className="sm:hidden">
+              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            </span>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="sr-only">Go to first page</span>
-              {"<<"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="sr-only">Go to previous page</span>
-              {"<"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="sr-only">Go to next page</span>
-              {">"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="sr-only">Go to last page</span>
-              {">>"}
-            </Button>
-          </div>
+        </div>
+        <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to first page</span>
+            {"<<"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to previous page</span>
+            {"<"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to next page</span>
+            {">"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to last page</span>
+            {">>"}
+          </Button>
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
             transition={transition}
           >
             {/* Time column header - responsive width */}
-            <div className="w-18"></div>
+            <div className="w-12 sm:w-18"></div>
             <div className="grid flex-1 grid-cols-7  border-l">
               {weekDays.map((day, index) => (
                 <motion.span
@@ -90,10 +90,10 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
           </motion.div>
         </div>
 
-        <ScrollArea className="h-[736px]" type="always">
+        <ScrollArea className="h-full" type="always">
           <div className="flex">
             {/* Hours column */}
-            <motion.div className="relative w-18" variants={staggerContainer}>
+            <motion.div className="relative w-12 sm:w-18" variants={staggerContainer}>
               {hours.map((hour, index) => (
                 <motion.div
                   key={hour}

@@ -21,9 +21,9 @@ export function CalendarHeader() {
   const { view, events } = useCalendar();
 
   return (
-    <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 border-b p-2 sm:p-3 lg:p-4 lg:flex-row lg:items-center lg:justify-between">
       <motion.div
-        className="flex items-center gap-3"
+        className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2"
         variants={slideFromLeft}
         initial="initial"
         animate="animate"
@@ -34,28 +34,30 @@ export function CalendarHeader() {
       </motion.div>
 
       <motion.div
-        className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-1.5"
+        className="flex flex-col gap-2 sm:gap-3 lg:flex-row lg:items-center lg:gap-4"
         variants={slideFromRight}
         initial="initial"
         animate="animate"
         transition={transition}
       >
-        <div className="options flex-wrap flex items-center gap-4 md:gap-2">
-          <FilterEvents />
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
           <Views />
+          <FilterEvents />
         </div>
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-1.5">
-          {/* <UserSelect /> */}
-
+        <div className="flex flex-row gap-2 justify-between xs:justify-start">
           <AddEditEventDialog>
-            <Button>
-              <Plus className="h-4 w-4" />
-              Tambahkan Agenda
+            <Button
+              size="sm"
+              className="flex-1 xs:flex-none text-xs sm:text-sm"
+            >
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span className="hidden xs:inline">Tambah</span>
+              <span className="xs:hidden">+</span>
             </Button>
           </AddEditEventDialog>
+          <Settings />
         </div>
-        <Settings />
       </motion.div>
     </div>
   );

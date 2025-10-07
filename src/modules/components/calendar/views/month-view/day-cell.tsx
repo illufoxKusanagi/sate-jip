@@ -139,7 +139,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
 
           <motion.div
             className={cn(
-              "flex h-fit gap-1 px-2 mt-1 lg:h-[94px] lg:flex-col lg:gap-2 lg:px-0",
+              "flex h-fit gap-1 px-2 mt-1 lg:flex-col lg:gap-2 lg:px-0 flex-wrap",
               !currentMonth && "opacity-50"
             )}
           >

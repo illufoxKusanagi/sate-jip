@@ -77,8 +77,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <Card className="w-full max-w-xs">
+    <div className="flex h-screen items-center justify-center p-4">
+      <Card className="w-full sm:max-w-sm">
         <CardHeader className="text-center m-2">
           <CardTitle className="heading-4">Login</CardTitle>
           <CardDescription>
