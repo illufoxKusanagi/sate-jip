@@ -329,122 +329,126 @@ export default function InputDataConfigPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex flex-row h-screen w-full">
+      <div className="flex h-screen w-full">
         <AppSidebar />
-        <SidebarTrigger className="ml-4 mt-4" size={"lg"} />
-        <div className="absolute top-4 right-4 flex flex-row gap-4">
-          <ModeToggle />
-          {isAuthenticated ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex flex-row gap-3 px-4 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    className="rounded-full"
-                    src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
-                    alt={user?.username || "Admin"}
-                  />
-                  <AvatarFallback className="rounded-lg">IK</AvatarFallback>
-                </Avatar>
-                <div className="flex text-left justify-center">
-                  <span className="truncate body-small-regular">
-                    Selamat Datang, {user?.username}
-                  </span>
-                </div>
-                <ChevronDown className="ml-auto size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : null}
-        </div>
-        <div className="container lg:m-20">
-          <div className="flex items-center justify-between lg:mb-6">
-            <div>
-              <h1 className="text-3xl font-bold">Data Configuration</h1>
-              <p className="text-muted-foreground mt-2">
-                Manage system configuration settings
-              </p>
-            </div>
-            <div className="flex space-x-2">
-              <Button variant="outline" onClick={handleHealthCheck}>
-                Health Check
-              </Button>
-              <Button onClick={handleCreate}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Configuration
-              </Button>
-            </div>
+        <main className="flex-1 overflow-y-auto relative">
+          <div className="fixed top-3 left-3 z-50 lg:hidden">
+            <SidebarTrigger />
           </div>
+          <div className="hidden lg:block lg:ml-3 lg:mt-3">
+            <SidebarTrigger />
+          </div>
+          <div className="fixed top-3 right-3 z-50 flex gap-2">
+            <ModeToggle />
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1 sm:gap-2 px-2 py-1 hover:bg-accent rounded-md">
+                  <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
+                    <AvatarImage
+                      src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
+                      alt={user?.username || "Admin"}
+                    />
+                    <AvatarFallback className="text-xs">IK</AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:inline text-xs sm:text-sm truncate max-w-20">
+                    {user?.username}
+                  </span>
+                  <ChevronDown className="h-3 w-3" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : null}
+          </div>
+          <div className="container mt-24 mx-auto lg:m-20">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 lg:mb-6">
+              <div>
+                <h1 className="text-3xl font-bold">Data Configuration</h1>
+                <p className="text-muted-foreground mt-2">
+                  Manage system configuration settings
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" onClick={handleHealthCheck}>
+                  Health Check
+                </Button>
+                <Button onClick={handleCreate}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Configuration
+                </Button>
+              </div>
+            </div>
 
-          <Tabs defaultValue="opd">
-            <TabsList className="mb-4">
-              <TabsTrigger value="opd">Data OPD pengampu</TabsTrigger>
-              <TabsTrigger value="isp">Data ISP</TabsTrigger>
-            </TabsList>
-            <TabsContent value="opd">
-              {isConfigLoading ? (
-                <div className="flex items-center justify-center p-8">
-                  <div>Loading Configs...</div>
-                </div>
-              ) : (
-                <>
-                  <ConfigTable
-                    data={opdData}
-                    columns={opdColumns}
-                    sorting={opdSorting}
-                    setSorting={setOpdSorting}
-                    columnFilters={opdFilter}
-                    setColumnFilters={setOpdFilter}
-                    searchPlaceholder="Cari OPD..."
-                    searchColumn="dataConfig"
-                  />
-                  <ConfigDialog
-                    isOpen={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                    editingItem={editingItem}
-                    formData={formData}
-                    setFormData={setFormData}
-                    onSubmit={handleSubmit}
-                  />
-                </>
-              )}
-            </TabsContent>
-            <TabsContent value="isp">
-              {isConfigLoading ? (
-                <div className="flex items-center justify-center p-8">
-                  <div>Loading Configs...</div>
-                </div>
-              ) : (
-                <>
-                  <ConfigTable
-                    data={ispData}
-                    columns={ispColumns}
-                    sorting={ispSorting}
-                    setSorting={setIspSorting}
-                    columnFilters={ispFilter}
-                    setColumnFilters={setIspFilter}
-                    searchPlaceholder="Cari Penyedia Internet..."
-                    searchColumn="dataConfig"
-                  />
-                  <ConfigDialog
-                    isOpen={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                    editingItem={editingItem}
-                    formData={formData}
-                    setFormData={setFormData}
-                    onSubmit={handleSubmit}
-                  />
-                </>
-              )}
-            </TabsContent>
-          </Tabs>
-        </div>
+            <Tabs defaultValue="opd">
+              <TabsList className="mb-4">
+                <TabsTrigger value="opd">Data OPD pengampu</TabsTrigger>
+                <TabsTrigger value="isp">Data ISP</TabsTrigger>
+              </TabsList>
+              <TabsContent value="opd">
+                {isConfigLoading ? (
+                  <div className="flex items-center justify-center p-8">
+                    <div>Loading Configs...</div>
+                  </div>
+                ) : (
+                  <>
+                    <ConfigTable
+                      data={opdData}
+                      columns={opdColumns}
+                      sorting={opdSorting}
+                      setSorting={setOpdSorting}
+                      columnFilters={opdFilter}
+                      setColumnFilters={setOpdFilter}
+                      searchPlaceholder="Cari OPD..."
+                      searchColumn="dataConfig"
+                    />
+                    <ConfigDialog
+                      isOpen={isDialogOpen}
+                      onOpenChange={setIsDialogOpen}
+                      editingItem={editingItem}
+                      formData={formData}
+                      setFormData={setFormData}
+                      onSubmit={handleSubmit}
+                    />
+                  </>
+                )}
+              </TabsContent>
+              <TabsContent value="isp">
+                {isConfigLoading ? (
+                  <div className="flex items-center justify-center p-8">
+                    <div>Loading Configs...</div>
+                  </div>
+                ) : (
+                  <>
+                    <ConfigTable
+                      data={ispData}
+                      columns={ispColumns}
+                      sorting={ispSorting}
+                      setSorting={setIspSorting}
+                      columnFilters={ispFilter}
+                      setColumnFilters={setIspFilter}
+                      searchPlaceholder="Cari Penyedia Internet..."
+                      searchColumn="dataConfig"
+                    />
+                    <ConfigDialog
+                      isOpen={isDialogOpen}
+                      onOpenChange={setIsDialogOpen}
+                      editingItem={editingItem}
+                      formData={formData}
+                      setFormData={setFormData}
+                      onSubmit={handleSubmit}
+                    />
+                  </>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
+        </main>
       </div>
     </SidebarProvider>
   );

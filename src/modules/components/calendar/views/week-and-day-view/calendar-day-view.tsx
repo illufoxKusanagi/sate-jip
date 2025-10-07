@@ -78,7 +78,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const groupedEvents = groupEvents(dayEvents);
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <div className="flex flex-1 flex-col">
         <div>
           <DayViewMultiDayEventsRow
@@ -88,7 +88,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
           {/* Day header */}
           <div className="relative z-20 flex border-b">
-            <div className="w-18"></div>
+            <div className="w-12 sm:w-18"></div>
             <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
               {format(selectedDate, "EE")}{" "}
               <span className="font-semibold text-t-secondary">
@@ -98,10 +98,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           </div>
         </div>
 
-        <ScrollArea className="h-[800px]" type="always" ref={scrollAreaRef}>
+        <ScrollArea className="h-full" type="always" ref={scrollAreaRef}>
           <div className="flex">
             {/* Hours column */}
-            <div className="relative w-18">
+            <div className="relative w-12 sm:w-18">
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
@@ -175,7 +175,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         </ScrollArea>
       </div>
 
-      <div className="hidden w-72 divide-y border-l md:block">
+      <div className="hidden w-full md:w-72 divide-y border-l md:block">
         <DayPicker
           className="mx-auto w-fit"
           mode="single"
@@ -203,7 +203,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           )}
 
           {currentEvents.length > 0 && (
-            <ScrollArea className="h-[422px] px-4" type="always">
+            <ScrollArea className="h-full" type="always">
               <div className="space-y-6 pb-4">
                 {currentEvents.map((event) => {
                   return (

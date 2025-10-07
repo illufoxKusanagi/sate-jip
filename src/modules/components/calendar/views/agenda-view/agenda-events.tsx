@@ -53,7 +53,7 @@ export const AgendaEvents: FC = () => {
   );
 
   return (
-    <Command className="py-4 h-[80vh] bg-transparent">
+    <Command className="py-4 bg-transparent">
       <div className="mb-4 mx-4">
         <CommandInput placeholder="Type a command or search..." />
       </div>
@@ -81,7 +81,7 @@ export const AgendaEvents: FC = () => {
                 )}
               >
                 <EventDetailsDialog event={event}>
-                  <div className="w-full flex items-center justify-between gap-4">
+                  <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                       {badgeVariant === "dot" ? (
                         <EventBullet color={event.color} />
@@ -102,12 +102,12 @@ export const AgendaEvents: FC = () => {
                         >
                           {event.title}
                         </p>
-                        <p className="text-muted-foreground text-sm line-clamp-1 text-ellipsis md:text-clip w-1/3">
+                        <p className="text-muted-foreground text-sm line-clamp-1 text-ellipsis md:text-clip w-full">
                           {event.description}
                         </p>
                       </div>
                     </div>
-                    <div className="w-40 flex justify-center items-center gap-1">
+                    <div className="w-full sm:w-40 flex flex-col sm:flex-row justify-start sm:justify-center items-start sm:items-center gap-1">
                       {agendaModeGroupBy === "date" ? (
                         <>
                           <p className="text-sm">
