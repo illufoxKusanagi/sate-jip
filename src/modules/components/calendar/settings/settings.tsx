@@ -17,7 +17,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch";
+import { IconSwitch } from "@/modules/components/calendar/ui/icon-switch";
 import { useCalendar } from "@/modules/components/calendar/contexts/calendar-context";
 import { useDragDrop } from "@/modules/components/calendar/contexts/dnd-context";
 
@@ -41,7 +41,7 @@ export function Settings() {
           <DropdownMenuItem>
             Show confirmation dialog on event drop
             <DropdownMenuShortcut>
-              <Switch
+              <IconSwitch
                 icon={
                   showConfirmation ? (
                     <CheckIcon className="h-4 w-4" />
@@ -57,7 +57,7 @@ export function Settings() {
           <DropdownMenuItem>
             Use dot badge
             <DropdownMenuShortcut>
-              <Switch
+              <IconSwitch
                 icon={
                   isDotVariant ? (
                     <DotIcon className="w-4 h-4" />
@@ -75,7 +75,7 @@ export function Settings() {
           <DropdownMenuItem>
             Use 24 hour format
             <DropdownMenuShortcut>
-              <Switch
+              <IconSwitch
                 icon={
                   use24HourFormat ? (
                     <svg

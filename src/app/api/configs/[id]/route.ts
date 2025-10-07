@@ -5,10 +5,11 @@ import { eq } from "drizzle-orm";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!params.id) {
+    const { id } = await params;
+    if (!id) {
       return NextResponse.json(
         { error: "Missing id parameter" },
         { status: 400 }
@@ -31,7 +32,7 @@ export async function PUT(
         dataType,
         dataConfig: config,
       })
-      .where(eq(dataConfig.id, params.id));
+      .where(eq(dataConfig.id, id));
 
     return NextResponse.json({
       message: "Configuration updated successfully",
@@ -47,10 +48,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await db.delete(dataConfig).where(eq(dataConfig.id, params.id));
+    const { id } = await params;
+    await db.delete(dataConfig).where(eq(dataConfig.id, id));
 
     return NextResponse.json({
       message: "Configuration deleted successfully",

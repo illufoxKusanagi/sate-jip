@@ -23,49 +23,11 @@ import {
   ColumnFiltersState,
   SortingState,
 } from "@tanstack/react-table";
-import { ChevronDown, LogOut, Plus } from "lucide-react";
+import { ChevronDown, LogOut, Plus, Edit, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../context/auth-context";
 import { ConfigData } from "@/lib/types";
-
-const opdColumns: ColumnDef<ConfigData>[] = [
-  {
-    accessorKey: "dataConfig",
-    header: "Nama OPD",
-    cell: ({ row }) => row.original.dataConfig.name ?? "-",
-  },
-  {
-    id: "opdType",
-    header: "Jenis OPD",
-    cell: ({ row }) => (
-      <Badge>{row.original.dataConfig.opdType ?? "N/A"}</Badge>
-    ),
-  },
-  {
-    id: "address",
-    header: "Alamat",
-    cell: ({ row }) => row.original.dataConfig.address ?? "-",
-  },
-];
-
-const ispColumns: ColumnDef<ConfigData>[] = [
-  {
-    accessorKey: "dataConfig",
-    header: "Nama ISP",
-    cell: ({ row }) => row.original.dataConfig.name ?? "-",
-  },
-  {
-    id: "address",
-    header: "Alamat",
-    cell: ({ row }) => row.original.dataConfig.address ?? "-",
-  },
-  {
-    id: "pic",
-    header: "Penanggung-jawab",
-    cell: ({ row }) => row.original.dataConfig.pic ?? "-",
-  },
-];
 
 export default function InputDataConfigPage() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -87,19 +49,176 @@ export default function InputDataConfigPage() {
   const [opdFilter, setOpdFilter] = useState<ColumnFiltersState>([]);
   const [ispFilter, setIspFilter] = useState<ColumnFiltersState>([]);
 
+  const handleEdit = (item: ConfigData) => {
+    setEditingItem(item);
+    setFormData({
+      dataType: item.dataType,
+      name: item.dataConfig.name,
+      address: item.dataConfig.address || "",
+      opdType: item.dataConfig.opdType || "",
+      pic: item.dataConfig.pic || "",
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = async (item: ConfigData) => {
+    if (!confirm("Are you sure you want to delete this configuration?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/configs/${item.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
+      await fetchAllData();
+      toast.success("Configuration deleted successfully!");
+    } catch (error) {
+      console.error("Delete error: ", error);
+      toast.error("Failed to delete configuration");
+    }
+  };
+
+  const handleHealthCheck = async () => {
+    try {
+      console.log("Running health check...");
+      toast.info("Running health check...");
+
+      const response = await fetch("/api/health");
+      const healthData = await response.json();
+
+      console.log("Health check result:", healthData);
+
+      if (healthData.status === "healthy") {
+        toast.success("Health check passed! Database connection is working.");
+      } else {
+        toast.error(
+          `Health check failed: ${
+            healthData.database?.error || "Unknown error"
+          }`
+        );
+      }
+    } catch (error) {
+      console.error("Health check error:", error);
+      toast.error("Health check failed - unable to reach server");
+    }
+  };
+
+  const opdColumns: ColumnDef<ConfigData>[] = [
+    {
+      accessorKey: "dataConfig",
+      header: "Nama OPD",
+      cell: ({ row }) => row.original.dataConfig.name ?? "-",
+    },
+    {
+      id: "opdType",
+      header: "Jenis OPD",
+      cell: ({ row }) => (
+        <Badge>{row.original.dataConfig.opdType ?? "N/A"}</Badge>
+      ),
+    },
+    {
+      id: "address",
+      header: "Alamat",
+      cell: ({ row }) => row.original.dataConfig.address ?? "-",
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleEdit(row.original)}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleDelete(row.original)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const ispColumns: ColumnDef<ConfigData>[] = [
+    {
+      accessorKey: "dataConfig",
+      header: "Nama ISP",
+      cell: ({ row }) => row.original.dataConfig.name ?? "-",
+    },
+    {
+      id: "address",
+      header: "Alamat",
+      cell: ({ row }) => row.original.dataConfig.address ?? "-",
+    },
+    {
+      id: "pic",
+      header: "Penanggung-jawab",
+      cell: ({ row }) => row.original.dataConfig.pic ?? "-",
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleEdit(row.original)}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleDelete(row.original)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   const fetchAllData = async () => {
     try {
       setIsConfigLoading(true);
+      console.log("Fetching config data...");
       const response = await fetch("/api/configs");
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
       const allData: ConfigData[] = await response.json();
+      console.log("Fetched config data:", allData);
 
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
       const ispConfigs = allData.filter((item) => item.dataType === "ISP");
 
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
+      console.log(
+        "OPD configs:",
+        opdConfigs.length,
+        "ISP configs:",
+        ispConfigs.length
+      );
     } catch (error) {
-      console.error("Unexpected error: ", error);
+      console.error("Fetch error details:", error);
+      toast.error(
+        "Failed to fetch configurations. Please check your connection."
+      );
     } finally {
       setIsConfigLoading(false);
     }
@@ -110,7 +229,9 @@ export default function InputDataConfigPage() {
   };
 
   useEffect(() => {
-    fetchAllData();
+    (async () => {
+      await fetchAllData();
+    })();
   }, []);
 
   const handleCreate = () => {
@@ -140,6 +261,8 @@ export default function InputDataConfigPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log("Submitting form data:", formData);
+
       let payload: any;
       if (formData.dataType === "OPD") {
         payload = {
@@ -161,20 +284,31 @@ export default function InputDataConfigPage() {
         };
       }
 
+      console.log("Payload:", payload);
+
       const url = editingItem
         ? `/api/configs/${editingItem.id}`
         : "/api/configs";
       const method = editingItem ? "PUT" : "POST";
+
+      console.log(`Making ${method} request to ${url}`);
 
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       if (!response.ok) {
-        throw new Error(`HTTP Error! status: ${response.status}`);
+        const errorData = await response.text();
+        console.error("Server response error:", response.status, errorData);
+        throw new Error(
+          `HTTP Error! status: ${response.status} - ${errorData}`
+        );
       }
+
       const result = await response.json();
+      console.log("Submit result:", result);
 
       await fetchAllData();
       resetFormData();
@@ -184,8 +318,12 @@ export default function InputDataConfigPage() {
           : "Configuration created successfully!"
       );
     } catch (error) {
-      console.error("Submit error: ", error);
-      toast.error("Failed to create config");
+      console.error("Submit error details:", error);
+      toast.error(
+        editingItem
+          ? "Failed to update configuration. Please check your connection."
+          : "Failed to create configuration. Please check your connection."
+      );
     }
   };
 
@@ -233,10 +371,15 @@ export default function InputDataConfigPage() {
                 Manage system configuration settings
               </p>
             </div>
-            <Button onClick={handleCreate}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Configuration
-            </Button>
+            <div className="flex space-x-2">
+              <Button variant="outline" onClick={handleHealthCheck}>
+                Health Check
+              </Button>
+              <Button onClick={handleCreate}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Configuration
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="opd">
