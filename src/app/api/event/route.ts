@@ -51,6 +51,18 @@ export async function POST(request: NextRequest) {
     };
 
     const result = await db.insert(eventCalendar).values(newEvent);
+
+    // const insertId = (result as any).insertId; // Get MySQL insert ID
+
+    // return NextResponse.json(
+    //   {
+    //     success: true,
+    //     message: "Event created successfully",
+    //     id: insertId.toString(), // Return the ID
+    //     ...validated, // Return all the data back
+    //   },
+    //   { status: 201 }
+    // );
     return NextResponse.json(
       { success: true, message: "Event created successfully" },
       { status: 201 }

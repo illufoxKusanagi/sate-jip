@@ -140,6 +140,7 @@ export function AddEditEventDialog({
         updateEvent(formattedEvent);
         toast.success("Event updated successfully");
       } else {
+        // POST request to create event
         const response = await fetch("/api/event", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -147,18 +148,46 @@ export function AddEditEventDialog({
         });
 
         if (!response.ok) {
-          throw new Error("Failed to create event");
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create event");
         }
 
         const result = await response.json();
 
-        const formattedEvent: IEvent = {
-          id: result.id || Math.random().toString(),
-          ...payload,
+        // CRITICAL FIX: Use the returned data properly
+        const formattedEvent = {
+          id: result.id, // Use the ID from response
+          opdName: payload.opdName,
+          title: payload.title,
+          description: payload.description || "",
+          startDate: payload.startDate, // Already in ISO string format
+          endDate: payload.endDate,
+          color: payload.color,
         };
+
         addEvent(formattedEvent);
         toast.success("Event created successfully");
       }
+      // else {
+      //   const response = await fetch("/api/event", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(payload),
+      //   });
+
+      //   if (!response.ok) {
+      //     throw new Error("Failed to create event");
+      //   }
+
+      //   const result = await response.json();
+
+      //   const formattedEvent: IEvent = {
+      //     id: result.id || Math.random().toString(),
+      //     ...payload,
+      //   };
+      //   addEvent(formattedEvent);
+      //   toast.success("Event created successfully");
+      // }
 
       onClose();
       form.reset();

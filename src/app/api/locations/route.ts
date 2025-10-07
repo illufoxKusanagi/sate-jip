@@ -25,18 +25,24 @@ export async function POST(request: NextRequest) {
 
     const newLocation = {
       locationName: data.locationName,
-      latitude: data.latitude,
-      longitude: data.longitude,
+      latitude: data.latitude?.toString(), // Convert number to string for decimal type
+      longitude: data.longitude?.toString(), // Convert number to string for decimal type
       opdPengampu: data.opdPengampu,
-      opdType: data.opdType,
+      opdType: data.opdType as
+        | "OPD Utama"
+        | "OPD Pendukung"
+        | "Publik"
+        | "Non OPD", // Type assertion
       ispName: data.ispName,
-      internetSpeed: data.internetSpeed,
+      internetSpeed: data.internetSpeed.toString(), // Convert to string
       internetRatio: data.internetRatio,
-      internetInfrastructure: data.internetInfrastructure,
-      jip: data.jip || "unchecked",
+      internetInfrastructure: data.internetInfrastructure as
+        | "KABEL"
+        | "WIRELESS", // Type assertion
+      jip: (data.jip ? "checked" : "unchecked") as "checked" | "unchecked", // Fix: Convert boolean to enum
       dropPoint: data.dropPoint || "",
       eCat: data.eCat,
-      status: "active",
+      status: "active" as "active" | "inactive" | "maintenance", // Type assertion
     };
 
     const result = await db.insert(locations).values(newLocation);

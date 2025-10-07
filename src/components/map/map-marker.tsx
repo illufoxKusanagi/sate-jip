@@ -2,13 +2,12 @@
 
 import mapboxgl, { MarkerOptions } from "mapbox-gl";
 import React, { ReactNode, useEffect, useRef } from "react";
-import { LocationFeature } from "@/lib/mapbox/utils";
 import { useMap } from "@/app/context/map-context";
 
-type Props = {
+type Props<T = any> = {
   longitude: number;
   latitude: number;
-  data: any;
+  data: T;
   onHover?: ({
     isHovered,
     position,
@@ -18,7 +17,7 @@ type Props = {
     isHovered: boolean;
     position: { longitude: number; latitude: number };
     marker: mapboxgl.Marker;
-    data: LocationFeature;
+    data: T;
   }) => void;
   onClick?: ({
     position,
@@ -27,12 +26,12 @@ type Props = {
   }: {
     position: { longitude: number; latitude: number };
     marker: mapboxgl.Marker;
-    data: LocationFeature;
+    data: T;
   }) => void;
   children?: ReactNode;
 } & MarkerOptions;
 
-export default function Marker({
+export default function Marker<T = any>({
   children,
   latitude,
   longitude,
@@ -40,7 +39,7 @@ export default function Marker({
   onHover,
   onClick,
   ...props
-}: Props) {
+}: Props<T>) {
   const { map } = useMap();
   const markerRef = useRef<HTMLDivElement | null>(null);
 
