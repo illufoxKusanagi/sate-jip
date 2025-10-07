@@ -59,7 +59,9 @@ export function ConfigDialog({
     if (formData.dataType === "OPD") {
       return (
         <div className="space-y-2">
-          <Label htmlFor="opdType">OPD Type *</Label>
+          <Label htmlFor="opdType" className="text-sm font-medium">
+            OPD Type *
+          </Label>
           <Select
             value={formData.opdType}
             onValueChange={(value) =>
@@ -84,13 +86,16 @@ export function ConfigDialog({
     if (formData.dataType === "ISP") {
       return (
         <div className="space-y-2">
-          <Label htmlFor="pic">Penanggung Jawab *</Label>
+          <Label htmlFor="pic" className="text-sm font-medium">
+            Penanggung Jawab *
+          </Label>
           <Input
             id="pic"
             value={formData.pic}
             onChange={(e) => setFormData({ ...formData, pic: e.target.value })}
             placeholder="Enter PIC name"
             required
+            className="w-full"
           />
         </div>
       );
@@ -101,12 +106,12 @@ export function ConfigDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px] max-w-[95vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">
             {editingItem ? "Edit Configuration" : "Add Configuration"}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm">
             {editingItem
               ? "Update the configuration settings below."
               : "Create a new configuration setting."}
@@ -116,7 +121,9 @@ export function ConfigDialog({
         <form onSubmit={onSubmit}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="dataType">Data Type *</Label>
+              <Label htmlFor="dataType" className="text-sm font-medium">
+                Data Type *
+              </Label>
               <Select
                 value={formData.dataType}
                 onValueChange={(value) => {
@@ -140,7 +147,9 @@ export function ConfigDialog({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="name">Nama *</Label>
+              <Label htmlFor="name" className="text-sm font-medium">
+                Nama *
+              </Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -149,11 +158,14 @@ export function ConfigDialog({
                 }
                 placeholder="Enter name"
                 required
+                className="w-full"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Alamat</Label>
+              <Label htmlFor="address" className="text-sm font-medium">
+                Alamat
+              </Label>
               <Input
                 id="address"
                 value={formData.address}
@@ -164,21 +176,25 @@ export function ConfigDialog({
                   })
                 }
                 placeholder="Enter address"
+                className="w-full"
               />
             </div>
 
             {renderDynamicFields()}
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
-            <Button type="submit">{editingItem ? "Update" : "Create"}</Button>
+            <Button type="submit" className="w-full sm:w-auto">
+              {editingItem ? "Update" : "Create"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

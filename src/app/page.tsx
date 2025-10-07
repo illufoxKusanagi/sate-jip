@@ -23,8 +23,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useMobile } from "@/hooks/use-mobile";
+
 export default function Home() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
+  const isMobile = useMobile();
 
   const handleLogout = () => {
     logout();
@@ -42,7 +45,7 @@ export default function Home() {
 
   return (
     <>
-      <SidebarProvider defaultOpen={true}>
+      <SidebarProvider defaultOpen={!isMobile}>
         <div className="flex flex-row h-screen w-full">
           <AppSidebar />
           <SidebarTrigger className="ml-4 mt-4" size={"lg"} />
@@ -80,7 +83,7 @@ export default function Home() {
                 </DropdownMenu>
               ) : null}
             </div>
-            <div className="flex flex-col mx-20 my-10 rounded-lg">
+            <div className="flex flex-col md:mx-20 mx-4 my-10 rounded-lg">
               <Tabs defaultValue="map">
                 <TabsList>
                   {isAuthenticated ? (
@@ -95,10 +98,10 @@ export default function Home() {
                 </TabsList>
                 <TabsContent value="map">
                   <div className="flex flex-col gap-4">
-                    <div className="w-full h-[40rem] rounded-4xl">
+                    <div className="w-full h-[60vh] rounded-4xl">
                       <MainMap />
                     </div>
-                    <div className="flex flex-row w-full gap-4">
+                    <div className="flex flex-col md:flex-row w-full gap-4">
                       <ChartPie
                         dataKey="infrastructureDistribution"
                         title="Diagram Infrastruktur Jaringan"

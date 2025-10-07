@@ -60,16 +60,14 @@ export const adminColumns: ColumnDef<AdminData>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="w-[200px] font-medium text-wrap px-3">
-        {row.getValue("nama")}
-      </div>
+      <div className="font-medium text-wrap px-3">{row.getValue("nama")}</div>
     ),
   },
   {
     accessorKey: "jabatan",
     header: "Jabatan",
     cell: ({ row }) => (
-      <div className="w-[240px] text-wrap" title={row.getValue("jabatan")}>
+      <div className="text-wrap" title={row.getValue("jabatan")}>
         {row.getValue("jabatan")}
       </div>
     ),
@@ -78,7 +76,7 @@ export const adminColumns: ColumnDef<AdminData>[] = [
     accessorKey: "nip",
     header: "NIP",
     cell: ({ row }) => (
-      <div className="w-[120px] text-wrap" title={row.getValue("nip")}>
+      <div className="text-wrap" title={row.getValue("nip")}>
         {row.getValue("nip")}
       </div>
     ),
@@ -87,7 +85,7 @@ export const adminColumns: ColumnDef<AdminData>[] = [
     accessorKey: "instansi",
     header: "Nama Perangkat Daerah",
     cell: ({ row }) => (
-      <div className="w-[240px] text-wrap" title={row.getValue("instansi")}>
+      <div className="text-wrap" title={row.getValue("instansi")}>
         {row.getValue("instansi")}
       </div>
     ),
@@ -96,7 +94,7 @@ export const adminColumns: ColumnDef<AdminData>[] = [
     accessorKey: "whatsapp",
     header: "No. WhatsApp",
     cell: ({ row }) => (
-      <div className="w-[100px]" title={row.getValue("whatsapp")}>
+      <div className="" title={row.getValue("whatsapp")}>
         {row.getValue("whatsapp")}
       </div>
     ),
@@ -210,30 +208,32 @@ export function AdminTable() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div>Loading admins...</div>
+      <div className="flex items-center justify-center p-6 sm:p-8">
+        <div className="text-sm sm:text-base">Loading admins...</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-3 sm:space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
-          placeholder="Cari PIC..."
+          placeholder="Cari nama PIC..."
           value={(table.getColumn("nama")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("nama")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-full sm:max-w-xs text-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Columns</span>
+              <span className="sm:hidden">Cols</span>
+              <ChevronDown className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-40 sm:w-48">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -241,7 +241,7 @@ export function AdminTable() {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className="capitalize text-xs sm:text-sm"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -255,14 +255,17 @@ export function AdminTable() {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="font-semibold p-2">
+                    <TableHead
+                      key={header.id}
+                      className="font-semibold p-1 sm:p-2 text-xs sm:text-sm whitespace-nowrap"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -284,7 +287,10 @@ export function AdminTable() {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="p-1 sm:p-2 text-xs sm:text-sm"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -307,12 +313,12 @@ export function AdminTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2">
-        <div className="flex items-center space-x-6 lg:space-x-8">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-6 lg:space-x-8">
+          <div className="flex items-center justify-between sm:justify-start space-x-2">
+            <p className="text-xs sm:text-sm font-medium">Rows per page</p>
             <select
-              className="h-8 w-[70px] rounded border border-input bg-transparent px-3 py-1 text-sm"
+              className="h-8 w-[70px] rounded border border-input bg-transparent px-2 py-1 text-xs sm:text-sm"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
@@ -325,48 +331,53 @@ export function AdminTable() {
               ))}
             </select>
           </div>
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+          <div className="flex items-center justify-center text-xs sm:text-sm font-medium">
+            <span className="hidden sm:inline">
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </span>
+            <span className="sm:hidden">
+              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            </span>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="sr-only">Go to first page</span>
-              {"<<"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <span className="sr-only">Go to previous page</span>
-              {"<"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="sr-only">Go to next page</span>
-              {">"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-8 w-8 p-0"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <span className="sr-only">Go to last page</span>
-              {">>"}
-            </Button>
-          </div>
+        </div>
+        <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to first page</span>
+            {"<<"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to previous page</span>
+            {"<"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to next page</span>
+            {">"}
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to last page</span>
+            {">>"}
+          </Button>
         </div>
       </div>
     </div>

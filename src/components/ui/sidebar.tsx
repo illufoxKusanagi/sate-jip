@@ -270,7 +270,7 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="outline"
-      size="icon"
+      size="xl"
       className={cn("group size-7", className)}
       onClick={(event) => {
         onClick?.(event);

@@ -34,9 +34,11 @@ export function Calendar() {
 
   if (isLoading) {
     return (
-      <div className="w-full border rounded-xl p-8">
-        <div className="flex items-center justify-center">
-          <div className="text-lg">Loading calendar...</div>
+      <div className="w-full border rounded-xl p-3 sm:p-6 lg:p-8">
+        <div className="flex items-center justify-center min-h-[300px]">
+          <div className="text-sm sm:text-base lg:text-lg">
+            Loading calendar...
+          </div>
         </div>
       </div>
     );
@@ -44,14 +46,16 @@ export function Calendar() {
 
   if (error) {
     return (
-      <div className="w-full border rounded-xl p-8">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="text-red-500">{error}</div>
+      <div className="w-full border rounded-xl p-3 sm:p-6 lg:p-8">
+        <div className="flex flex-col items-center justify-center gap-4 min-h-[300px]">
+          <div className="text-red-500 text-sm sm:text-base text-center">
+            {error}
+          </div>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+            className="px-3 py-2 sm:px-4 sm:py-2 bg-primary text-primary-foreground rounded-md text-xs sm:text-sm"
           >
-            Retry
+            Muat ulang
           </button>
         </div>
       </div>
@@ -61,63 +65,13 @@ export function Calendar() {
   return (
     <CalendarProvider events={events} view="bulan">
       <DndProvider showConfirmation={false}>
-        <div className="w-full border rounded-xl">
+        <div className="w-full border rounded-xl overflow-hidden">
           <CalendarHeader />
-          <CalendarBody />
+          <div className="overflow-auto max-h-[calc(100vh-200px)] sm:max-h-[calc(100vh-160px)]">
+            <CalendarBody />
+          </div>
         </div>
       </DndProvider>
     </CalendarProvider>
   );
 }
-
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import { CalendarBody } from "@/modules/components/calendar/calendar-body";
-// import { CalendarProvider } from "@/modules/components/calendar/contexts/calendar-context";
-// import { DndProvider } from "@/modules/components/calendar/contexts/dnd-context";
-// import { CalendarHeader } from "@/modules/components/calendar/header/calendar-header";
-// import { getEvents } from "@/modules/components/calendar/requests";
-// import type { IEvent } from "@/modules/components/calendar/interfaces";
-
-// export function Calendar() {
-//   const [events, setEvents] = useState<IEvent[]>([]);
-//   const [isLoading, setIsLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchEvents = async () => {
-//       try {
-//         const data = await getEvents();
-//         console.log("Fetched events:", data);
-//         setEvents(data);
-//       } catch (error) {
-//         console.error("Failed to fetch events:", error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     fetchEvents();
-//   }, []);
-
-//   if (isLoading) {
-//     return (
-//       <div className="w-full border rounded-xl p-8">
-//         <div className="flex items-center justify-center text-muted-foreground">
-//           Loading calendar...
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <CalendarProvider events={events} view="month">
-//       <DndProvider showConfirmation={false}>
-//         <div className="w-full border rounded-xl">
-//           <CalendarHeader />
-//           <CalendarBody />
-//         </div>
-//       </DndProvider>
-//     </CalendarProvider>
-//   );
-// }

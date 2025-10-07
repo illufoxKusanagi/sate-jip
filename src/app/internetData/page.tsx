@@ -12,7 +12,7 @@ export default function LoginPage() {
           </div>
           Dinas Kominfo Kabupaten Madiun
         </a>
-        <LocationForm className="w-2xl" />
+        <LocationForm className="w-full md:w-2xl" />
       </div>
     </div>
   );
