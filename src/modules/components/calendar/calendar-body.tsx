@@ -8,6 +8,7 @@ import { useCalendar } from "@/modules/components/calendar/contexts/calendar-con
 import { AgendaEvents } from "@/modules/components/calendar/views/agenda-view/agenda-events";
 import { CalendarMonthView } from "@/modules/components/calendar/views/month-view/calendar-month-view";
 import { CalendarWeekView } from "@/modules/components/calendar/views/week-and-day-view/calendar-week-view";
+import { CalendarDayView } from "@/modules/components/calendar/views/week-and-day-view/calendar-day-view";
 import { CalendarYearView } from "@/modules/components/calendar/views/year-view/calendar-year-view";
 
 export function CalendarBody() {
@@ -35,25 +36,25 @@ export function CalendarBody() {
         variants={fadeIn}
         transition={transition}
       >
-        {view === "month" && (
+        {view === "bulan" && (
           <CalendarMonthView
             singleDayEvents={singleDayEvents}
             multiDayEvents={multiDayEvents}
           />
         )}
-        {view === "week" && (
+        {view === "minggu" && (
           <CalendarWeekView
             singleDayEvents={singleDayEvents}
             multiDayEvents={multiDayEvents}
           />
         )}
-        {/* {view === "day" && (
+        {view === "hari" && (
           <CalendarDayView
             singleDayEvents={singleDayEvents}
             multiDayEvents={multiDayEvents}
           />
-        )} */}
-        {view === "year" && (
+        )}
+        {view === "tahun" && (
           <CalendarYearView
             singleDayEvents={singleDayEvents}
             multiDayEvents={multiDayEvents}

@@ -43,17 +43,17 @@ export function rangeText(view: TCalendarView, date: Date): string {
 
   switch (view) {
     //TODO : Align to monday based week
-    case "month":
+    case "bulan":
       start = startOfMonth(date);
       end = endOfMonth(date);
       break;
-    case "week":
+    case "minggu":
       start = startOfWeek(date);
       end = endOfWeek(date);
       break;
-    case "day":
+    case "hari":
       return format(date, FORMAT_STRING);
-    case "year":
+    case "tahun":
       start = startOfYear(date);
       end = endOfYear(date);
       break;
@@ -74,10 +74,10 @@ export function navigateDate(
   direction: "previous" | "next"
 ): Date {
   const operations: Record<TCalendarView, (d: Date, n: number) => Date> = {
-    month: direction === "next" ? addMonths : subMonths,
-    week: direction === "next" ? addWeeks : subWeeks,
-    day: direction === "next" ? addDays : subDays,
-    year: direction === "next" ? addYears : subYears,
+    bulan: direction === "next" ? addMonths : subMonths,
+    minggu: direction === "next" ? addWeeks : subWeeks,
+    hari: direction === "next" ? addDays : subDays,
+    tahun: direction === "next" ? addYears : subYears,
     agenda: direction === "next" ? addMonths : subMonths,
   };
 
@@ -90,14 +90,25 @@ export function getEventsCount(
   view: TCalendarView
 ): number {
   const compareFns: Record<TCalendarView, (d1: Date, d2: Date) => boolean> = {
-    day: isSameDay,
-    week: isSameWeek,
-    month: isSameMonth,
-    year: isSameYear,
+    hari: isSameDay,
+    minggu: isSameWeek,
+    bulan: isSameMonth,
+    tahun: isSameYear,
     agenda: isSameMonth,
   };
 
   const compareFn = compareFns[view];
+
+  if (!compareFn) {
+    console.error(
+      "No compareFn found for view:",
+      view,
+      "Available keys:",
+      Object.keys(compareFns)
+    );
+    return 0;
+  }
+
   return events.filter((event) => compareFn(parseISO(event.startDate), date))
     .length;
 }
@@ -424,14 +435,14 @@ export const useGetEventsByMode = (events: IEvent[]) => {
   const { view, selectedDate } = useCalendar();
 
   switch (view) {
-    case "day":
+    case "hari":
       return getEventsForDay(events, selectedDate);
-    case "week":
+    case "minggu":
       return getEventsForWeek(events, selectedDate);
     case "agenda":
-    case "month":
+    case "bulan":
       return getEventsForMonth(events, selectedDate);
-    case "year":
+    case "tahun":
       return getEventsForYear(events, selectedDate);
     default:
       return [];

@@ -51,7 +51,7 @@ export function CalendarHeader() {
           <AddEditEventDialog>
             <Button>
               <Plus className="h-4 w-4" />
-              Add Event
+              Tambahkan Agenda
             </Button>
           </AddEditEventDialog>
         </div>
