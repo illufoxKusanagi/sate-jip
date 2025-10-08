@@ -23,7 +23,7 @@ export function CalendarHeader() {
   return (
     <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 border-b p-2 sm:p-3 lg:p-4 lg:flex-row lg:items-center lg:justify-between">
       <motion.div
-        className="flex flex-row xs:flex-col justify-between items-stretch xs:items-center gap-2 m-2"
+        className="flex flex-row justify-between sm:justify-center items-stretch xs:items-center gap-2 sm:gap-10 m-2"
         variants={slideFromLeft}
         initial="initial"
         animate="animate"
@@ -40,12 +40,12 @@ export function CalendarHeader() {
         animate="animate"
         transition={transition}
       >
-        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
-          <Views />
+        <div className="flex flex-col sm:flex-row items-stretch sm:justify-center sm:items-center gap-2">
           <FilterEvents className="hidden sm:inline" />
+          <Views />
         </div>
 
-        <div className="flex flex-row gap-2 justify-between xs:justify-start">
+        <div className="flex flex-row gap-2 justify-between sm:justify-start">
           <FilterEvents className="inline sm:hidden" />
           <AddEditEventDialog>
             <Button className="flex-1 xs:flex-none text-xs sm:text-sm">

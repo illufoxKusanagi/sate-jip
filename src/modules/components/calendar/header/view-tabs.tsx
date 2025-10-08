@@ -43,7 +43,7 @@ function Views() {
     <Tabs
       value={view}
       onValueChange={(value) => setView(value as TCalendarView)}
-      className="gap-2 sm:gap-4 sm:w-auto w-full"
+      className="gap-2 sm:gap-4 w-full"
     >
       <TabsList className="h-auto gap-1 sm:gap-2 rounded-xl p-1 w-full">
         {tabs.map(({ icon: Icon, name, value }) => {

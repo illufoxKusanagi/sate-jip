@@ -201,7 +201,6 @@ export default function InputDataConfigPage() {
       }
 
       const rawData = await response.json();
-      // Parse dataConfig JSON string to object
       const allData: ConfigData[] = rawData.map((item: any) => ({
         ...item,
         dataConfig:
@@ -340,10 +339,10 @@ export default function InputDataConfigPage() {
       <div className="flex h-screen w-full">
         <AppSidebar />
         <main className="flex-1 overflow-y-auto relative">
-          <div className="fixed top-3 left-3 z-50 lg:hidden">
+          <div className="fixed top-3 left-3 z-50 sm:hidden">
             <SidebarTrigger />
           </div>
-          <div className="hidden lg:block lg:ml-3 lg:mt-3">
+          <div className="hidden fixed top-4 sm:block lg:ml-3 lg:mt-3">
             <SidebarTrigger />
           </div>
           <div className="fixed top-3 right-3 z-50 flex gap-2">
@@ -377,15 +376,12 @@ export default function InputDataConfigPage() {
           <div className="container mt-24 mx-auto lg:m-20">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 lg:mb-6">
               <div>
-                <h1 className="text-3xl font-bold">Data Configuration</h1>
+                <p className="heading-2">Konfigurasi Data</p>
                 <p className="text-muted-foreground mt-2">
-                  Manage system configuration settings
+                  Untuk informasi OPD dan ISP
                 </p>
               </div>
               <div className="flex space-x-2">
-                <Button variant="outline" onClick={handleHealthCheck}>
-                  Health Check
-                </Button>
                 <Button onClick={handleCreate}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add Configuration
