@@ -86,15 +86,6 @@ export const adminColumns: ColumnDef<AdminData>[] = [
       </div>
     ),
   },
-  // {
-  //   accessorKey: "nip",
-  //   header: "NIP",
-  //   cell: ({ row }) => (
-  //     <div className="text-wrap" title={row.getValue("nip")}>
-  //       {row.getValue("nip")}
-  //     </div>
-  //   ),
-  // },
   {
     accessorKey: "instansi",
     header: "Nama Perangkat Daerah",
@@ -104,15 +95,6 @@ export const adminColumns: ColumnDef<AdminData>[] = [
       </div>
     ),
   },
-  // {
-  //   accessorKey: "whatsapp",
-  //   header: "No. WhatsApp",
-  //   cell: ({ row }) => (
-  //     <div className="" title={row.getValue("whatsapp")}>
-  //       {row.getValue("whatsapp")}
-  //     </div>
-  //   ),
-  // },
 ];
 
 export function AdminTable() {
