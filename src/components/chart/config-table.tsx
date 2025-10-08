@@ -85,6 +85,11 @@ export default function ConfigTable({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    globalFilterFn: (row, columnId, filterValue) => {
+      const dataConfig = row.getValue("dataConfig") as any;
+      const name = dataConfig?.name || "";
+      return name.toLowerCase().includes(filterValue.toLowerCase());
+    },
     state: {
       sorting,
       columnFilters,
@@ -97,11 +102,9 @@ export default function ConfigTable({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           placeholder={searchPlaceholder}
-          value={
-            (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""
-          }
+          value={table.getState().globalFilter ?? ""}
           onChange={(event) =>
-            table.getColumn(searchColumn)?.setFilterValue(event.target.value)
+            table.setGlobalFilter(String(event.target.value))
           }
           className="w-full sm:max-w-xs text-sm"
         />

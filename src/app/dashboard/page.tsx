@@ -7,12 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LocationsTable } from "@/components/chart/locations-table";
 import { AdminTable } from "@/components/chart/admin-table";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import MainMap from "@/components/map/main-map";
 import { ChartPie } from "@/components/chart/chart-pie";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,12 +20,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "../context/auth-context";
+import { PicDialog } from "@/components/pic-dialog";
+import { LocationDialog } from "@/components/location-dialog";
+import { useState } from "react";
 
 export default function Home() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
+  const [isPicDialogOpen, setIsPicDialogOpen] = useState(false);
+  const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleCreatePic = () => {
+    setIsPicDialogOpen(true);
+  };
+
+  const handleCreateLocation = () => {
+    setIsLocationDialogOpen(true);
   };
 
   if (isLoading) {
@@ -147,11 +158,12 @@ export default function Home() {
                             Dasbor Penanggungjawab
                           </h2>
                           <Button
-                            asChild
+                            onClick={handleCreatePic}
                             size="sm"
                             className="w-full sm:w-auto"
                           >
-                            <Link href="/adminData">Tambahkan PIC</Link>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambahkan PIC
                           </Button>
                         </div>
                         <AdminTable />
@@ -165,11 +177,12 @@ export default function Home() {
                             Dasbor Titik Lokasi
                           </h2>
                           <Button
-                            asChild
+                            onClick={handleCreateLocation}
                             size="sm"
                             className="w-full sm:w-auto"
                           >
-                            <Link href="/internetData">Tambahkan Lokasi</Link>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambahkan Lokasi
                           </Button>
                         </div>
                         <LocationsTable />
@@ -180,6 +193,20 @@ export default function Home() {
               </Tabs>
             </div>
           </main>
+
+          {/* Add PIC Dialog */}
+          <PicDialog
+            isOpen={isPicDialogOpen}
+            onOpenChange={setIsPicDialogOpen}
+            editingItem={null}
+          />
+
+          {/* Add Location Dialog */}
+          <LocationDialog
+            isOpen={isLocationDialogOpen}
+            onOpenChange={setIsLocationDialogOpen}
+            editingItem={null}
+          />
         </div>
       </SidebarProvider>
     </>

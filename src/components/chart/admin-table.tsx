@@ -20,6 +20,8 @@ import {
   Mail,
   Phone,
   User,
+  Edit,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -41,8 +43,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { AdminData } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { PicDialog } from "../pic-dialog";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
   {
@@ -105,34 +119,76 @@ export function AdminTable() {
   const [adminData, setAdminData] = useState<AdminData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingAdmin, setEditingAdmin] = useState<AdminData | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deletingAdmin, setDeletingAdmin] = useState<AdminData | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const fetchAdmins = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/admins");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Response is not JSON");
+      }
+
+      const data = await response.json();
+      setAdminData(data);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch admins"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (admin: AdminData) => {
+    setEditingAdmin(admin);
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (admin: AdminData) => {
+    setDeletingAdmin(admin);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingAdmin) return;
+
+    try {
+      const response = await fetch(`/api/admins/${deletingAdmin.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
+      await fetchAdmins();
+      toast.success("Admin deleted successfully!");
+    } catch (error) {
+      console.error("Delete error: ", error);
+      toast.error("Failed to delete admin");
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingAdmin(null);
+    }
+  };
+
+  const handleDialogSuccess = () => {
+    fetchAdmins();
+  };
 
   useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const response = await fetch("/api/admins");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          throw new Error("Response is not JSON");
-        }
-
-        const data = await response.json();
-        setAdminData(data);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch admins"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAdmins();
   }, []);
 
@@ -172,13 +228,16 @@ export function AdminTable() {
                 Call Phone
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                View Profile
+              <DropdownMenuItem onClick={() => handleEdit(admin)}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Admin
               </DropdownMenuItem>
-              <DropdownMenuItem>Edit Admin</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                Deactivate Admin
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDelete(admin)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Admin
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -380,6 +439,36 @@ export function AdminTable() {
           </Button>
         </div>
       </div>
+
+      {/* Edit Dialog */}
+      <PicDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        editingItem={editingAdmin}
+        onSuccess={handleDialogSuccess}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Admin</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {deletingAdmin?.nama}? This action
+              cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
