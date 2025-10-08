@@ -83,31 +83,6 @@ export default function InputDataConfigPage() {
     }
   };
 
-  const handleHealthCheck = async () => {
-    try {
-      console.log("Running health check...");
-      toast.info("Running health check...");
-
-      const response = await fetch("/api/health");
-      const healthData = await response.json();
-
-      console.log("Health check result:", healthData);
-
-      if (healthData.status === "healthy") {
-        toast.success("Health check passed! Database connection is working.");
-      } else {
-        toast.error(
-          `Health check failed: ${
-            healthData.database?.error || "Unknown error"
-          }`
-        );
-      }
-    } catch (error) {
-      console.error("Health check error:", error);
-      toast.error("Health check failed - unable to reach server");
-    }
-  };
-
   const opdColumns: ColumnDef<ConfigData>[] = [
     {
       accessorKey: "dataConfig",
@@ -336,71 +311,85 @@ export default function InputDataConfigPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full">
+      <div className="flex flex-row h-screen w-full relative">
         <AppSidebar />
-        <main className="flex-1 overflow-y-auto relative">
-          <div className="fixed top-3 left-3 z-50 sm:hidden">
-            <SidebarTrigger />
-          </div>
-          <div className="hidden fixed top-4 sm:block lg:ml-3 lg:mt-3">
-            <SidebarTrigger />
-          </div>
-          <div className="fixed top-3 right-3 z-50 flex gap-2">
-            <ModeToggle />
-            {isAuthenticated ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 sm:gap-2 px-2 py-1 hover:bg-accent rounded-md">
-                  <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
-                    <AvatarImage
-                      src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
-                      alt={user?.username || "Admin"}
-                    />
-                    <AvatarFallback className="text-xs">IK</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden sm:inline text-xs sm:text-sm truncate max-w-20">
-                    {user?.username}
+
+        {/* Fixed positioned controls */}
+        <div className="fixed top-5 left-4 z-50 md:relative md:top-4 md:left-2 md:z-auto">
+          <SidebarTrigger />
+        </div>
+
+        <div className="fixed top-4 right-4 z-50 flex flex-row gap-2 sm:gap-4">
+          <ModeToggle />
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex flex-row gap-1 sm:gap-3 px-2 sm:px-4 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md">
+                <Avatar className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg">
+                  <AvatarImage
+                    className="rounded-full"
+                    src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
+                    alt={user?.username || "Admin"}
+                  />
+                  <AvatarFallback className="rounded-lg text-xs">
+                    IK
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden sm:flex text-left justify-center">
+                  <span className="truncate body-small-regular">
+                    halo, {user?.username}
                   </span>
-                  <ChevronDown className="h-3 w-3" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-44">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : null}
-          </div>
-          <div className="container mt-24 mx-auto lg:m-20">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 lg:mb-6">
+                </div>
+                <ChevronDown className="ml-auto size-3 sm:size-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
+        </div>
+
+        <main className="flex-1 my-12 overflow-y-auto">
+          <div className="flex flex-col mx-4 sm:mx-8 lg:mx-20 my-16 sm:my-10 rounded-lg">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
               <div>
-                <p className="heading-2">Konfigurasi Data</p>
-                <p className="text-muted-foreground mt-2">
+                <h1 className="text-xl sm:text-2xl font-bold">
+                  Konfigurasi Data
+                </h1>
+                <p className="text-muted-foreground text-sm">
                   Untuk informasi OPD dan ISP
                 </p>
               </div>
-              <div className="flex space-x-2">
-                <Button onClick={handleCreate}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Configuration
-                </Button>
-              </div>
+              <Button
+                onClick={handleCreate}
+                size="sm"
+                className="w-full sm:w-auto"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Tambah Konfigurasi Data
+              </Button>
             </div>
 
             <Tabs defaultValue="opd">
-              <TabsList className="mb-4">
-                <TabsTrigger value="opd">Data OPD pengampu</TabsTrigger>
-                <TabsTrigger value="isp">Data ISP</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 gap-1">
+                <TabsTrigger value="opd" className="text-xs sm:text-sm">
+                  Data OPD pengampu
+                </TabsTrigger>
+                <TabsTrigger value="isp" className="text-xs sm:text-sm">
+                  Data ISP
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="opd">
                 {isConfigLoading ? (
                   <div className="flex items-center justify-center p-8">
-                    <div>Loading Configs...</div>
+                    <div>Memuat Konfigurasi...</div>
                   </div>
                 ) : (
-                  <>
+                  <div className="flex flex-col gap-4 p-2 sm:p-4">
                     <ConfigTable
                       data={opdData}
                       columns={opdColumns}
@@ -419,7 +408,7 @@ export default function InputDataConfigPage() {
                       setFormData={setFormData}
                       onSubmit={handleSubmit}
                     />
-                  </>
+                  </div>
                 )}
               </TabsContent>
               <TabsContent value="isp">
@@ -428,7 +417,7 @@ export default function InputDataConfigPage() {
                     <div>Loading Configs...</div>
                   </div>
                 ) : (
-                  <>
+                  <div className="flex flex-col gap-4 p-2 sm:p-4">
                     <ConfigTable
                       data={ispData}
                       columns={ispColumns}
@@ -447,7 +436,7 @@ export default function InputDataConfigPage() {
                       setFormData={setFormData}
                       onSubmit={handleSubmit}
                     />
-                  </>
+                  </div>
                 )}
               </TabsContent>
             </Tabs>

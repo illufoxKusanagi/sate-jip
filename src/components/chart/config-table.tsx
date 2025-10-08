@@ -93,9 +93,8 @@ export default function ConfigTable({
   });
 
   return (
-    <div className="w-full space-y-4">
-      {/* Mobile/Desktop responsive search and filter bar */}
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+    <div className="w-full space-y-3 sm:space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           placeholder={searchPlaceholder}
           value={
@@ -109,11 +108,17 @@ export default function ConfigTable({
         {setColumnVisibility && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full sm:w-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs sm:text-sm"
+              >
+                <span className="hidden sm:inline">Columns</span>
+                <span className="sm:hidden">Cols</span>
+                <ChevronDown className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-40 sm:w-48">
               <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {table
@@ -123,7 +128,7 @@ export default function ConfigTable({
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className="capitalize"
+                      className="capitalize text-xs sm:text-sm"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
@@ -172,14 +177,12 @@ export default function ConfigTable({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="px-2 sm:px-4 py-2 sm:py-3"
+                      className="p-1 sm:p-2 text-xs sm:text-sm"
                     >
-                      <div className="max-w-[120px] sm:max-w-[200px] lg:max-w-none">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </div>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -188,7 +191,7 @@ export default function ConfigTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-16 sm:h-24 text-center text-sm"
                 >
                   No results found.
                 </TableCell>
@@ -199,50 +202,70 @@ export default function ConfigTable({
       </div>
 
       {/* Responsive pagination */}
-      <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground text-center sm:text-left">
-          {table.getFilteredRowModel().rows.length} row(s) total.
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex items-center justify-between sm:justify-start gap-2">
+            <p className="font-medium whitespace-nowrap">Rows per page</p>
+            <select
+              className="h-7 sm:h-8 w-16 sm:w-[70px] rounded border border-input bg-transparent px-1 sm:px-2 py-1 text-xs sm:text-sm"
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="text-center sm:text-left font-medium">
+            <span className="hidden sm:inline">
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </span>
+            <span className="sm:hidden">
+              {table.getState().pagination.pageIndex + 1}/{table.getPageCount()}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center space-x-1 sm:space-x-2">
+        <div className="flex items-center justify-center gap-1">
           <Button
             variant="outline"
             size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="hidden sm:flex"
           >
-            <ChevronsLeft className="h-4 w-4" />
+            {"<<"}
           </Button>
           <Button
             variant="outline"
             size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <ChevronLeft className="h-4 w-4" />
+            {"<"}
           </Button>
-          <div className="flex items-center gap-1">
-            <div className="text-xs sm:text-sm font-medium px-2">
-              {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </div>
-          </div>
           <Button
             variant="outline"
             size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <ChevronRight className="h-4 w-4" />
+            {">"}
           </Button>
           <Button
             variant="outline"
             size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="hidden sm:flex"
           >
-            <ChevronsRight className="h-4 w-4" />
+            {">>"}
           </Button>
         </div>
       </div>
