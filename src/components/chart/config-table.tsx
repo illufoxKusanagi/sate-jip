@@ -93,7 +93,7 @@ export default function ConfigTable({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       {/* Mobile/Desktop responsive search and filter bar */}
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <Input
@@ -104,7 +104,7 @@ export default function ConfigTable({
           onChange={(event) =>
             table.getColumn(searchColumn)?.setFilterValue(event.target.value)
           }
-          className="max-w-full sm:max-w-sm"
+          className="w-full sm:max-w-xs text-sm"
         />
         {setColumnVisibility && (
           <DropdownMenu>
@@ -139,65 +139,63 @@ export default function ConfigTable({
       </div>
 
       {/* Responsive table container */}
-      <div className="rounded-md border overflow-hidden">
-        <div className="overflow-x-auto">
-          <Table className="min-w-full">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        className="whitespace-nowrap px-2 sm:px-4"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="px-2 sm:px-4 py-2 sm:py-3"
-                      >
-                        <div className="max-w-[120px] sm:max-w-[200px] lg:max-w-none">
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className="font-semibold p-1 sm:p-2 text-xs sm:text-sm whitespace-nowrap"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
                           )}
-                        </div>
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results found.
-                  </TableCell>
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="px-2 sm:px-4 py-2 sm:py-3"
+                    >
+                      <div className="max-w-[120px] sm:max-w-[200px] lg:max-w-none">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    </TableCell>
+                  ))}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
       {/* Responsive pagination */}

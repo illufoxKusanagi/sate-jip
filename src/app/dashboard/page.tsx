@@ -86,10 +86,10 @@ export default function Home() {
             ) : null}
           </div>
 
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 my-12 overflow-y-auto">
             <div className="flex flex-col mx-4 sm:mx-8 lg:mx-20 my-16 sm:my-10 rounded-lg">
               <Tabs defaultValue="map">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-1">
+                <TabsList className="grid w-full grid-cols-3 gap-1">
                   {isAuthenticated ? (
                     <>
                       <TabsTrigger value="map" className="text-xs sm:text-sm">

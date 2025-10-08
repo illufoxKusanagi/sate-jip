@@ -1,42 +1,24 @@
-# docker-compose.yml
+# docker-compose.yml (Production)
+# Gunakan perintah: docker compose up -d --build
 
 services:
   # Next.js Application
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: sate-jip-app-diskominfo
     restart: unless-stopped
     ports:
       - "3000:3000"
     env_file:
-      - .env
-    # depends_on:
-    #   - db
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
-# services:
-#   # Next.js Application
-#   app:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
-#     container_name: sate-jip-app-diskominfo
-#     restart: unless-stopped
-#     ports:
-#       - "3000:3000"
-#     env_file:
-#       - .env.local  # Use .env.local for production secrets
-#     environment:
-#       - NODE_ENV=production
-#     # Remove volumes for production - app is self-contained in the image
-#     # If using external database, uncomment:
-#     # depends_on:
-#     #   - db
-#     networks:
-#       - sate-jip-network
+      - .env # Pastikan file ini berisi variabel untuk produksi
+    environment:
+      - NODE_ENV=production
+    # Tidak ada volume untuk source code di produksi agar image bersifat immutable.
+    networks:
+      - sate-jip-network
 
-# networks:
-#   sate-jip-network:
-#     driver: bridge
+networks:
+  sate-jip-network:
+    driver: bridge

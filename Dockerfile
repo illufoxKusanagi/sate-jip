@@ -1,53 +1,50 @@
 # Multi-stage build for production deployment
-# Stage 1: Dependencies
-FROM node:18-alpine AS deps
+
+# Stage 1: Build Stage
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies for build)
+# Install all dependencies (including devDependencies for build)
+# This leverages Docker layer caching. This layer is only rebuilt when package*.json changes.
 RUN npm ci
 
-# Stage 2: Builder
-FROM node:18-alpine AS builder
-WORKDIR /app
-
-# Copy dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-
 # Copy source code
+# A .dockerignore file is used to prevent copying unnecessary files (like .git, node_modules)
 COPY . .
 
 # Build the Next.js application
+# This generates the production build and the standalone output
 RUN npm run build
 
-# Stage 3: Production runner
+# Stage 2: Production Runner Stage
 FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
 # Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup -S -g 1001 nodejs
+RUN adduser -S -u 1001 nextjs
 
 # Copy necessary files from builder
-COPY --from=builder /app/public ./public
+# Copy the standalone server output
 COPY --from=builder /app/.next/standalone ./
+# Copy static assets
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
 # Set correct permissions
-RUN chown -R nextjs:nodejs /app
+RUN chown -R nextjs:nodejs .
 
 # Switch to non-root user
 USER nextjs
 
-# Expose port
 EXPOSE 3000
 
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
 # Start the production server
 CMD ["node", "server.js"]

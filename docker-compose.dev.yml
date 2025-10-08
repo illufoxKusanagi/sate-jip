@@ -1,11 +1,12 @@
-# docker-compose.dev.yml - Development environment with hot-reload
+# docker-compose.dev.yml (Development)
+# Gunakan perintah: docker compose -f docker-compose.dev.yml up
 
 services:
-  # Next.js Application (Development)
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile # Kita bisa tetap pakai Dockerfile utama
+      target: builder # Hanya build sampai tahap 'builder'
     container_name: sate-jip-app-dev
     restart: unless-stopped
     ports:
@@ -15,13 +16,13 @@ services:
     environment:
       - NODE_ENV=development
     volumes:
-      - .:/app # Mount source code for hot-reload
-      - /app/node_modules # Prevent overwriting node_modules
-      - /app/.next # Prevent overwriting build cache
+      - .:/app
+      - /app/node_modules # Mencegah node_modules lokal menimpa yang di container
+      - /app/.next # Cache untuk build development
     command: npm run dev
     networks:
-      - sate-jip-dev-network
+      - sate-jip-network
 
 networks:
-  sate-jip-dev-network:
+  sate-jip-network:
     driver: bridge

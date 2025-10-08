@@ -23,7 +23,7 @@ export function CalendarHeader() {
   return (
     <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 border-b p-2 sm:p-3 lg:p-4 lg:flex-row lg:items-center lg:justify-between">
       <motion.div
-        className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2"
+        className="flex flex-row xs:flex-col justify-between items-stretch xs:items-center gap-2 m-2"
         variants={slideFromLeft}
         initial="initial"
         animate="animate"
@@ -34,7 +34,7 @@ export function CalendarHeader() {
       </motion.div>
 
       <motion.div
-        className="flex flex-col gap-2 sm:gap-3 lg:flex-row lg:items-center lg:gap-4"
+        className="flex flex-col gap-4 sm:gap-3 lg:flex-row lg:items-center lg:gap-4"
         variants={slideFromRight}
         initial="initial"
         animate="animate"
@@ -42,18 +42,15 @@ export function CalendarHeader() {
       >
         <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2">
           <Views />
-          <FilterEvents />
+          <FilterEvents className="hidden sm:inline" />
         </div>
 
         <div className="flex flex-row gap-2 justify-between xs:justify-start">
+          <FilterEvents className="inline sm:hidden" />
           <AddEditEventDialog>
-            <Button
-              size="sm"
-              className="flex-1 xs:flex-none text-xs sm:text-sm"
-            >
+            <Button className="flex-1 xs:flex-none text-xs sm:text-sm">
               <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-              <span className="hidden xs:inline">Tambah</span>
-              <span className="xs:hidden">+</span>
+              <span className="inline">Tambah Agenda</span>
             </Button>
           </AddEditEventDialog>
           <Settings />
