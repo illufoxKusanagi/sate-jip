@@ -30,8 +30,10 @@ const formSchema = z.object({
   }),
   idNumber: z
     .string()
-    .length(18, { message: "NIP must be at least 18 characters." })
-    .regex(/^\d+$/, { message: "NIP must contain only numbers." }),
+    .optional()
+    .refine((val) => !val || (val.length === 18 && /^\d+$/.test(val)), {
+      message: "NIP must be exactly 18 digits (or leave empty).",
+    }),
   position: z.string().min(1, {
     message: "Enter a valid position.",
   }),
@@ -73,14 +75,13 @@ export function PicDialog({
 
   useEffect(() => {
     if (isOpen) {
-      // Populate form when editing
       if (editingItem) {
         form.reset({
-          fullName: editingItem.nama,
-          idNumber: editingItem.nip,
-          position: editingItem.jabatan,
-          opdName: editingItem.instansi,
-          whatsappNumber: editingItem.whatsapp,
+          fullName: editingItem.fullName,
+          idNumber: editingItem.idNumber,
+          position: editingItem.position,
+          opdName: editingItem.opdName,
+          whatsappNumber: editingItem.whatsappNumber,
         });
       } else {
         form.reset({
@@ -99,11 +100,11 @@ export function PicDialog({
 
     try {
       const adminData = {
-        nama: values.fullName,
-        nip: values.idNumber,
-        jabatan: values.position,
-        instansi: values.opdName,
-        whatsapp: values.whatsappNumber,
+        fullName: values.fullName,
+        idNumber: values.idNumber || "",
+        position: values.position,
+        opdName: values.opdName,
+        whatsappNumber: values.whatsappNumber,
       };
 
       console.log("Submitting admin data:", adminData);
@@ -185,11 +186,12 @@ export function PicDialog({
               name="idNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    NIP <span className="text-red-500">*</span>
-                  </FormLabel>
+                  <FormLabel>NIP</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter 18-digit NIP" {...field} />
+                    <Input
+                      placeholder="Enter 18-digit NIP (optional)"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

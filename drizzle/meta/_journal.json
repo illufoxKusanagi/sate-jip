@@ -50,6 +50,13 @@
       "when": 1759664112082,
       "tag": "0006_light_komodo",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1759900157835,
+      "tag": "0007_charming_rhino",
+      "breakpoints": true
     }
   ]
 }

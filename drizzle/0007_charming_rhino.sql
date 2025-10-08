@@ -1,0 +1,1 @@
+ALTER TABLE `locations` ADD `activation_date` varchar(10);
