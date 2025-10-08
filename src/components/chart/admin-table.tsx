@@ -87,29 +87,11 @@ export const adminColumns: ColumnDef<AdminData>[] = [
     ),
   },
   {
-    accessorKey: "nip",
-    header: "NIP",
-    cell: ({ row }) => (
-      <div className="text-wrap" title={row.getValue("nip")}>
-        {row.getValue("nip")}
-      </div>
-    ),
-  },
-  {
     accessorKey: "instansi",
     header: "Nama Perangkat Daerah",
     cell: ({ row }) => (
       <div className="text-wrap" title={row.getValue("instansi")}>
         {row.getValue("instansi")}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "whatsapp",
-    header: "No. WhatsApp",
-    cell: ({ row }) => (
-      <div className="" title={row.getValue("whatsapp")}>
-        {row.getValue("whatsapp")}
       </div>
     ),
   },
@@ -222,7 +204,9 @@ export function AdminTable() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => (window.location.href = `tel:${admin.whatsapp}`)}
+                onClick={() =>
+                  (window.location.href = `tel:${admin.whatsappNumber}`)
+                }
               >
                 <Phone className="mr-2 h-4 w-4" />
                 Call Phone
@@ -457,8 +441,8 @@ export function AdminTable() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Admin</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete {deletingAdmin?.nama}? This action
-              cannot be undone.
+              Are you sure you want to delete {deletingAdmin?.fullName}? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

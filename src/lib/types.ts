@@ -18,11 +18,11 @@ export interface LocationData {
 
 export interface AdminData {
   id: string;
-  nama: string;
-  nip: string;
-  jabatan: string;
-  instansi: string;
-  whatsapp: string;
+  fullName: string;
+  idNumber: string;
+  position: string;
+  opdName: string;
+  whatsappNumber: string;
 }
 
 export interface ConfigData {

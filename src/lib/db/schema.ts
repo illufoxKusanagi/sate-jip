@@ -12,6 +12,7 @@ export const locations = mysqlTable("locations", {
     .primaryKey()
     .$defaultFn(() => uuidv4()),
   locationName: varchar("location_name", { length: 255 }).notNull(),
+  activationDate: varchar("activation_date", { length: 10 }),
   latitude: decimal("latitude", { precision: 10, scale: 8 }),
   longitude: decimal("longitude", { precision: 11, scale: 8 }),
   opdPengampu: varchar("opd_pengampu", { length: 255 }).notNull(),

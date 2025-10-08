@@ -149,6 +149,7 @@ export function LocationDialog({
       } else {
         form.reset({
           locationName: "",
+          activationDate: "",
           latitude: undefined,
           longitude: undefined,
           opdPengampu: "",

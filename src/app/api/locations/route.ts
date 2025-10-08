@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
 
     const newLocation = {
       locationName: data.locationName,
+      activationDate: data.activationDate,
       latitude: data.latitude?.toString(), // Convert number to string for decimal type
       longitude: data.longitude?.toString(), // Convert number to string for decimal type
       opdPengampu: data.opdPengampu,
