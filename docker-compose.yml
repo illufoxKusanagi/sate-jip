@@ -1,5 +1,4 @@
-version: '3.8'
-
+# Gunakan perintah: docker compose up -d --build
 services:
   # Next.js Application
   app:
@@ -12,6 +11,12 @@ services:
     ports:
       - "3001:3000"
     env_file:
+      - .env # Pastikan file ini berisi variabel untuk produksi
+    environment:
+      - NODE_ENV=production
+    # Tidak ada volume untuk source code di produksi agar image bersifat immutable.
+    networks:
+      - sate-jip-network
       - .env
     environment:
       - NODE_ENV=production

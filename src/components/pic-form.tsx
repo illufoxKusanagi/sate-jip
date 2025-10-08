@@ -136,9 +136,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <Input placeholder="20230129031129" {...field} />
-                        </div>
+                        <Input placeholder="20230129031129" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -154,9 +152,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <Input placeholder="Staff muda" {...field} />
-                        </div>
+                        <Input placeholder="Staff muda" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -172,12 +168,10 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <Input
-                            placeholder="Dinas Komunikasi dan Informatika"
-                            {...field}
-                          />
-                        </div>
+                        <Input
+                          placeholder="Dinas Komunikasi dan Informatika"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -194,9 +188,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <Input placeholder="08123456789" {...field} />
-                        </div>
+                        <Input placeholder="08123456789" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

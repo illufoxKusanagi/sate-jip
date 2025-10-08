@@ -22,12 +22,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Home() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   const handleLogout = () => {
     logout();

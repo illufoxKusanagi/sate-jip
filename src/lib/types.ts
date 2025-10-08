@@ -1,5 +1,6 @@
 export interface LocationData {
   id: string;
+  activationDate: string;
   locationName: string;
   latitude: number;
   longitude: number;

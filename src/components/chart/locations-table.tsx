@@ -19,6 +19,8 @@ import {
   MoreHorizontal,
   MapPin,
   Eye,
+  Edit,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -40,10 +42,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "../ui/badge";
 import { LocationData } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
+import { toast } from "sonner";
+import { LocationDialog } from "../location-dialog";
 
 interface LocationsTableProps {
   onViewLocation?: (location: LocationData) => void;
@@ -182,24 +196,72 @@ export const columns: ColumnDef<LocationData>[] = [
 export function LocationsTable({ onViewLocation }: LocationsTableProps) {
   const [locationData, setlocationData] = useState<LocationData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingLocation, setEditingLocation] = useState<LocationData | null>(
+    null
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deletingLocation, setDeletingLocation] = useState<LocationData | null>(
+    null
+  );
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const fetchLocation = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/locations");
+      if (response.ok) {
+        const data = await response.json();
+        setlocationData(data);
+      } else {
+        console.error("Failed to fetch locations");
+        toast.error("Failed to fetch locations");
+      }
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      toast.error("Error fetching locations");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (location: LocationData) => {
+    setEditingLocation(location);
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (location: LocationData) => {
+    setDeletingLocation(location);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingLocation) return;
+
+    try {
+      const response = await fetch(`/api/locations/${deletingLocation.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
+      await fetchLocation();
+      toast.success("Location deleted successfully!");
+    } catch (error) {
+      console.error("Delete error: ", error);
+      toast.error("Failed to delete location");
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingLocation(null);
+    }
+  };
+
+  const handleDialogSuccess = () => {
+    fetchLocation();
+  };
 
   useEffect(() => {
-    const fetchLocation = async () => {
-      try {
-        const response = await fetch("/api/locations");
-        if (response.ok) {
-          const data = await response.json();
-          setlocationData(data);
-        } else {
-          console.error("Failed to fetch locations");
-        }
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchLocation();
   }, []);
 
@@ -250,8 +312,15 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                 Open in Google Maps
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit Location</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
+              <DropdownMenuItem onClick={() => handleEdit(location)}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Location
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDelete(location)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
                 Delete Location
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -455,6 +524,36 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
           </Button>
         </div>
       </div>
+
+      {/* Edit Dialog */}
+      <LocationDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        editingItem={editingLocation}
+        onSuccess={handleDialogSuccess}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Location</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {deletingLocation?.locationName}?
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

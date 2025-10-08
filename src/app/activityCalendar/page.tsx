@@ -29,7 +29,6 @@ export default function ActivityCalendar() {
           <div className="fixed top-5 left-4 z-50 md:relative md:top-4 md:left-2 md:z-auto">
             <SidebarTrigger />
           </div>
-
           <div className="fixed top-4 right-4 z-50 flex flex-row gap-2 sm:gap-4">
             <ModeToggle />
             {isAuthenticated ? (

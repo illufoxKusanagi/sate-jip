@@ -20,6 +20,8 @@ import {
   Mail,
   Phone,
   User,
+  Edit,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -41,8 +43,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { AdminData } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { PicDialog } from "../pic-dialog";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
   {
@@ -105,34 +119,76 @@ export function AdminTable() {
   const [adminData, setAdminData] = useState<AdminData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingAdmin, setEditingAdmin] = useState<AdminData | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deletingAdmin, setDeletingAdmin] = useState<AdminData | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const fetchAdmins = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/admins");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Response is not JSON");
+      }
+
+      const data = await response.json();
+      setAdminData(data);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching admins:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch admins"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (admin: AdminData) => {
+    setEditingAdmin(admin);
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (admin: AdminData) => {
+    setDeletingAdmin(admin);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingAdmin) return;
+
+    try {
+      const response = await fetch(`/api/admins/${deletingAdmin.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! status: ${response.status}`);
+      }
+
+      await fetchAdmins();
+      toast.success("Admin deleted successfully!");
+    } catch (error) {
+      console.error("Delete error: ", error);
+      toast.error("Failed to delete admin");
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingAdmin(null);
+    }
+  };
+
+  const handleDialogSuccess = () => {
+    fetchAdmins();
+  };
 
   useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const response = await fetch("/api/admins");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          throw new Error("Response is not JSON");
-        }
-
-        const data = await response.json();
-        setAdminData(data);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching admins:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch admins"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAdmins();
   }, []);
 
@@ -172,13 +228,16 @@ export function AdminTable() {
                 Call Phone
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                View Profile
+              <DropdownMenuItem onClick={() => handleEdit(admin)}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Admin
               </DropdownMenuItem>
-              <DropdownMenuItem>Edit Admin</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                Deactivate Admin
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDelete(admin)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Admin
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -313,12 +372,12 @@ export function AdminTable() {
         </Table>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-6 lg:space-x-8">
-          <div className="flex items-center justify-between sm:justify-start space-x-2">
-            <p className="text-xs sm:text-sm font-medium">Rows per page</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex items-center justify-between sm:justify-start gap-2">
+            <p className="font-medium whitespace-nowrap">Rows per page</p>
             <select
-              className="h-8 w-[70px] rounded border border-input bg-transparent px-2 py-1 text-xs sm:text-sm"
+              className="h-7 sm:h-8 w-16 sm:w-[70px] rounded border border-input bg-transparent px-1 sm:px-2 py-1 text-xs sm:text-sm"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
@@ -331,7 +390,7 @@ export function AdminTable() {
               ))}
             </select>
           </div>
-          <div className="flex items-center justify-center text-xs sm:text-sm font-medium">
+          <div className="text-center sm:text-left font-medium">
             <span className="hidden sm:inline">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
@@ -341,45 +400,75 @@ export function AdminTable() {
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+        <div className="flex items-center justify-center gap-1">
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Go to first page</span>
             {"<<"}
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Go to previous page</span>
             {"<"}
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Go to next page</span>
             {">"}
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            size="sm"
+            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-xs"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Go to last page</span>
             {">>"}
           </Button>
         </div>
       </div>
+
+      {/* Edit Dialog */}
+      <PicDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        editingItem={editingAdmin}
+        onSuccess={handleDialogSuccess}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Admin</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {deletingAdmin?.nama}? This action
+              cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

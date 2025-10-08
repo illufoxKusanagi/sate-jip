@@ -9,7 +9,8 @@ RUN apk add --no-cache libc6-compat
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including devDependencies for build)
+# Install all dependencies (including devDependencies for build)
+# This leverages Docker layer caching. This layer is only rebuilt when package*.json changes.
 RUN npm ci
 
 # Stage 2: Builder
@@ -18,8 +19,8 @@ WORKDIR /app
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
-
 # Copy source code
+# A .dockerignore file is used to prevent copying unnecessary files (like .git, node_modules)
 COPY . .
 
 # Disable telemetry during build
@@ -36,34 +37,36 @@ ENV NEXT_PUBLIC_MAPBOX_SESSION_TOKEN=$NEXT_PUBLIC_MAPBOX_SESSION_TOKEN
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
 # Build the Next.js application
+# This generates the production build and the standalone output
 RUN npm run build
 
-# Stage 3: Production runner
-FROM node:20-alpine AS runner
+# Stage 2: Production Runner Stage
+FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+RUN adduser -S -u 1001 nextjs
 
 # Copy necessary files from builder
+# Copy the standalone server output
+COPY --from=builder /app/.next/standalone ./
+# Copy static assets
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
 
-# Copy standalone server files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Set correct permissions
+RUN chown -R nextjs:nodejs .
+
 
 # Switch to non-root user
 USER nextjs
 
-# Expose port
 EXPOSE 3000
 
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
 # Start the production server using standalone output
 CMD ["node", "server.js"]
