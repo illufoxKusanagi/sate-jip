@@ -22,8 +22,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { AdminData } from "@/lib/types";
-
+import { AdminData, ConfigData } from "@/lib/types";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
+import { Command, CommandGroup, CommandItem, CommandList } from "./ui/command";
+import { CommandInput } from "./ui/command";
+import { Check, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 const formSchema = z.object({
   fullName: z.string().min(4, {
     message: "Full name must be at least 4 characters.",
@@ -61,6 +69,8 @@ export function PicDialog({
   onSuccess,
 }: PicDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [opdData, setOpdData] = useState<ConfigData[]>([]);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,8 +83,36 @@ export function PicDialog({
     },
   });
 
+  const fetchOpdOptions = async () => {
+    try {
+      const response = await fetch("/api/configs");
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch configs: ${response.status}`);
+      }
+
+      const rawData = await response.json();
+      // Parse dataConfig JSON string to object
+      const allData: ConfigData[] = rawData.map((item: any) => ({
+        ...item,
+        dataConfig:
+          typeof item.dataConfig === "string"
+            ? JSON.parse(item.dataConfig)
+            : item.dataConfig,
+      }));
+
+      const opdConfigs = allData.filter((item) => item.dataType === "OPD");
+
+      setOpdData(opdConfigs);
+    } catch (error) {
+      console.error("Unexpected error: ", error);
+      toast.error("Failed to load OPD and ISP data. Please refresh the page.");
+    }
+  };
+
   useEffect(() => {
     if (isOpen) {
+      fetchOpdOptions();
       if (editingItem) {
         form.reset({
           fullName: editingItem.fullName,
@@ -171,10 +209,10 @@ export function PicDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Full Name <span className="text-red-500">*</span>
+                    Nama Lengkap <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter full name" {...field} />
+                    <Input placeholder="Masukkan nama lengkap" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -204,10 +242,10 @@ export function PicDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Position <span className="text-red-500">*</span>
+                    Jabatan <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter position/title" {...field} />
+                    <Input placeholder="Masukkan jabatan" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -220,11 +258,72 @@ export function PicDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    OPD Name <span className="text-red-500">*</span>
+                    Nama OPD <span className="text-red-500">*</span>
                   </FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter OPD name" {...field} />
-                  </FormControl>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? opdData.find(
+                                (opd) => opd.dataConfig.name === field.value
+                              )?.dataConfig.name
+                            : "Pilih OPD"}
+                          <ChevronDown className="" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Cari OPD..." />
+                        <CommandList>
+                          <CommandGroup>
+                            {opdData.map((opd) => (
+                              <CommandItem
+                                value={opd.dataConfig.name}
+                                key={opd.id}
+                                onSelect={() => {
+                                  form.setValue("opdName", opd.dataConfig.name);
+                                  setOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    opd.dataConfig.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {opd.dataConfig.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  {/* <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Pilih OPD" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {opdData.map((opd) => (
+                        <SelectItem value={opd.dataConfig.name} key={opd.id}>
+                          {opd.dataConfig.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -236,10 +335,10 @@ export function PicDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    WhatsApp Number <span className="text-red-500">*</span>
+                    Nomor WhatsApp <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter WhatsApp number" {...field} />
+                    <Input placeholder="Masukkan nomor WhatsApp" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
