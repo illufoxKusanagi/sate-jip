@@ -23,15 +23,12 @@ import { z } from "zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AdminData, ConfigData } from "@/lib/types";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@radix-ui/react-popover";
+
 import { Command, CommandGroup, CommandItem, CommandList } from "./ui/command";
 import { CommandInput } from "./ui/command";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 const formSchema = z.object({
   fullName: z.string().min(4, {
     message: "Full name must be at least 4 characters.",
@@ -251,7 +248,6 @@ export function PicDialog({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="opdName"
@@ -284,7 +280,7 @@ export function PicDialog({
                       <Command>
                         <CommandInput placeholder="Cari OPD..." />
                         <CommandList>
-                          <CommandGroup>
+                          <CommandGroup heading="Opsi opd">
                             {opdData.map((opd) => (
                               <CommandItem
                                 value={opd.dataConfig.name}
@@ -310,20 +306,6 @@ export function PicDialog({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  {/* <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Pilih OPD" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {opdData.map((opd) => (
-                        <SelectItem value={opd.dataConfig.name} key={opd.id}>
-                          {opd.dataConfig.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select> */}
                   <FormMessage />
                 </FormItem>
               )}
