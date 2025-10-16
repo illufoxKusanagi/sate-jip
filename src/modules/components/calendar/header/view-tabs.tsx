@@ -43,9 +43,9 @@ function Views() {
     <Tabs
       value={view}
       onValueChange={(value) => setView(value as TCalendarView)}
-      className="gap-4 sm:w-auto w-full"
+      className="gap-2 sm:gap-4 sm:w-auto w-full"
     >
-      <TabsList className="h-auto gap-2 rounded-xl p-1 w-full">
+      <TabsList className="h-auto gap-1 sm:gap-2 rounded-xl p-1 w-full">
         {tabs.map(({ icon: Icon, name, value }) => {
           const isActive = view === value;
 
@@ -60,7 +60,7 @@ function Views() {
               onClick={() => setView(value as TCalendarView)}
               initial={false}
               animate={{
-                width: isActive ? 120 : 32,
+                width: isActive ? (window.innerWidth < 640 ? 80 : 120) : 32,
               }}
               transition={{
                 type: "tween",
@@ -70,7 +70,7 @@ function Views() {
             >
               <TabsTrigger value={value} asChild>
                 <motion.div
-                  className="flex h-8 w-full items-center justify-center cursor-pointer"
+                  className="flex h-8 w-full items-center justify-center cursor-pointer px-1 sm:px-2"
                   animate={{ filter: "blur(0px)" }}
                   exit={{ filter: "blur(2px)" }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
@@ -79,7 +79,7 @@ function Views() {
                   <AnimatePresence initial={false}>
                     {isActive && (
                       <motion.span
-                        className="font-medium"
+                        className="font-medium text-xs sm:text-sm ml-1 sm:ml-2 truncate"
                         initial={{ opacity: 0, scaleX: 0.8 }}
                         animate={{ opacity: 1, scaleX: 1 }}
                         transition={{ duration: 0.25, ease: "easeOut" }}

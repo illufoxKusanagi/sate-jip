@@ -57,12 +57,12 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, ...transition }}
           >
-            <span className="text-xs font-medium text-t-quaternary">{day}</span>
+            <span className="text-[10px] sm:text-xs font-medium text-t-quaternary">{day}</span>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 overflow-hidden">
+      <div className="grid grid-cols-7">
         {cells.map((cell, index) => (
           <DayCell
             key={index}

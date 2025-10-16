@@ -9,8 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import { useCalendar } from "@/modules/components/calendar/contexts/calendar-context";
 import type { TEventColor } from "@/modules/components/calendar/types";
+import { ComponentProps } from "react";
 
-export default function FilterEvents() {
+export default function FilterEvents({ className }: ComponentProps<"div">) {
   const { selectedColors, filterEventsBySelectedColors, clearFilter } =
     useCalendar();
 
@@ -35,7 +36,10 @@ export default function FilterEvents() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Toggle variant="outline" className="cursor-pointer w-fit">
+        <Toggle
+          variant="outline"
+          className={`cursor-pointer w-fit ${className}`}
+        >
           <Filter className="h-4 w-4" />
         </Toggle>
       </DropdownMenuTrigger>

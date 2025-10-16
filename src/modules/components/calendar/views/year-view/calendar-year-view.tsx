@@ -89,13 +89,13 @@ export function CalendarYearView({ singleDayEvents, multiDayEvents }: IProps) {
 
               <div className="grid grid-cols-7 text-center text-xs font-medium text-muted-foreground py-2">
                 {WEEKDAYS.map((day) => (
-                  <div key={day} className="p-1">
+                  <div key={day} className="p-0.5 sm:p-1">
                     {day}
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-7 gap-0.5 p-1.5 flex-grow text-xs">
+              <div className="grid grid-cols-7 gap-0.5 sm:gap-1 p-0.5 sm:p-1.5 flex-grow text-[10px] sm:text-xs">
                 {cells.map((cell) => {
                   const isCurrentMonth = isSameMonth(cell.date, monthDate);
                   const isToday = isSameDay(cell.date, new Date());
@@ -113,7 +113,7 @@ export function CalendarYearView({ singleDayEvents, multiDayEvents }: IProps) {
                     <div
                       key={cell.date.toISOString()}
                       className={cn(
-                        "flex flex-col items-center justify-start p-1 min-h-[2rem] relative",
+                        "flex flex-col items-center justify-start p-0.5 sm:p-1 min-h-[2rem] relative",
                         !isCurrentMonth && "text-muted-foreground/40",
                         hasEvents && isCurrentMonth
                           ? "cursor-pointer hover:bg-accent/20 hover:rounded-md"
