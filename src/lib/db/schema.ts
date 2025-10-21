@@ -58,6 +58,7 @@ export const users = mysqlTable("users", {
     .$defaultFn(() => uuidv4()),
   username: varchar("username", { length: 255 }).notNull().unique(),
   password: varchar("password", { length: 255 }).notNull(),
+  role: mysqlEnum("role", ["admin", "user"]).default("user"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

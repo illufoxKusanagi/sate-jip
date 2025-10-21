@@ -88,6 +88,7 @@ async function seedUsers() {
       await db.insert(users).values({
         username: user.username,
         password: hashedPassword,
+        role: user.role as any,
       });
 
       console.log(`✅ Created user: ${user.username}`);

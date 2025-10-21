@@ -50,6 +50,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Create non-root user for security
 RUN adduser -S -u 1001 nextjs
 
+# Install netcat for health checks in entrypoint
+RUN apk add --no-cache netcat-openbsd
+
 # Copy necessary files from builder
 # Copy the standalone server output
 COPY --from=builder /app/.next/standalone ./
@@ -57,9 +60,19 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
-# Set correct permissions
-# RUN chown -R nextjs:nodejs .
+# Copy migration files and scripts for production
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/src/lib/db ./src/lib/db
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/package.json ./package.json
 
+# Copy entrypoint script
+COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+
+# Set correct permissions
+RUN chown -R nextjs:nextjs .
 
 # Switch to non-root user
 USER nextjs
@@ -68,5 +81,5 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-# Start the production server using standalone output
-CMD ["node", "server.js"]
+# Use entrypoint script instead of direct node command
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

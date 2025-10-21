@@ -57,6 +57,20 @@
       "when": 1759900157835,
       "tag": "0007_charming_rhino",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1761031981329,
+      "tag": "0008_violet_cargill",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1761032456995,
+      "tag": "0009_lovely_titanium_man",
+      "breakpoints": true
     }
   ]
 }
