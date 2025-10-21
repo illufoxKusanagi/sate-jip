@@ -188,7 +188,9 @@ export const columns: ColumnDef<LocationData>[] = [
     accessorKey: "eCat",
     header: "Category",
     cell: ({ row }) => (
-      <Badge variant="secondary">{row.getValue("eCat")}</Badge>
+      <Badge className="text-white" variant="secondary">
+        {row.getValue("eCat")}
+      </Badge>
     ),
   },
 ];

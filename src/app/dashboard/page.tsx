@@ -23,6 +23,7 @@ import { useAuth } from "../context/auth-context";
 import { PicDialog } from "@/components/pic-dialog";
 import { LocationDialog } from "@/components/location-dialog";
 import { useState } from "react";
+import { TopBar } from "@/components/layout/top-bar";
 
 export default function Dashboard() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
@@ -58,46 +59,8 @@ export default function Dashboard() {
         <div className="flex flex-row h-screen w-full relative">
           <AppSidebar />
 
-          {/* Fixed positioned controls */}
-          <div className="fixed top-5 left-4 z-50 md:relative md:top-4 md:left-2 md:z-auto">
-            <SidebarTrigger />
-          </div>
-
-          <div className="fixed top-4 right-4 z-50 flex flex-row gap-2 sm:gap-4">
-            <ModeToggle />
-            {isAuthenticated ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex flex-row gap-1 sm:gap-3 px-2 sm:px-4 items-center hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md">
-                  <Avatar className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg">
-                    <AvatarImage
-                      className="rounded-full"
-                      src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_1.png"
-                      alt={user?.username || "Admin"}
-                    />
-                    <AvatarFallback className="rounded-lg text-xs">
-                      IK
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="hidden sm:flex text-left justify-center">
-                    <span className="truncate body-small-regular">
-                      halo, {user?.username}
-                    </span>
-                  </div>
-                  <ChevronDown className="ml-auto size-3 sm:size-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : null}
-          </div>
-
-          <main className="flex-1 my-12 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto">
+            <TopBar />
             <div className="flex flex-col mx-4 sm:mx-8 lg:mx-20 my-16 sm:my-10 rounded-lg">
               <Tabs defaultValue="map">
                 <TabsList className="grid w-full grid-cols-3 gap-1">
