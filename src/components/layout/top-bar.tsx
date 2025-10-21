@@ -43,6 +43,7 @@ export function TopBar() {
                 <div className="hidden sm:flex text-left justify-center">
                   <span className="truncate body-small-regular">
                     halo, {user?.username}
+                    dengan role: {user?.role}
                   </span>
                 </div>
                 <ChevronDown className="ml-auto size-3 sm:size-4" />

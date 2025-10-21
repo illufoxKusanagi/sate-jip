@@ -58,6 +58,7 @@ import { useEffect, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { toast } from "sonner";
 import { LocationDialog } from "../location-dialog";
+import { useAuth } from "@/app/context/auth-context";
 
 interface LocationsTableProps {
   onViewLocation?: (location: LocationData) => void;
@@ -206,7 +207,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
     null
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
+  const { isAdmin } = useAuth();
   const fetchLocation = async () => {
     try {
       setLoading(true);
@@ -314,17 +315,21 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                 Open in Google Maps
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleEdit(location)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Location
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-600"
-                onClick={() => handleDelete(location)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Location
-              </DropdownMenuItem>
+              {isAdmin() && (
+                <>
+                  <DropdownMenuItem onClick={() => handleEdit(location)}>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Location
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => handleDelete(location)}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Location
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

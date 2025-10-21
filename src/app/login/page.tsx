@@ -65,11 +65,11 @@ export default function LoginPage() {
         return;
       }
 
-      login(result.user.username, result.token);
+      login(result.user.username, result.token, result.user.role);
       toast.success(
         `Login berhasil, Okaerinasai, ${result.user.username}-san!`
       );
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login gagal, silahkan coba lagi");

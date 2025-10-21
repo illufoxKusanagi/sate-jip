@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
       {
         userId: user.id,
         username: user.username,
+        role: user.role,
       },
       process.env.JWT_SECRET || "your-secret-key",
       { expiresIn: "7d" }
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
       user: {
         id: user.id,
         username: user.username,
+        role: user.role,
       },
       token,
     });

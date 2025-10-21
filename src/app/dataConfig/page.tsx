@@ -31,7 +31,7 @@ import { ConfigData } from "@/lib/types";
 import { TopBar } from "@/components/layout/top-bar";
 
 export default function InputDataConfigPage() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, isAdmin } = useAuth();
   const [isConfigLoading, setIsConfigLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ConfigData | null>(null);
@@ -84,7 +84,34 @@ export default function InputDataConfigPage() {
     }
   };
 
-  const opdColumns: ColumnDef<ConfigData>[] = [
+  const actionColumns: ColumnDef<ConfigData>[] = [
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleEdit(row.original)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleDelete(row.original)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </>
+        </div>
+      ),
+    },
+  ];
+
+  const baseOpdColumns: ColumnDef<ConfigData>[] = [
     {
       accessorKey: "dataConfig",
       header: "Nama OPD",
@@ -102,31 +129,9 @@ export default function InputDataConfigPage() {
       header: "Alamat",
       cell: ({ row }) => row.original.dataConfig.address ?? "-",
     },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => (
-        <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEdit(row.original)}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleDelete(row.original)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
   ];
 
-  const ispColumns: ColumnDef<ConfigData>[] = [
+  const baseIspColumns: ColumnDef<ConfigData>[] = [
     {
       accessorKey: "dataConfig",
       header: "Nama ISP",
@@ -142,29 +147,15 @@ export default function InputDataConfigPage() {
       header: "Penanggung-jawab",
       cell: ({ row }) => row.original.dataConfig.pic ?? "-",
     },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => (
-        <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEdit(row.original)}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleDelete(row.original)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  const opdColumns: ColumnDef<ConfigData>[] = isAdmin()
+    ? [...baseOpdColumns, ...actionColumns]
+    : baseOpdColumns;
+
+  const ispColumns: ColumnDef<ConfigData>[] = isAdmin()
+    ? [...baseIspColumns, ...actionColumns]
+    : baseIspColumns;
 
   const fetchAllData = async () => {
     try {
@@ -327,14 +318,16 @@ export default function InputDataConfigPage() {
                   Untuk informasi OPD dan ISP
                 </p>
               </div>
-              <Button
-                onClick={handleCreate}
-                size="sm"
-                className="w-full sm:w-auto"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Tambah Konfigurasi Data
-              </Button>
+              {isAdmin() && (
+                <Button
+                  onClick={handleCreate}
+                  size="sm"
+                  className="w-full sm:w-auto"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Tambah Konfigurasi Data
+                </Button>
+              )}
             </div>
 
             <Tabs defaultValue="opd">

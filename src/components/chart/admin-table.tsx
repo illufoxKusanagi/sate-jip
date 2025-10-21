@@ -57,6 +57,7 @@ import { AdminData } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PicDialog } from "../pic-dialog";
+import { useAuth } from "@/app/context/auth-context";
 
 export const adminColumns: ColumnDef<AdminData>[] = [
   {
@@ -105,6 +106,7 @@ export function AdminTable() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deletingAdmin, setDeletingAdmin] = useState<AdminData | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { isAdmin } = useAuth();
 
   const fetchAdmins = async () => {
     try {
@@ -212,17 +214,21 @@ export function AdminTable() {
                 Call Phone
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleEdit(admin)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Admin
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-600"
-                onClick={() => handleDelete(admin)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Admin
-              </DropdownMenuItem>
+              {isAdmin() && (
+                <>
+                  <DropdownMenuItem onClick={() => handleEdit(admin)}>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Admin
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => handleDelete(admin)}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Admin
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

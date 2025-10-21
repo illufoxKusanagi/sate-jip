@@ -16,9 +16,11 @@ import FilterEvents from "@/modules/components/calendar/header/filter";
 import { TodayButton } from "@/modules/components/calendar/header/today-button";
 import { Settings } from "@/modules/components/calendar/settings/settings";
 import Views from "./view-tabs";
+import { useAuth } from "@/app/context/auth-context";
 
 export function CalendarHeader() {
   const { view, events } = useCalendar();
+  const { isAdmin } = useAuth();
 
   return (
     <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 border-b p-2 sm:p-3 lg:p-4 lg:flex-row lg:items-center lg:justify-between">
@@ -47,12 +49,14 @@ export function CalendarHeader() {
 
         <div className="flex flex-row gap-2 justify-between sm:justify-start">
           <FilterEvents className="inline sm:hidden" />
-          <AddEditEventDialog>
-            <Button className="flex-1 xs:flex-none text-xs sm:text-sm">
-              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-              <span className="inline">Tambah Agenda</span>
-            </Button>
-          </AddEditEventDialog>
+          {isAdmin() && (
+            <AddEditEventDialog>
+              <Button className="flex-1 xs:flex-none text-xs sm:text-sm">
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                <span className="inline">Tambah Agenda</span>
+              </Button>
+            </AddEditEventDialog>
+          )}
           <Settings />
         </div>
       </motion.div>

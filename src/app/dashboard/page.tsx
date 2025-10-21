@@ -26,7 +26,7 @@ import { useState } from "react";
 import { TopBar } from "@/components/layout/top-bar";
 
 export default function Dashboard() {
-  const { isAuthenticated, isLoading, logout, user } = useAuth();
+  const { isAuthenticated, isLoading, logout, isAdmin } = useAuth();
   const [isPicDialogOpen, setIsPicDialogOpen] = useState(false);
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
 
@@ -120,14 +120,16 @@ export default function Dashboard() {
                           <h2 className="text-xl sm:text-2xl font-bold">
                             Dasbor Penanggungjawab
                           </h2>
-                          <Button
-                            onClick={handleCreatePic}
-                            size="sm"
-                            className="w-full sm:w-auto"
-                          >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Tambahkan PIC
-                          </Button>
+                          {isAdmin() && (
+                            <Button
+                              onClick={handleCreatePic}
+                              size="sm"
+                              className="w-full sm:w-auto"
+                            >
+                              <Plus className="mr-2 h-4 w-4" />
+                              Tambahkan PIC
+                            </Button>
+                          )}
                         </div>
                         <AdminTable />
                       </div>
@@ -139,14 +141,16 @@ export default function Dashboard() {
                           <h2 className="text-xl sm:text-2xl font-bold">
                             Dasbor Titik Lokasi
                           </h2>
-                          <Button
-                            onClick={handleCreateLocation}
-                            size="sm"
-                            className="w-full sm:w-auto"
-                          >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Tambahkan Lokasi
-                          </Button>
+                          {isAdmin() && (
+                            <Button
+                              onClick={handleCreateLocation}
+                              size="sm"
+                              className="w-full sm:w-auto"
+                            >
+                              <Plus className="mr-2 h-4 w-4" />
+                              Tambahkan Lokasi
+                            </Button>
+                          )}
                         </div>
                         <LocationsTable />
                       </div>
