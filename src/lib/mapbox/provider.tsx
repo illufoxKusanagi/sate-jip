@@ -47,6 +47,16 @@ export default function MapProvider({
         zoom: initialViewState.zoom,
         attributionControl: false,
         logoPosition: "bottom-right",
+        scrollZoom: {
+          around: "center",
+        },
+        doubleClickZoom: true,
+        touchZoomRotate: true,
+        boxZoom: true,
+        dragRotate: true,
+        dragPan: true,
+        keyboard: true,
+        touchPitch: true,
       });
 
       map.current.on("load", () => {

@@ -24,7 +24,7 @@ import { PicDialog } from "@/components/pic-dialog";
 import { LocationDialog } from "@/components/location-dialog";
 import { useState } from "react";
 
-export default function Home() {
+export default function Dashboard() {
   const { isAuthenticated, isLoading, logout, user } = useAuth();
   const [isPicDialogOpen, setIsPicDialogOpen] = useState(false);
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);

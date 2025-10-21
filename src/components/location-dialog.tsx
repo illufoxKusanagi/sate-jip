@@ -31,6 +31,16 @@ import { z } from "zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ConfigData, LocationData } from "@/lib/types";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { cn } from "@/lib/utils";
+import { Check, ChevronDown } from "lucide-react";
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "./ui/command";
 
 const formSchema = z.object({
   locationName: z
@@ -76,6 +86,8 @@ export function LocationDialog({
   const [opdData, setOpdData] = useState<ConfigData[]>([]);
   const [ispData, setIspData] = useState<ConfigData[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [opdOpen, setOpdOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -350,20 +362,59 @@ export function LocationDialog({
                     <FormLabel>
                       OPD Pengampu <span className="text-red-500">*</span>
                     </FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Pilih OPD Pengampu" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {opdData.map((opd) => (
-                          <SelectItem value={opd.dataConfig.name} key={opd.id}>
-                            {opd.dataConfig.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover open={opdOpen} onOpenChange={setOpdOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? opdData.find(
+                                  (opd) => opd.dataConfig.name === field.value
+                                )?.dataConfig.name
+                              : "Pilih OPD"}
+                            <ChevronDown className="" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari OPD..." />
+                          <CommandList>
+                            <CommandGroup heading="Opsi opd">
+                              {opdData.map((opd) => (
+                                <CommandItem
+                                  value={opd.dataConfig.name}
+                                  key={opd.id}
+                                  onSelect={() => {
+                                    form.setValue(
+                                      "opdPengampu",
+                                      opd.dataConfig.name
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      opd.dataConfig.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {opd.dataConfig.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -398,20 +449,59 @@ export function LocationDialog({
                     <FormLabel>
                       Nama ISP <span className="text-red-500">*</span>
                     </FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Pilih nama ISP" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {ispData.map((isp) => (
-                          <SelectItem value={isp.dataConfig.name} key={isp.id}>
-                            {isp.dataConfig.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? ispData.find(
+                                  (isp) => isp.dataConfig.name === field.value
+                                )?.dataConfig.name
+                              : "Pilih ISP"}
+                            <ChevronDown className="" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Cari ISP..." />
+                          <CommandList>
+                            <CommandGroup heading="Opsi opd">
+                              {ispData.map((isp) => (
+                                <CommandItem
+                                  value={isp.dataConfig.name}
+                                  key={isp.id}
+                                  onSelect={() => {
+                                    form.setValue(
+                                      "ispName",
+                                      isp.dataConfig.name
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      isp.dataConfig.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {isp.dataConfig.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
