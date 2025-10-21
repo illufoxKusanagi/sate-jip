@@ -2,6 +2,7 @@ import { LocationData } from "../types";
 
 export const locationData = [
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia",
     latitude: -7.541858083799367,
     longitude: 111.65312443469108,
@@ -17,6 +18,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Gedung Diklat ( MPP )",
     latitude: -7.627393722572465,
     longitude: 111.51611549231939,
@@ -32,6 +34,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Kesatuan Bangsa dan Politik Dalam Negeri",
     latitude: -7.54415037239102,
     longitude: 111.65464887860212,
@@ -47,6 +50,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kesbang ( MPP )",
     latitude: -7.6268129087992,
     longitude: 111.51677707430652,
@@ -62,6 +66,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Pendapatan Daerah",
     latitude: -7.541746637143354,
     longitude: 111.65375302076605,
@@ -77,6 +82,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Pengelolaan Keuangan dan Aset Daerah (BPKAD)",
     latitude: -7.542797573726957,
     longitude: 111.6537357530752,
@@ -92,6 +98,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Perencanaan Pembangunan Daerah (BAPPEDA)",
     latitude: -7.542516146577988,
     longitude: 111.65315522728748,
@@ -107,6 +114,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Pembangunan ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -122,6 +130,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Hukum ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -137,6 +146,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Kesra ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -152,6 +162,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Organisasi ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -167,6 +178,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Tapem ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -182,6 +194,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Lpse ( Puspem)",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -197,6 +210,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Pengadaan ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -212,6 +226,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Perekonomian ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -227,6 +242,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia",
     latitude: -7.541858083799367,
     longitude: 111.65312443469108,
@@ -242,6 +258,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Gedung Diklat ( MPP )",
     latitude: -7.627393722572465,
     longitude: 111.51611549231939,
@@ -257,6 +274,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Kesatuan Bangsa dan Politik Dalam Negeri",
     latitude: -7.54415037239102,
     longitude: 111.65464887860212,
@@ -272,6 +290,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kesbang ( MPP )",
     latitude: -7.6268129087992,
     longitude: 111.51677707430652,
@@ -287,6 +306,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Pendapatan Daerah",
     latitude: -7.541746637143354,
     longitude: 111.65375302076605,
@@ -302,6 +322,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Pengelolaan Keuangan dan Aset Daerah (BPKAD)",
     latitude: -7.542797573726957,
     longitude: 111.6537357530752,
@@ -317,6 +338,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Badan Perencanaan Pembangunan Daerah (BAPPEDA)",
     latitude: -7.542516146577988,
     longitude: 111.65315522728748,
@@ -332,6 +354,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Pembangunan ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -347,6 +370,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Hukum ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -362,6 +386,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Kesra ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -377,6 +402,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Organisasi ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -392,6 +418,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Tapem ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -407,6 +434,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Lpse ( Puspem)",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -422,6 +450,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Pengadaan ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -437,6 +466,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Perekonomian ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -452,6 +482,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Humas ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -467,6 +498,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bagian Protokol ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -482,6 +514,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Pendopo Ronggo Djumeno",
     latitude: -7.540576035892256,
     longitude: 111.65234434956976,
@@ -497,6 +530,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Ruang Gambar ( Pendopo Muda Graha MPP )",
     latitude: -7.626607148458956,
     longitude: 111.5164239065903,
@@ -512,6 +546,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Rumah Dinas Sekda ( MPP )",
     latitude: -7.626766487266532,
     longitude: 111.51601630800349,
@@ -527,6 +562,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Ass Ek Bang ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -542,6 +578,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Ass Adm Umum ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -557,6 +594,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Sekpri Wabup ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -572,6 +610,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Ass Pemerintahan ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -587,6 +626,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Sekpri Sekda ( Puspem )",
     latitude: -7.54046077416668,
     longitude: 111.65334023001948,
@@ -602,6 +642,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Kependudukan dan Pencatatan Sipil",
     latitude: -7.6276388893682086,
     longitude: 111.51713527305878,
@@ -617,6 +658,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Puskesmas Pilangkenceng",
     latitude: -7.488386754360204,
     longitude: 111.66243956180423,
@@ -632,6 +674,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Puskesmas Gemarang",
     latitude: -7.647233470775,
     longitude: 111.7333218323626,
@@ -647,6 +690,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Ketahanan Pangan dan Peternakan ( MPP )",
     latitude: -7.627251986583983,
     longitude: 111.51678474415242,
@@ -662,6 +706,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Diskominfo",
     latitude: -7.632570997752923,
     longitude: 111.52999310460616,
@@ -677,6 +722,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Diskominfo",
     latitude: -7.632570997752923,
     longitude: 111.52999310460616,
@@ -692,6 +738,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Pasar Caruban",
     latitude: -7.52975411928245,
     longitude: 111.64455883827917,
@@ -707,6 +754,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "GOR Pangeran Timur",
     latitude: -7.543778386421711,
     longitude: 111.67563990003505,
@@ -722,6 +770,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Taman Kota Caruban",
     latitude: -7.548378446019767,
     longitude: 111.65639894335267,
@@ -737,6 +786,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Pasar Burung",
     latitude: -7.549431857297132,
     longitude: 111.66489082955603,
@@ -753,6 +803,7 @@ export const locationData = [
   },
   // ...existing code...
   {
+    activationDate: "2024-01-15",
     locationName: "Alun-Alun Caruban 1",
     latitude: -7.541936550887679,
     longitude: 111.65225981846054,
@@ -768,6 +819,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Balai Desa Bangunsari 1",
     latitude: -7.74747057985154,
     longitude: 111.52337190856156,
@@ -783,6 +835,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Monumen Kresek",
     latitude: -7.7055067122652545,
     longitude: 111.63161170985236,
@@ -798,6 +851,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Lppl Radio Puroboyo Fm",
     latitude: -7.530498221714723,
     longitude: 111.64390536422856,
@@ -813,6 +867,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Balai Desa Bangunsari 2",
     latitude: -7.748094505540143,
     longitude: 111.5232258697293,
@@ -828,6 +883,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Balai Desa Bangunsari 3",
     latitude: -7.748085109075849,
     longitude: 111.5228522379072,
@@ -843,6 +899,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Alun-Alun Caruban 2",
     latitude: -7.541936550887679,
     longitude: 111.65225981846054,
@@ -858,6 +915,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Lingkungan Hidup",
     latitude: -7.544036766912068,
     longitude: 111.65320345570936,
@@ -873,6 +931,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Gedung Pesilat",
     latitude: -7.543908115074259,
     longitude: 111.65160248092383,
@@ -888,6 +947,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Pariwisata, Pemuda dan Olahraga",
     latitude: -7.543504613531213,
     longitude: 111.65323954306946,
@@ -903,6 +963,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Pekerjaan Umum dan Penataan Ruang",
     latitude: -7.547824268144713,
     longitude: 111.65345570930452,
@@ -918,6 +979,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kantor Pengairan",
     latitude: null,
     longitude: null,
@@ -933,6 +995,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Pemberdayaan Masyarakat dan Desa",
     latitude: -7.542291519644663,
     longitude: 111.65451346239321,
@@ -948,6 +1011,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Gedung PKK ( MPP )",
     latitude: -7.627499318398605,
     longitude: 111.51707346446484,
@@ -963,6 +1027,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "MPP",
     latitude: -7.628004690674374,
     longitude: 111.51683299140494,
@@ -978,6 +1043,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Korwil Wungu",
     latitude: -7.649383308568087,
     longitude: 111.55213520216576,
@@ -993,6 +1059,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Korwil Geger",
     latitude: -7.720368408990409,
     longitude: 111.53557017720397,
@@ -1008,6 +1075,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Korwil Dolopo",
     latitude: -7.762772387002599,
     longitude: 111.52724554321394,
@@ -1023,6 +1091,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dindik Tiron",
     latitude: -7.5853376455462,
     longitude: 111.54102369281784,
@@ -1038,6 +1107,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dindik Tiron",
     latitude: -7.5853376455462,
     longitude: 111.54102369281784,
@@ -1054,6 +1124,7 @@ export const locationData = [
   },
   // ...existing code...
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Kb Jiwan",
     latitude: -7.6251063309845835,
     longitude: 111.4935081701216,
@@ -1070,6 +1141,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Perdagangan, Koperasi dan Usaha Mikro",
     latitude: -7.543378374896917,
     longitude: 111.65402598592824,
@@ -1085,6 +1157,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Gedung Metrologi ( MPP )",
     latitude: -7.62760982225096,
     longitude: 111.51623514125305,
@@ -1100,6 +1173,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Perhubungan",
     latitude: -7.548127485519355,
     longitude: 111.67048946176733,
@@ -1115,6 +1189,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "CCTV Muneng",
     latitude: -7.4915770761505645,
     longitude: 111.60253224200893,
@@ -1130,6 +1205,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Smart Traffic Light Dishub ( Nglames )",
     latitude: -7.589761155129132,
     longitude: 111.53919995406794,
@@ -1145,6 +1221,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Smart Traffic Light Dishub ( Balerejo )",
     latitude: -7.556948678545941,
     longitude: 111.58048717660012,
@@ -1160,6 +1237,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Smart Traffic Light Dishub ( Karang Malang)",
     latitude: -7.551789346152159,
     longitude: 111.61560379635284,
@@ -1175,6 +1253,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Smart Traffic Light Dishub ( Sekelip)",
     latitude: -7.726789319618905,
     longitude: 111.5330677139646,
@@ -1190,6 +1269,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Perpustakaan dan Kearsipan",
     latitude: -7.547595560989398,
     longitude: 111.6545764995912,
@@ -1205,6 +1285,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Pertanian",
     latitude: -7.621605591913676,
     longitude: 111.52486505034973,
@@ -1220,6 +1301,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bpp Sawahan",
     latitude: -7.578502359046678,
     longitude: 111.5312166886204,
@@ -1235,6 +1317,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Bpp Saradan",
     latitude: -7.550729325634116,
     longitude: 111.73489086561362,
@@ -1250,6 +1333,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Rusunawa Disperkim",
     latitude: -7.550015573402786,
     longitude: 111.6777754470923,
@@ -1265,6 +1349,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Sosial",
     latitude: -7.656309797477986,
     longitude: 111.5589806393699,
@@ -1281,6 +1366,7 @@ export const locationData = [
   },
   // ...existing code...
   {
+    activationDate: "2024-01-15",
     locationName: "Dinas Tenaga Kerja",
     latitude: -7.544216487566813,
     longitude: 111.65385845354886,
@@ -1296,6 +1382,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Inspektorat",
     latitude: -7.542878948073424,
     longitude: 111.65418716926499,
@@ -1311,6 +1398,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Balerejo",
     latitude: -7.552900920260921,
     longitude: 111.60486061887269,
@@ -1326,6 +1414,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Dagangan",
     latitude: -7.70799572064414,
     longitude: 111.55153319022882,
@@ -1341,6 +1430,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Dolopo",
     latitude: -7.765291910856416,
     longitude: 111.52713838732004,
@@ -1356,6 +1446,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Geger",
     latitude: -7.720869288402169,
     longitude: 111.5364096370773,
@@ -1371,6 +1462,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Gemarang",
     latitude: -7.646983277527923,
     longitude: 111.73338908782765,
@@ -1386,6 +1478,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Jiwan",
     latitude: -7.6239568060787,
     longitude: 111.49187467161728,
@@ -1401,6 +1494,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Kare",
     latitude: -7.719314884764577,
     longitude: 111.6887476526293,
@@ -1416,6 +1510,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Kebonsari",
     latitude: -7.72063237059277,
     longitude: 111.50754735113455,
@@ -1431,6 +1526,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Madiun",
     latitude: -7.599986337374711,
     longitude: 111.53540513863844,
@@ -1446,6 +1542,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Mejayan",
     latitude: -7.545645122113804,
     longitude: 111.65492227871393,
@@ -1461,6 +1558,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Pilangkenceng",
     latitude: -7.490855215839783,
     longitude: 111.66288029805533,
@@ -1476,6 +1574,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Saradan",
     latitude: -7.550692710040043,
     longitude: 111.73469016483743,
@@ -1491,6 +1590,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Sawahan",
     latitude: -7.578514274163255,
     longitude: 111.53103009596227,
@@ -1506,6 +1606,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Wonoasri",
     latitude: -7.570024466480867,
     longitude: 111.62360064359906,
@@ -1521,6 +1622,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kecamatan Wungu",
     latitude: -7.64811909898848,
     longitude: 111.55159944614282,
@@ -1536,6 +1638,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kantor Kelurahan Bangunsari",
     latitude: -7.7476699192304626,
     longitude: 111.52353209049257,
@@ -1551,6 +1654,7 @@ export const locationData = [
     status: "active",
   },
   {
+    activationDate: "2024-01-15",
     locationName: "Kelurahan Krajan (Kecamatan Mejayan)",
     latitude: -7.545484253637856,
     longitude: 111.65529041190294,

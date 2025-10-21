@@ -1,5 +1,38 @@
 # Gunakan perintah: docker compose up -d --build
 services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: sate-jip-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - sate-jip-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p12345678Haha",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Next.js Application
   app:
     build:
@@ -9,21 +42,19 @@ services:
     container_name: sate-jip-app-diskominfo
     restart: unless-stopped
     ports:
-      - "3001:3000"
+      - "3000:3000"
     env_file:
       - .env # Pastikan file ini berisi variabel untuk produksi
     environment:
       - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+    depends_on:
+      mysql:
+        condition: service_healthy
     # Tidak ada volume untuk source code di produksi agar image bersifat immutable.
     networks:
       - sate-jip-network
-      - .env
-    environment:
-      - NODE_ENV=production
-      - HOSTNAME=0.0.0.0
     # Remove volumes for production - app is self-contained in the image
-    networks:
-      - sate-jip-network
     healthcheck:
       test: ["CMD-SHELL", "wget --spider -q http://localhost:3000 || exit 1"]
       interval: 30s
@@ -34,3 +65,6 @@ services:
 networks:
   sate-jip-network:
     driver: bridge
+
+volumes:
+  mysql-data:

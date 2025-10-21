@@ -141,6 +141,7 @@ async function seedLocations() {
     for (const location of locationData) {
       await db.insert(locations).values({
         locationName: location.locationName,
+        activationDate: (location as any).activationDate || null,
         latitude: location.latitude?.toString() || null,
         longitude: location.longitude?.toString() || null,
         opdPengampu: location.opdPengampu,

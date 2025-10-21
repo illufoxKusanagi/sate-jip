@@ -58,7 +58,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
 # Set correct permissions
-RUN chown -R nextjs:nodejs .
+# RUN chown -R nextjs:nodejs .
 
 
 # Switch to non-root user
