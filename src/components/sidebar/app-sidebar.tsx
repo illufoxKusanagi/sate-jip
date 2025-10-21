@@ -10,11 +10,13 @@ import {
   DatabaseZap,
   Home,
   LayoutDashboard,
+  Network,
   PersonStandingIcon,
   Pin,
   Server,
   Ticket,
 } from "lucide-react";
+// import { CustomSateItikIcon } from "@/components/icons/sate-itik-icon";
 
 import {
   Sidebar,
@@ -134,14 +136,24 @@ export function AppSidebar() {
         )}
       >
         <SidebarMenu>
-          <SidebarMenuButton asChild className="hover:bg-accent/50 h-10">
+          <SidebarMenuButton asChild className="hover:bg-accent/50 h-16">
             {open ? (
-              <p className="body-big-bold text-center text-primary-600 dark:text-primary-300">
-                SATE ITIK
-              </p>
+              <div className="flex items-center gap-3 w-full px-2">
+                <Network className="h-6 w-6 text-primary-600 dark:text-primary-300 shrink-0" />
+                {/* <CustomSateItikIcon className="h-6 w-6 text-primary-600 dark:text-primary-300 shrink-0" /> */}
+                <div className="flex flex-col items-start overflow-hidden">
+                  <p className="body-big-bold text-primary-600 dark:text-primary-300 truncate">
+                    SATE-ITIK
+                  </p>
+                  <CardDescription className="text-xs truncate w-full">
+                    Sistem Analisis Terpadu
+                  </CardDescription>
+                </div>
+              </div>
             ) : (
               <div className="flex items-center justify-center w-full">
-                <Home className="h-6 w-6 text-primary-600 dark:text-primary-300" />
+                <Network className="h-6 w-6 text-primary-600 dark:text-primary-300" />
+                {/* <CustomSateItikIcon className="h-6 w-6 text-primary-600 dark:text-primary-300" /> */}
               </div>
             )}
           </SidebarMenuButton>
