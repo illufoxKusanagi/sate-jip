@@ -1,5 +1,20 @@
 "use client";
-import { Calendar, Cog, Home, Ticket } from "lucide-react";
+import {
+  Building,
+  Calendar,
+  Calendar1,
+  ChevronDown,
+  Cog,
+  Database,
+  DatabaseIcon,
+  DatabaseZap,
+  Home,
+  LayoutDashboard,
+  PersonStandingIcon,
+  Pin,
+  Server,
+  Ticket,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -14,6 +29,11 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -23,6 +43,55 @@ export function AppSidebar() {
     email: "ariefsatria@gmail.com",
     avatar: "",
   };
+
+  const tikItems = [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Penanggung-Jawab",
+      url: "/admins",
+      icon: PersonStandingIcon,
+    },
+    {
+      title: "Lokasi",
+      url: "/locations",
+      icon: Pin,
+    },
+    {
+      title: "Config",
+      url: "/dataConfig",
+      icon: Cog,
+    },
+  ];
+
+  const calendarItem = [
+    {
+      title: "Kalender Kegiatan",
+      url: "/activityCalendar",
+      icon: Calendar1,
+    },
+  ];
+
+  const dataCentralItem = [
+    {
+      title: "Dashboard",
+      url: "/data-central-dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Manajemen Server",
+      url: "/server-management",
+      icon: Server,
+    },
+    {
+      title: "Data Server",
+      url: "/server-data",
+      icon: DatabaseZap,
+    },
+  ];
 
   const items = [
     {
@@ -39,11 +108,6 @@ export function AppSidebar() {
       title: "E-TIcketing",
       url: "#",
       icon: Ticket,
-    },
-    {
-      title: "Kalender Kegiatan",
-      url: "/activityCalendar",
-      icon: Calendar,
     },
 
     // {
@@ -82,8 +146,29 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarGroup>
             <SidebarGroupContent className="space-y-1">
-              <SidebarMenu>
-                {items.map((item) => (
+              <Collapsible defaultOpen className="group/collapsible">
+                <SidebarMenuButton asChild>
+                  <CollapsibleTrigger className="w-full text-muted-foreground hover:text-foreground transition-colors">
+                    <Building />
+                    Jaringan Intra Pemerintah
+                    <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+                  </CollapsibleTrigger>
+                </SidebarMenuButton>
+                <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+                  <div className="mt-1 space-y-1">
+                    {tikItems.map((item) => (
+                      <SidebarMenuButton key={item.title} asChild>
+                        <Link href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+
+              {/* {items.map((item) => (
                   <SidebarHeader key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url}>
@@ -92,11 +177,60 @@ export function AppSidebar() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarHeader>
-                ))}
-              </SidebarMenu>
+                ))} */}
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarMenu>
+        <SidebarGroup>
+          <SidebarGroupContent className="space-y-1">
+            <Collapsible defaultOpen className="group/collapsible">
+              <SidebarMenuButton asChild>
+                <CollapsibleTrigger className="w-full text-muted-foreground hover:text-foreground transition-colors">
+                  <Database />
+                  Pusat Data Pemerintah
+                  <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+                </CollapsibleTrigger>
+              </SidebarMenuButton>
+              <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+                <div className="mt-1 space-y-1">
+                  {dataCentralItem.map((item) => (
+                    <SidebarMenuButton key={item.title} asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent className="space-y-1">
+            <Collapsible defaultOpen className="group/collapsible">
+              <SidebarMenuButton asChild>
+                <CollapsibleTrigger className="w-full text-muted-foreground hover:text-foreground transition-colors">
+                  <Calendar />
+                  Agenda
+                  <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+                </CollapsibleTrigger>
+              </SidebarMenuButton>
+              <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+                <div className="mt-1 space-y-1">
+                  {calendarItem.map((item) => (
+                    <SidebarMenuButton key={item.title} asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter
         className={cn(
