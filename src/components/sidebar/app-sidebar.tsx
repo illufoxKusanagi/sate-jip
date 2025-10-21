@@ -34,6 +34,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
+import { CardDescription } from "../ui/card";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -136,11 +137,11 @@ export function AppSidebar() {
           <SidebarMenuButton asChild className="hover:bg-accent/50 h-10">
             {open ? (
               <p className="body-big-bold text-center text-primary-600 dark:text-primary-300">
-                SATE-JIP
+                SATE ITIK
               </p>
             ) : (
               <div className="flex items-center justify-center w-full">
-                <LayoutDashboard className="h-6 w-6 text-primary-600 dark:text-primary-300" />
+                <Home className="h-6 w-6 text-primary-600 dark:text-primary-300" />
               </div>
             )}
           </SidebarMenuButton>
@@ -289,7 +290,9 @@ export function AppSidebar() {
           </p>
         ) : (
           <div className="flex items-center justify-center">
-            <span className="text-xl">❤️</span>
+            <Link href={"https://github.com/illufoxKusanagi"}>
+              <span className="text-xl">❤️</span>
+            </Link>
           </div>
         )}
       </SidebarFooter>
