@@ -5,11 +5,11 @@ import { eq } from "drizzle-orm";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const data = await request.json();
-    const { id } = params;
+    const { id } = await params;
 
     const updatedLocation = {
       locationName: data.locationName,
@@ -50,10 +50,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const result = await db.delete(locations).where(eq(locations.id, id));
 
