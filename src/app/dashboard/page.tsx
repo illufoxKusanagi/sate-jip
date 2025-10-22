@@ -1,24 +1,14 @@
 "use client";
 
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LocationsTable } from "@/components/chart/locations-table";
 import { AdminTable } from "@/components/chart/admin-table";
 import { Button } from "@/components/ui/button";
 import MainMap from "@/components/map/main-map";
 import { ChartPie } from "@/components/chart/chart-pie";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ChevronDown, LogOut, Plus } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Plus } from "lucide-react";
 import { useAuth } from "../context/auth-context";
 import { PicDialog } from "@/components/pic-dialog";
 import { LocationDialog } from "@/components/location-dialog";
@@ -29,10 +19,6 @@ export default function Dashboard() {
   const { isAuthenticated, isLoading, logout, isAdmin } = useAuth();
   const [isPicDialogOpen, setIsPicDialogOpen] = useState(false);
   const [isLocationDialogOpen, setIsLocationDialogOpen] = useState(false);
-
-  const handleLogout = () => {
-    logout();
-  };
 
   const handleCreatePic = () => {
     setIsPicDialogOpen(true);

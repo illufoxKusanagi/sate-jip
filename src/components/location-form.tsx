@@ -163,7 +163,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       toast.success("Location created successfully!");
       form.reset();
       console.log("Location created:", result);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error creating location:", error);
       toast.error(

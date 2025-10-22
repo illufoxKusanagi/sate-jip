@@ -3,19 +3,9 @@
 import ConfigTable from "@/components/chart/config-table";
 import { ConfigDialog } from "@/components/config-dialog";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import {
@@ -23,7 +13,7 @@ import {
   ColumnFiltersState,
   SortingState,
 } from "@tanstack/react-table";
-import { ChevronDown, LogOut, Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../context/auth-context";
@@ -31,7 +21,7 @@ import { ConfigData } from "@/lib/types";
 import { TopBar } from "@/components/layout/top-bar";
 
 export default function InputDataConfigPage() {
-  const { isAuthenticated, logout, isAdmin } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const [isConfigLoading, setIsConfigLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ConfigData | null>(null);

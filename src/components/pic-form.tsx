@@ -85,7 +85,7 @@ export function PicForm({ className, ...props }: ComponentProps<"div">) {
       toast.success("Admin creation successful!!");
       form.reset();
       console.log("Admin created:", result);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error creating admin: ", error);
       toast.error(
