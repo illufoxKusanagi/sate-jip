@@ -57,11 +57,12 @@ export async function POST(request: NextRequest) {
       token,
     });
 
-    response.cookies.set("admin-token", token, {
+    response.cookies.set("auth-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds (not milliseconds)
+      path: "/", // Ensure cookie is available for all routes
     });
 
     return response;

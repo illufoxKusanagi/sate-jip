@@ -40,7 +40,7 @@ import { useAuth } from "@/app/context/auth-context";
 
 export function AppSidebar() {
   const { open } = useSidebar();
-  const { isAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const user = {
     name: "arief",
@@ -69,7 +69,7 @@ export function AppSidebar() {
     },
     {
       title: "Config",
-      url: "/dataConfig",
+      url: "/data-config",
       icon: Cog,
       adminOnly: true,
     },
@@ -99,22 +99,22 @@ export function AppSidebar() {
   const calendarItem = [
     {
       title: "Kalender Kegiatan",
-      url: "/activityCalendar",
+      url: "/activity-calendar",
       icon: Calendar1,
       adminOnly: false,
     },
   ];
 
   const visibleTikItems = tikItems.filter(
-    (item) => !item.adminOnly || isAdmin()
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const visibleDataCentralItems = dataCentralItem.filter(
-    (item) => !item.adminOnly || isAdmin()
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const visibleCalendarItems = calendarItem.filter(
-    (item) => !item.adminOnly || isAdmin()
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const items = [
@@ -133,17 +133,6 @@ export function AppSidebar() {
       url: "#",
       icon: Ticket,
     },
-
-    // {
-    //   title: "Search",
-    //   url: "#",
-    //   icon: Search,
-    // },
-    // {
-    //   title: "Settings",
-    //   url: "#",
-    //   icon: Settings,
-    // },
   ];
 
   return (
