@@ -16,7 +16,6 @@ import {
   Server,
   Ticket,
 } from "lucide-react";
-// import { CustomSateItikIcon } from "@/components/icons/sate-itik-icon";
 
 import {
   Sidebar,
@@ -37,9 +36,11 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { CardDescription } from "../ui/card";
+import { useAuth } from "@/app/context/auth-context";
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const { isAdmin } = useAuth();
 
   const user = {
     name: "arief",
@@ -52,29 +53,25 @@ export function AppSidebar() {
       title: "Dashboard",
       url: "/dashboard",
       icon: LayoutDashboard,
+      adminOnly: false,
     },
     {
       title: "Penanggung-Jawab",
       url: "/admins",
       icon: PersonStandingIcon,
+      adminOnly: true,
     },
     {
       title: "Lokasi",
       url: "/locations",
       icon: Pin,
+      adminOnly: true,
     },
     {
       title: "Config",
       url: "/dataConfig",
       icon: Cog,
-    },
-  ];
-
-  const calendarItem = [
-    {
-      title: "Kalender Kegiatan",
-      url: "/activityCalendar",
-      icon: Calendar1,
+      adminOnly: true,
     },
   ];
 
@@ -83,18 +80,42 @@ export function AppSidebar() {
       title: "Dashboard",
       url: "/data-central-dashboard",
       icon: LayoutDashboard,
+      adminOnly: false,
     },
     {
       title: "Manajemen Server",
       url: "/server-management",
       icon: Server,
+      adminOnly: false,
     },
     {
       title: "Data Server",
       url: "/server-data",
       icon: DatabaseZap,
+      adminOnly: true,
     },
   ];
+
+  const calendarItem = [
+    {
+      title: "Kalender Kegiatan",
+      url: "/activityCalendar",
+      icon: Calendar1,
+      adminOnly: false,
+    },
+  ];
+
+  const visibleTikItems = tikItems.filter(
+    (item) => !item.adminOnly || isAdmin()
+  );
+
+  const visibleDataCentralItems = dataCentralItem.filter(
+    (item) => !item.adminOnly || isAdmin()
+  );
+
+  const visibleCalendarItems = calendarItem.filter(
+    (item) => !item.adminOnly || isAdmin()
+  );
 
   const items = [
     {
@@ -186,7 +207,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
                 <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                   <div className="mt-1 space-y-1">
-                    {tikItems.map((item) => (
+                    {visibleTikItems.map((item) => (
                       <SidebarMenuButton key={item.title} asChild>
                         <Link
                           href={item.url}
@@ -233,7 +254,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
               <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                 <div className="mt-1 space-y-1">
-                  {dataCentralItem.map((item) => (
+                  {visibleDataCentralItems.map((item) => (
                     <SidebarMenuButton key={item.title} asChild>
                       <Link
                         href={item.url}
@@ -268,7 +289,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
               <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                 <div className="mt-1 space-y-1">
-                  {calendarItem.map((item) => (
+                  {visibleCalendarItems.map((item) => (
                     <SidebarMenuButton key={item.title} asChild>
                       <Link
                         href={item.url}
