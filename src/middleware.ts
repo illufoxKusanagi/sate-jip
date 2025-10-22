@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { geolocation } from "@vercel/functions";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secret-key"
@@ -14,33 +15,41 @@ const protectedRoutes = [
   "/server-management",
   "/server-data",
   "/data-central-dashboard",
-  "/admins",
 ];
 
 // Routes that only admins can access
-const adminOnlyRoutes = ["/server-management", "/server-data"];
+const adminOnlyRoutes = ["/server-management", "/server-data", "/data-config"];
 
 // Public routes (accessible without authentication)
 const publicRoutes = ["/login", "/dashboard", "/activity-calendar", "/"];
 
+// Routes that should bypass geolocation check
+const geolocationBypassRoutes = ["/access-denied", "/unauthorized"];
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // ALWAYS log this first to confirm middleware is running
-  console.log("========================================");
-  console.log("[MIDDLEWARE RUNNING]", pathname);
-  console.log("========================================");
+  // Skip geolocation check for bypass routes, API, and static files
+  if (
+    !geolocationBypassRoutes.some((route) => pathname.startsWith(route)) &&
+    !pathname.startsWith("/api/") &&
+    !pathname.startsWith("/_next/")
+  ) {
+    // Check geolocation - only allow access from Indonesia
+    const location = geolocation(request);
+    if (location.country && location.country !== "ID") {
+      const accessDeniedUrl = new URL("/access-denied", request.url);
+      return NextResponse.redirect(accessDeniedUrl);
+    }
+  }
 
-  console.log("[Middleware] Processing:", pathname);
-
-  // Show all cookies for debugging
-  console.log("[Middleware] All cookies:", request.cookies.getAll()); // Skip middleware for API routes, static files, and public routes
+  // Allow public routes, API routes, and static files
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
-    publicRoutes.some((route) => pathname === route)
+    publicRoutes.some((route) => pathname === route) ||
+    geolocationBypassRoutes.some((route) => pathname.startsWith(route))
   ) {
-    console.log("[Middleware] Allowing public/API route");
     return NextResponse.next();
   }
 
@@ -50,20 +59,15 @@ export async function middleware(request: NextRequest) {
   );
 
   if (!isProtectedRoute) {
-    console.log("[Middleware] Not a protected route");
     return NextResponse.next();
   }
 
   // Get token from cookies
   const token = request.cookies.get("auth-token")?.value;
 
-  console.log("[Middleware] Protected route, token exists:", !!token);
-
   if (!token) {
-    // No authentication - redirect to login
-    console.log("[Middleware] No token, redirecting to login");
     const loginUrl = new URL("/login", request.url);
-    // loginUrl.searchParams.set("redirect", pathname);
+    loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -76,30 +80,25 @@ export async function middleware(request: NextRequest) {
       role: string;
     };
 
-    console.log("[Middleware] Token valid, user role:", decoded.role);
-
     // Check if route is admin-only
     const isAdminRoute = adminOnlyRoutes.some((route) =>
       pathname.startsWith(route)
     );
 
     if (isAdminRoute && decoded.role !== "admin") {
-      // Non-admin trying to access admin route
-      console.log("[Middleware] Non-admin accessing admin route, blocking");
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      // Redirect to unauthorized page with information about the attempted access
+      const unauthorizedUrl = new URL("/unauthorized", request.url);
+      unauthorizedUrl.searchParams.set("from", pathname);
+      return NextResponse.redirect(unauthorizedUrl);
     }
 
-    console.log("[Middleware] Access granted");
     return NextResponse.next();
   } catch (error) {
-    // Invalid token - redirect to login
     console.error("[Middleware] Token verification failed:", error);
     const loginUrl = new URL("/login", request.url);
-    // loginUrl.searchParams.set("redirect", pathname);
-
-    // Clear invalid cookie
+    loginUrl.searchParams.set("redirect", pathname);
     const response = NextResponse.redirect(loginUrl);
-    response.cookies.delete("auth-token"); // Fixed: was "admin-token"
+    response.cookies.delete("auth-token");
     return response;
   }
 }
