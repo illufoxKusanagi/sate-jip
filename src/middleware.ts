@@ -19,23 +19,16 @@ const protectedRoutes = [
 
 // Routes that only admins can access
 const adminOnlyRoutes = ["/server-management", "/server-data", "/data-config"];
-
-// Public routes (accessible without authentication)
 const publicRoutes = ["/login", "/dashboard", "/activity-calendar", "/"];
-
-// Routes that should bypass geolocation check
 const geolocationBypassRoutes = ["/access-denied", "/unauthorized"];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  // Skip geolocation check for bypass routes, API, and static files
   if (
     !geolocationBypassRoutes.some((route) => pathname.startsWith(route)) &&
     !pathname.startsWith("/api/") &&
     !pathname.startsWith("/_next/")
   ) {
-    // Check geolocation - only allow access from Indonesia
     const location = geolocation(request);
     if (location.country && location.country !== "ID") {
       const accessDeniedUrl = new URL("/access-denied", request.url);
@@ -43,7 +36,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Allow public routes, API routes, and static files
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||

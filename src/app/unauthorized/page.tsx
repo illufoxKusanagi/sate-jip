@@ -32,7 +32,6 @@ export default function UnauthorizedPage() {
               </div>
             </div>
           </div>
-
           {/* Title */}
           <h1 className="heading-1 text-center mb-4">Akses Terbatas</h1>
 
