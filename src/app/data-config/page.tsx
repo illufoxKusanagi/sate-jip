@@ -2,10 +2,8 @@
 
 import ConfigTable from "@/components/chart/config-table";
 import { ConfigDialog } from "@/components/config-dialog";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import {
@@ -19,6 +17,7 @@ import { toast } from "sonner";
 import { useAuth } from "../context/auth-context";
 import { ConfigData } from "@/lib/types";
 import { TopBar } from "@/components/layout/top-bar";
+import { PageStructure } from "@/components/layout/page-structure";
 
 export default function InputDataConfigPage() {
   const { logout, isAdmin } = useAuth();
@@ -292,103 +291,88 @@ export default function InputDataConfigPage() {
   };
 
   return (
-    <SidebarProvider>
-      <div className="flex flex-row h-screen w-full relative">
-        <AppSidebar />
-
-        <main className="flex-1 overflow-y-auto">
-          <TopBar />
-          <div className="flex flex-col mx-4 sm:mx-8 lg:mx-20">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold">
-                  Konfigurasi Data
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  Untuk informasi OPD dan ISP
-                </p>
-              </div>
-              {isAdmin() && (
-                <Button
-                  onClick={handleCreate}
-                  size="sm"
-                  className="w-full sm:w-auto"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Tambah Konfigurasi Data
-                </Button>
-              )}
-            </div>
-
-            <Tabs defaultValue="opd">
-              <TabsList className="grid w-full grid-cols-2 gap-1">
-                <TabsTrigger value="opd" className="text-xs sm:text-sm">
-                  Data OPD pengampu
-                </TabsTrigger>
-                <TabsTrigger value="isp" className="text-xs sm:text-sm">
-                  Data ISP
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="opd">
-                {isConfigLoading ? (
-                  <div className="flex items-center justify-center p-8">
-                    <div>Memuat Konfigurasi...</div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-4 p-2 sm:p-4">
-                    <ConfigTable
-                      data={opdData}
-                      columns={opdColumns}
-                      sorting={opdSorting}
-                      setSorting={setOpdSorting}
-                      columnFilters={opdFilter}
-                      setColumnFilters={setOpdFilter}
-                      searchPlaceholder="Cari OPD..."
-                      searchColumn="dataConfig"
-                    />
-                    <ConfigDialog
-                      isOpen={isDialogOpen}
-                      onOpenChange={setIsDialogOpen}
-                      editingItem={editingItem}
-                      formData={formData}
-                      setFormData={setFormData}
-                      onSubmit={handleSubmit}
-                    />
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="isp">
-                {isConfigLoading ? (
-                  <div className="flex items-center justify-center p-8">
-                    <div>Loading Configs...</div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-4 p-2 sm:p-4">
-                    <ConfigTable
-                      data={ispData}
-                      columns={ispColumns}
-                      sorting={ispSorting}
-                      setSorting={setIspSorting}
-                      columnFilters={ispFilter}
-                      setColumnFilters={setIspFilter}
-                      searchPlaceholder="Cari Penyedia Internet..."
-                      searchColumn="dataConfig"
-                    />
-                    <ConfigDialog
-                      isOpen={isDialogOpen}
-                      onOpenChange={setIsDialogOpen}
-                      editingItem={editingItem}
-                      formData={formData}
-                      setFormData={setFormData}
-                      onSubmit={handleSubmit}
-                    />
-                  </div>
-                )}
-              </TabsContent>
-            </Tabs>
-          </div>
-        </main>
+    <PageStructure>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold">Konfigurasi Data</h1>
+          <p className="text-muted-foreground text-sm">
+            Untuk informasi OPD dan ISP
+          </p>
+        </div>
+        {isAdmin() && (
+          <Button onClick={handleCreate} size="sm" className="w-full sm:w-auto">
+            <Plus className="mr-2 h-4 w-4" />
+            Tambah Konfigurasi Data
+          </Button>
+        )}
       </div>
-    </SidebarProvider>
+
+      <Tabs defaultValue="opd">
+        <TabsList className="grid w-full grid-cols-2 gap-1">
+          <TabsTrigger value="opd" className="text-xs sm:text-sm">
+            Data OPD pengampu
+          </TabsTrigger>
+          <TabsTrigger value="isp" className="text-xs sm:text-sm">
+            Data ISP
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="opd">
+          {isConfigLoading ? (
+            <div className="flex items-center justify-center p-8">
+              <div>Memuat Konfigurasi...</div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 p-2 sm:p-4">
+              <ConfigTable
+                data={opdData}
+                columns={opdColumns}
+                sorting={opdSorting}
+                setSorting={setOpdSorting}
+                columnFilters={opdFilter}
+                setColumnFilters={setOpdFilter}
+                searchPlaceholder="Cari OPD..."
+                searchColumn="dataConfig"
+              />
+              <ConfigDialog
+                isOpen={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                editingItem={editingItem}
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+              />
+            </div>
+          )}
+        </TabsContent>
+        <TabsContent value="isp">
+          {isConfigLoading ? (
+            <div className="flex items-center justify-center p-8">
+              <div>Loading Configs...</div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 p-2 sm:p-4">
+              <ConfigTable
+                data={ispData}
+                columns={ispColumns}
+                sorting={ispSorting}
+                setSorting={setIspSorting}
+                columnFilters={ispFilter}
+                setColumnFilters={setIspFilter}
+                searchPlaceholder="Cari Penyedia Internet..."
+                searchColumn="dataConfig"
+              />
+              <ConfigDialog
+                isOpen={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                editingItem={editingItem}
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+              />
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </PageStructure>
   );
 }
