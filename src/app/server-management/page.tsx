@@ -4,7 +4,8 @@ import { PageStructure } from "@/components/layout/page-structure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServerRackVisual } from "@/components/server-rack-visual";
 import { ServerTable } from "@/components/chart/server-table";
-import { ServerDialog } from "@/components/server-dialog";
+import { ServerDialog } from "@/components/dialogs/server-dialog";
+import { ServerInfoDialog } from "@/components/dialogs/server-info-dialog";
 import { ServerData } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -15,6 +16,8 @@ export default function ServerManagement() {
   const [serverData, setServerData] = useState<ServerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
+  const [selectedServer, setSelectedServer] = useState<ServerData | null>(null);
 
   // Fetch server data from API
   const fetchServerData = async () => {
@@ -46,7 +49,10 @@ export default function ServerManagement() {
   }, []);
 
   const handleUnitClick = (unit: number, server?: ServerData) => {
-    // Unit click handled by table actions now
+    if (server) {
+      setSelectedServer(server);
+      setIsInfoDialogOpen(true);
+    }
   };
 
   if (loading) {
@@ -150,6 +156,14 @@ export default function ServerManagement() {
           isOpen={isAddDialogOpen}
           onOpenChange={setIsAddDialogOpen}
           onSuccess={fetchServerData}
+          editingItem={null}
+        />
+
+        {/* Server Info Dialog (from rack visualization) */}
+        <ServerInfoDialog
+          isOpen={isInfoDialogOpen}
+          onOpenChange={setIsInfoDialogOpen}
+          server={selectedServer}
         />
       </div>
     </PageStructure>

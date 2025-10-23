@@ -103,15 +103,15 @@ export function ServerInfoDialog({
           </div>
 
           {/* Specifications */}
-          {server.specification &&
-            Object.keys(server.specification).length > 0 && (
+          {server.specifications &&
+            Object.keys(server.specifications).length > 0 && (
               <div className="border-t border-border pt-4">
                 <p className="heading-3 mb-3 flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
                   Specifications
                 </p>
                 <div className="grid grid-cols-1 gap-3">
-                  {(server.specification as any).cpu && (
+                  {(server.specifications as any).cpu && (
                     <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
                       <Cpu className="h-4 w-4 mt-0.5 text-primary-600" />
                       <div>
@@ -119,12 +119,12 @@ export function ServerInfoDialog({
                           CPU
                         </p>
                         <p className="text-sm">
-                          {(server.specification as any).cpu}
+                          {(server.specifications as any).cpu}
                         </p>
                       </div>
                     </div>
                   )}
-                  {(server.specification as any).ram && (
+                  {(server.specifications as any).ram && (
                     <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
                       <Network className="h-4 w-4 mt-0.5 text-primary-600" />
                       <div>
@@ -132,12 +132,12 @@ export function ServerInfoDialog({
                           RAM
                         </p>
                         <p className="text-sm">
-                          {(server.specification as any).ram}
+                          {(server.specifications as any).ram}
                         </p>
                       </div>
                     </div>
                   )}
-                  {(server.specification as any).storage && (
+                  {(server.specifications as any).storage && (
                     <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
                       <Database className="h-4 w-4 mt-0.5 text-primary-600" />
                       <div>
@@ -145,12 +145,12 @@ export function ServerInfoDialog({
                           Storage
                         </p>
                         <p className="text-sm">
-                          {(server.specification as any).storage}
+                          {(server.specifications as any).storage}
                         </p>
                       </div>
                     </div>
                   )}
-                  {(server.specification as any).os && (
+                  {(server.specifications as any).os && (
                     <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
                       <Server className="h-4 w-4 mt-0.5 text-primary-600" />
                       <div>
@@ -158,7 +158,7 @@ export function ServerInfoDialog({
                           Operating System
                         </p>
                         <p className="text-sm">
-                          {(server.specification as any).os}
+                          {(server.specifications as any).os}
                         </p>
                       </div>
                     </div>
@@ -168,13 +168,13 @@ export function ServerInfoDialog({
             )}
 
           {/* Installed Apps */}
-          {server.installedApp && server.installedApp.length > 0 && (
+          {server.installedApps && server.installedApps.length > 0 && (
             <div className="border-t border-border pt-4">
               <p className="heading-3 mb-3">
-                Installed Applications ({server.installedApp.length})
+                Installed Applications ({server.installedApps.length})
               </p>
               <div className="flex flex-wrap gap-2">
-                {server.installedApp.map((app, index) => (
+                {server.installedApps.map((app, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
                     {app}
                   </Badge>

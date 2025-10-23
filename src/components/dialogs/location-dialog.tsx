@@ -9,6 +9,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { ConfigData, LocationData } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { Check, ChevronDown } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -17,30 +25,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { ConfigData, LocationData } from "@/lib/types";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { cn } from "@/lib/utils";
-import { Check, ChevronDown } from "lucide-react";
+} from "../ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "./ui/command";
+} from "../ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const formSchema = z.object({
   locationName: z

@@ -1,11 +1,20 @@
 "use client";
 
 import ConfigTable from "@/components/chart/config-table";
-import { ConfigDialog } from "@/components/config-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,6 +27,7 @@ import { useAuth } from "../context/auth-context";
 import { ConfigData } from "@/lib/types";
 import { TopBar } from "@/components/layout/top-bar";
 import { PageStructure } from "@/components/layout/page-structure";
+import { ConfigDialog } from "@/components/dialogs/config-dialog";
 
 export default function InputDataConfigPage() {
   const { logout, isAdmin } = useAuth();
@@ -38,6 +48,8 @@ export default function InputDataConfigPage() {
   const [ispSorting, setIspSorting] = useState<SortingState>([]);
   const [opdFilter, setOpdFilter] = useState<ColumnFiltersState>([]);
   const [ispFilter, setIspFilter] = useState<ColumnFiltersState>([]);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<ConfigData | null>(null);
 
   const handleEdit = (item: ConfigData) => {
     setEditingItem(item);
@@ -51,13 +63,16 @@ export default function InputDataConfigPage() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = async (item: ConfigData) => {
-    if (!confirm("Are you sure you want to delete this configuration?")) {
-      return;
-    }
+  const handleDelete = (item: ConfigData) => {
+    setDeletingItem(item);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingItem) return;
 
     try {
-      const response = await fetch(`/api/configs/${item.id}`, {
+      const response = await fetch(`/api/configs/${deletingItem.id}`, {
         method: "DELETE",
       });
 
@@ -70,6 +85,9 @@ export default function InputDataConfigPage() {
     } catch (error) {
       console.error("Delete error: ", error);
       toast.error("Failed to delete configuration");
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingItem(null);
     }
   };
 
@@ -373,6 +391,34 @@ export default function InputDataConfigPage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Configuration</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">
+                {deletingItem?.dataConfig.name}
+              </span>
+              ? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageStructure>
   );
 }

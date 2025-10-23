@@ -45,8 +45,6 @@ import { ServerData } from "@/lib/types";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ServerDialog } from "../server-dialog";
-import { ServerInfoDialog } from "../server-info-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -57,6 +55,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { ServerDialog } from "../dialogs/server-dialog";
+import { ServerInfoDialog } from "../dialogs/server-info-dialog";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -185,16 +185,30 @@ export function ServerTable({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleEdit = (server: ServerData) => {
+    // Close info dialog if open
+    setIsInfoDialogOpen(false);
+    setInfoServer(null);
+
     setEditingServer(server);
     setIsEditDialogOpen(true);
   };
 
   const handleViewInfo = (server: ServerData) => {
+    // Close edit dialog if open
+    setIsEditDialogOpen(false);
+    setEditingServer(null);
+
     setInfoServer(server);
     setIsInfoDialogOpen(true);
   };
 
   const handleDelete = (server: ServerData) => {
+    // Close other dialogs if open
+    setIsInfoDialogOpen(false);
+    setInfoServer(null);
+    setIsEditDialogOpen(false);
+    setEditingServer(null);
+
     setDeletingServer(server);
     setIsDeleteDialogOpen(true);
   };
@@ -223,6 +237,8 @@ export function ServerTable({
   };
 
   const handleDialogSuccess = () => {
+    setIsEditDialogOpen(false);
+    setEditingServer(null);
     if (onDataChange) onDataChange();
   };
 
@@ -372,8 +388,13 @@ export function ServerTable({
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-muted/50 cursor-pointer"
                   onClick={(e) => {
-                    // Don't trigger row click if clicking on action button
-                    if ((e.target as HTMLElement).closest("button")) return;
+                    // Don't trigger row click if clicking on button or inside dropdown
+                    const target = e.target as HTMLElement;
+                    if (
+                      target.closest("button") ||
+                      target.closest('[role="menu"]')
+                    )
+                      return;
                     handleViewInfo(row.original);
                   }}
                 >

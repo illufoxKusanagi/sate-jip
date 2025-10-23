@@ -34,11 +34,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   rackName: z.string().min(1, "Rack name is required"),
-  unitPosition: z.coerce
+  unitPosition: z
     .number()
     .min(1, "Unit position must be at least 1")
     .max(42, "Unit position cannot exceed 42"),
-  unitSize: z.coerce
+  unitSize: z
     .number()
     .min(1, "Unit size must be at least 1")
     .max(10, "Unit size cannot exceed 10"),
@@ -82,7 +82,7 @@ export function ServerDialog({
       serialNumber: "",
       assetNumber: "",
       ipAddress: "",
-      status: "online",
+      status: "offline",
       cpu: "",
       ram: "",
       storage: "",
@@ -105,12 +105,12 @@ export function ServerDialog({
           assetNumber: editingItem.assetNumber,
           ipAddress: editingItem.ipAddress || "",
           status: editingItem.status,
-          cpu: (editingItem.specification as any)?.cpu || "",
-          ram: (editingItem.specification as any)?.ram || "",
-          storage: (editingItem.specification as any)?.storage || "",
-          os: (editingItem.specification as any)?.os || "",
-          installedApps: Array.isArray(editingItem.installedApp)
-            ? editingItem.installedApp.join(", ")
+          cpu: (editingItem.specifications as any)?.cpu || "",
+          ram: (editingItem.specifications as any)?.ram || "",
+          storage: (editingItem.specifications as any)?.storage || "",
+          os: (editingItem.specifications as any)?.os || "",
+          installedApps: Array.isArray(editingItem.installedApps)
+            ? editingItem.installedApps.join(", ")
             : "",
           notes: editingItem.notes || "",
         });
@@ -134,7 +134,7 @@ export function ServerDialog({
         assetNumber: values.assetNumber,
         ipAddress: values.ipAddress,
         status: values.status,
-        specification: {
+        specifications: {
           cpu: values.cpu || undefined,
           ram: values.ram || undefined,
           storage: values.storage || undefined,
@@ -260,7 +260,15 @@ export function ServerDialog({
                       <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="number" min="1" max="42" {...field} />
+                      <Input
+                        type="number"
+                        min="1"
+                        max="42"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value) || 1)
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -276,7 +284,15 @@ export function ServerDialog({
                       Unit Size (U) <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input type="number" min="1" max="10" {...field} />
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value) || 1)
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

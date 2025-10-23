@@ -1,5 +1,13 @@
 import React from "react";
-import { Button } from "./ui/button";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Input } from "../ui/input";
 import {
   Dialog,
   DialogContent,
@@ -7,16 +15,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
 interface ConfigData {
   id: string;
