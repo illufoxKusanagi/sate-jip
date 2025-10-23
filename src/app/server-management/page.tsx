@@ -4,53 +4,77 @@ import { PageStructure } from "@/components/layout/page-structure";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServerRackVisual } from "@/components/server-rack-visual";
 import { ServerTable } from "@/components/chart/server-table";
-import { mockServerData } from "@/lib/data/mock-servers";
+import { ServerDialog } from "@/components/server-dialog";
 import { ServerData } from "@/lib/types";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Server, HardDrive, Cpu, Database, Network } from "lucide-react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Server, Database, Plus } from "lucide-react";
 
 export default function ServerManagement() {
-  const [selectedServer, setSelectedServer] = useState<ServerData | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [serverData, setServerData] = useState<ServerData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
-  const handleServerClick = (server: ServerData) => {
-    setSelectedServer(server);
-    setIsDialogOpen(true);
+  // Fetch server data from API
+  const fetchServerData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/server-data");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setServerData(result.data);
+      } else {
+        throw new Error("Failed to fetch server data");
+      }
+    } catch (error) {
+      console.error("Error fetching server data:", error);
+      toast.error("Failed to load server data");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchServerData();
+  }, []);
 
   const handleUnitClick = (unit: number, server?: ServerData) => {
-    if (server) {
-      handleServerClick(server);
-    }
+    // Unit click handled by table actions now
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "online":
-        return "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20";
-      case "offline":
-        return "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20";
-      case "maintenance":
-        return "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20";
-      case "standby":
-        return "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20";
-    }
-  };
+  if (loading) {
+    return (
+      <PageStructure>
+        <div className="flex flex-col gap-6 w-full">
+          <h1 className="heading-1 text-center">Manajemen Server</h1>
+          <div className="flex items-center justify-center p-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading server data...</p>
+            </div>
+          </div>
+        </div>
+      </PageStructure>
+    );
+  }
 
   return (
     <PageStructure>
       <div className="flex flex-col gap-6 w-full">
-        <h1 className="heading-1 text-center">Manajemen Server</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="heading-1">Manajemen Server</h1>
+          <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Server
+          </Button>
+        </div>
 
         <Tabs defaultValue="visualization" className="w-full">
           <TabsList className="w-full grid grid-cols-2">
@@ -68,29 +92,29 @@ export default function ServerManagement() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               <ServerRackVisual
                 rackName="Rak A"
-                servers={mockServerData}
+                servers={serverData}
                 onUnitClick={handleUnitClick}
               />
               <ServerRackVisual
                 rackName="Rak B"
-                servers={mockServerData}
+                servers={serverData}
                 onUnitClick={handleUnitClick}
               />
               <ServerRackVisual
                 rackName="Rak C"
-                servers={mockServerData}
+                servers={serverData}
                 onUnitClick={handleUnitClick}
               />
               <ServerRackVisual
                 rackName="Rak D"
-                servers={mockServerData}
+                servers={serverData}
                 onUnitClick={handleUnitClick}
               />
             </div>
 
             {/* Legend */}
             <div className="mt-6 p-4 bg-card border border-border rounded-lg">
-              <h3 className="heading-3 mb-3">Status Legend</h3>
+              <p className="heading-3 mb-3">Status Legend</p>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded border-2 border-green-500 bg-green-500/20"></div>
@@ -117,186 +141,16 @@ export default function ServerManagement() {
           </TabsContent>
 
           <TabsContent value="table" className="mt-6">
-            <ServerTable
-              data={mockServerData}
-              onServerClick={handleServerClick}
-            />
+            <ServerTable data={serverData} onDataChange={fetchServerData} />
           </TabsContent>
         </Tabs>
 
-        {/* Server Detail Dialog */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-xl">
-                <Server className="h-5 w-5" />
-                {selectedServer?.serverName}
-              </DialogTitle>
-              <DialogDescription>
-                Detail informasi server dan aplikasi yang terinstall
-              </DialogDescription>
-            </DialogHeader>
-
-            {selectedServer && (
-              <div className="space-y-6 mt-4">
-                {/* Basic Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Rack Location
-                    </label>
-                    <p className="text-base font-semibold">
-                      {selectedServer.rackName} - U
-                      {String(selectedServer.unitPosition).padStart(2, "0")}
-                      {selectedServer.unitSize > 1 &&
-                        ` (${selectedServer.unitSize}U)`}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Status
-                    </label>
-                    <div className="mt-1">
-                      <Badge
-                        className={getStatusColor(selectedServer.status)}
-                        variant="outline"
-                      >
-                        {selectedServer.status}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Brand
-                    </label>
-                    <p className="text-base font-semibold">
-                      {selectedServer.brand}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Serial Number
-                    </label>
-                    <p className="font-mono text-sm">
-                      {selectedServer.serialNumber}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Asset Number
-                    </label>
-                    <p className="font-mono text-sm">
-                      {selectedServer.assetNumber}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">
-                      IP Address
-                    </label>
-                    <p className="font-mono text-sm">
-                      {selectedServer.ipAddress}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Specifications */}
-                {Object.keys(selectedServer.specifications).length > 0 && (
-                  <div className="border-t border-border pt-4">
-                    <h3 className="heading-3 mb-3 flex items-center gap-2">
-                      <HardDrive className="h-4 w-4" />
-                      Specifications
-                    </h3>
-                    <div className="grid grid-cols-1 gap-3">
-                      {selectedServer.specifications.cpu && (
-                        <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
-                          <Cpu className="h-4 w-4 mt-0.5 text-primary-600" />
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">
-                              CPU
-                            </label>
-                            <p className="text-sm">
-                              {selectedServer.specifications.cpu}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {selectedServer.specifications.ram && (
-                        <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
-                          <Network className="h-4 w-4 mt-0.5 text-primary-600" />
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">
-                              RAM
-                            </label>
-                            <p className="text-sm">
-                              {selectedServer.specifications.ram}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {selectedServer.specifications.storage && (
-                        <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
-                          <Database className="h-4 w-4 mt-0.5 text-primary-600" />
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">
-                              Storage
-                            </label>
-                            <p className="text-sm">
-                              {selectedServer.specifications.storage}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {selectedServer.specifications.os && (
-                        <div className="flex items-start gap-3 bg-muted/50 p-3 rounded-md">
-                          <Server className="h-4 w-4 mt-0.5 text-primary-600" />
-                          <div>
-                            <label className="text-xs font-medium text-muted-foreground">
-                              Operating System
-                            </label>
-                            <p className="text-sm">
-                              {selectedServer.specifications.os}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Installed Apps */}
-                {selectedServer.installedApps.length > 0 && (
-                  <div className="border-t border-border pt-4">
-                    <h3 className="heading-3 mb-3">
-                      Installed Applications (
-                      {selectedServer.installedApps.length})
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedServer.installedApps.map((app, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {app}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Notes */}
-                {selectedServer.notes && (
-                  <div className="border-t border-border pt-4">
-                    <h3 className="heading-3 mb-2">Notes</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedServer.notes}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+        {/* Add Server Dialog */}
+        <ServerDialog
+          isOpen={isAddDialogOpen}
+          onOpenChange={setIsAddDialogOpen}
+          onSuccess={fetchServerData}
+        />
       </div>
     </PageStructure>
   );

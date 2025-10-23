@@ -54,6 +54,10 @@ export interface ServerData {
     storage?: string;
     os?: string;
   };
+  // TODO : Parse json format, which database output, using this before
+  // sending api response
+  // responseArray =  "[{"id":"blah", "type":"blah", ...}, {"id":"blah2",.... },...]"
+  // <Item[]> JSON.parse(responseArray)
   installedApps: string[];
   notes?: string;
 }

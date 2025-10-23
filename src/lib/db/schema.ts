@@ -5,6 +5,7 @@ import {
   mysqlEnum,
   timestamp,
   json,
+  int,
 } from "drizzle-orm/mysql-core";
 import { v4 as uuidv4 } from "uuid";
 export const locations = mysqlTable("locations", {
@@ -85,6 +86,30 @@ export const eventCalendar = mysqlTable("activity_calendar", {
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
+export const serverData = mysqlTable("server_data", {
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  rackName: varchar("rack_name", { length: 50 }).notNull(),
+  unitPosition: int("unit_position").notNull(),
+  unitSize: int("unit_size").notNull(),
+  serverName: varchar("server_name", { length: 255 }).notNull(),
+  brand: varchar("brand", { length: 50 }).notNull(),
+  assetNumber: varchar("asset_number", { length: 50 }).notNull(),
+  serialNumber: varchar("serial_number", { length: 50 }),
+  ipAddress: varchar("ip_address", { length: 50 }),
+  status: mysqlEnum("status", [
+    "online",
+    "offline",
+    "maintenance",
+    "standby",
+  ]).default("offline"),
+  specification: json("specification"),
+  // installedApp: json("installed_app"),
+  installedApps: json("installed_apps").$type<string[]>(),
+  notes: varchar("notes", { length: 255 }),
+});
+
 // Export types
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
@@ -96,3 +121,5 @@ export type AnswerConfig = typeof dataConfig.$inferSelect;
 export type NewAnswerConfig = typeof dataConfig.$inferInsert;
 export type CalendarEvent = typeof eventCalendar.$inferSelect;
 export type NewCalendarEvent = typeof eventCalendar.$inferInsert;
+export type ServerData = typeof serverData.$inferSelect;
+export type NewServerData = typeof serverData.$inferInsert;

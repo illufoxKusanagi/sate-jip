@@ -88,12 +88,6 @@ export function AppSidebar() {
       icon: Server,
       adminOnly: false,
     },
-    {
-      title: "Data Server",
-      url: "/server-data",
-      icon: DatabaseZap,
-      adminOnly: true,
-    },
   ];
 
   const calendarItem = [
@@ -116,24 +110,6 @@ export function AppSidebar() {
   const visibleCalendarItems = calendarItem.filter(
     (item) => !item.adminOnly || isAuthenticated
   );
-
-  const items = [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: Home,
-    },
-    {
-      title: "Config",
-      url: "/dataConfig",
-      icon: Cog,
-    },
-    {
-      title: "E-TIcketing",
-      url: "#",
-      icon: Ticket,
-    },
-  ];
 
   return (
     <Sidebar variant="floating" collapsible="icon">

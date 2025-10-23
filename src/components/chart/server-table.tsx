@@ -44,6 +44,19 @@ import {
 import { ServerData } from "@/lib/types";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { ServerDialog } from "../server-dialog";
+import { ServerInfoDialog } from "../server-info-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -144,7 +157,7 @@ export const serverColumns: ColumnDef<ServerData>[] = [
     header: "Apps",
     cell: ({ row }) => {
       const apps = row.getValue("installedApps") as string[];
-      return <div className="text-sm">{apps.length} installed</div>;
+      return <div className="text-sm">{apps?.length || 0} installed</div>;
     },
   },
 ];
@@ -152,13 +165,66 @@ export const serverColumns: ColumnDef<ServerData>[] = [
 interface ServerTableProps {
   data: ServerData[];
   onServerClick?: (server: ServerData) => void;
+  onDataChange?: () => void;
 }
 
-export function ServerTable({ data, onServerClick }: ServerTableProps) {
+export function ServerTable({
+  data,
+  onServerClick,
+  onDataChange,
+}: ServerTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [editingServer, setEditingServer] = useState<ServerData | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [infoServer, setInfoServer] = useState<ServerData | null>(null);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
+  const [deletingServer, setDeletingServer] = useState<ServerData | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const handleEdit = (server: ServerData) => {
+    setEditingServer(server);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleViewInfo = (server: ServerData) => {
+    setInfoServer(server);
+    setIsInfoDialogOpen(true);
+  };
+
+  const handleDelete = (server: ServerData) => {
+    setDeletingServer(server);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingServer) return;
+
+    try {
+      const response = await fetch(`/api/server-data/${deletingServer.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete server");
+      }
+
+      toast.success("Server deleted successfully!");
+      if (onDataChange) onDataChange();
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Failed to delete server");
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setDeletingServer(null);
+    }
+  };
+
+  const handleDialogSuccess = () => {
+    if (onDataChange) onDataChange();
+  };
 
   const columnsWithActions: ColumnDef<ServerData>[] = [
     ...serverColumns,
@@ -184,20 +250,25 @@ export function ServerTable({ data, onServerClick }: ServerTableProps) {
                 Copy Server ID
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(server.ipAddress)}
+                onClick={() =>
+                  navigator.clipboard.writeText(server.ipAddress || "")
+                }
               >
                 Copy IP Address
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onServerClick?.(server)}>
+              <DropdownMenuItem onClick={() => handleViewInfo(server)}>
                 <Info className="mr-2 h-4 w-4" />
                 View Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleEdit(server)}>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Server
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDelete(server)}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete Server
               </DropdownMenuItem>
@@ -300,7 +371,11 @@ export function ServerTable({ data, onServerClick }: ServerTableProps) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-muted/50 cursor-pointer"
-                  onClick={() => onServerClick?.(row.original)}
+                  onClick={(e) => {
+                    // Don't trigger row click if clicking on action button
+                    if ((e.target as HTMLElement).closest("button")) return;
+                    handleViewInfo(row.original);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -396,6 +471,46 @@ export function ServerTable({ data, onServerClick }: ServerTableProps) {
           </Button>
         </div>
       </div>
+
+      {/* Edit Dialog */}
+      <ServerDialog
+        isOpen={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        editingItem={editingServer}
+        onSuccess={handleDialogSuccess}
+      />
+
+      {/* Info Dialog */}
+      <ServerInfoDialog
+        isOpen={isInfoDialogOpen}
+        onOpenChange={setIsInfoDialogOpen}
+        server={infoServer}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Server</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {deletingServer?.serverName}? This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
