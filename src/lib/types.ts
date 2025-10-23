@@ -36,3 +36,24 @@ export interface ConfigData {
   };
   createdAt: string;
 }
+
+export interface ServerData {
+  id: string;
+  rackName: string; // Rak A, B, C, D
+  unitPosition: number; // 1-42
+  unitSize: number; // How many U it occupies
+  serverName: string;
+  brand: string;
+  serialNumber: string;
+  assetNumber: string;
+  ipAddress: string;
+  status: "online" | "offline" | "maintenance" | "standby";
+  specifications: {
+    cpu?: string;
+    ram?: string;
+    storage?: string;
+    os?: string;
+  };
+  installedApps: string[];
+  notes?: string;
+}
