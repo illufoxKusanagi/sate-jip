@@ -9,24 +9,24 @@ Before starting the ticketing system, ensure you have everything ready.
 ## ✅ System Requirements
 
 ### Hardware
-- [ ] **RAM**: Minimum 8GB (16GB recommended for development)
-- [ ] **Storage**: At least 5GB free space for project
-- [ ] **CPU**: Multi-core processor recommended
+- [x] **RAM**: Minimum 8GB (16GB recommended for development)
+- [x] **Storage**: At least 5GB free space for project
+- [x] **CPU**: Multi-core processor recommended
 
 ### Software
-- [ ] **Node.js**: 18.0.0 or higher
+- [x] **Node.js**: 18.0.0 or higher
   ```bash
   node --version  # Should be v18+ or v20+
   ```
-- [ ] **npm/yarn/pnpm**: Latest version
+- [x] **npm/yarn/pnpm**: Latest version
   ```bash
   npm --version
   ```
-- [ ] **MySQL**: 8.0 or higher
+- [x] **MySQL**: 8.0 or higher
   ```bash
   mysql --version
   ```
-- [ ] **Git**: For version control
+- [x] **Git**: For version control
   ```bash
   git --version
   ```
@@ -338,8 +338,8 @@ mysql.createConnection(process.env.DATABASE_URL)
 - Firefox (Optional)
 
 ### For Testing
-- [ ] Chrome (Latest)
-- [ ] Firefox (Latest)
+- [x] Chrome (Latest)
+- [x] Firefox (Latest)
 - [ ] Safari (Latest)
 - [ ] Mobile browsers (iOS Safari, Chrome Mobile)
 
