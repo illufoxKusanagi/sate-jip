@@ -11,6 +11,8 @@ import {
   boolean,
 } from "drizzle-orm/mysql-core";
 import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
+
 export const locations = mysqlTable("locations", {
   id: varchar("id", { length: 50 })
     .primaryKey()
@@ -125,7 +127,9 @@ export const serverData = mysqlTable("server_data", {
 });
 
 export const ticketCategories = mysqlTable("ticket_categories", {
-  id: varchar("id", { length: 50 }).primaryKey(),
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   name: varchar("name", { length: 100 }).notNull(),
   description: text("description"),
 
@@ -140,7 +144,9 @@ export const ticketCategories = mysqlTable("ticket_categories", {
 });
 
 export const tickets = mysqlTable("tickets", {
-  id: varchar("id", { length: 50 }).primaryKey(),
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   ticketNumber: varchar("ticket_number", { length: 20 }).notNull().unique(),
 
   subject: varchar("subject", { length: 255 }).notNull(),
@@ -182,7 +188,9 @@ export const tickets = mysqlTable("tickets", {
 });
 
 export const ticketReplies = mysqlTable("ticket_replies", {
-  id: varchar("id", { length: 50 }).primaryKey(),
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   ticketId: varchar("ticket_id", { length: 50 })
     .references(() => tickets.id)
     .notNull(),
@@ -203,7 +211,9 @@ export const ticketReplies = mysqlTable("ticket_replies", {
 });
 
 export const ticketAttachments = mysqlTable("ticket_attachments", {
-  id: varchar("id", { length: 50 }).primaryKey(),
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   ticketId: varchar("ticket_id", { length: 50 })
     .references(() => tickets.id)
     .notNull(),
