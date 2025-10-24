@@ -149,7 +149,9 @@ export const tickets = mysqlTable("tickets", {
   email: varchar("email", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 20 }),
 
-  categoryId: varchar("category_id", { length: 50 }),
+  categoryId: varchar("category_id", { length: 50 })
+    .references(() => ticketCategories.id)
+    .notNull(),
   priority: mysqlEnum("priority", [
     "rendah",
     "sedang",
@@ -180,7 +182,9 @@ export const tickets = mysqlTable("tickets", {
 
 export const ticketReplies = mysqlTable("ticket_replies", {
   id: varchar("id", { length: 50 }).primaryKey(),
-  ticketId: varchar("ticket_id", { length: 50 }).notNull(),
+  ticketId: varchar("ticket_id", { length: 50 })
+    .references(() => tickets.id)
+    .notNull(),
 
   message: text("message").notNull(),
   messageHtml: text("message_html"),
@@ -199,8 +203,12 @@ export const ticketReplies = mysqlTable("ticket_replies", {
 
 export const ticketAttachments = mysqlTable("ticket_attachments", {
   id: varchar("id", { length: 50 }).primaryKey(),
-  ticketId: varchar("ticket_id", { length: 50 }).notNull(),
-  replyId: varchar("reply_id", { length: 50 }),
+  ticketId: varchar("ticket_id", { length: 50 })
+    .references(() => tickets.id)
+    .notNull(),
+  replyId: varchar("reply_id", { length: 50 }).references(
+    () => ticketReplies.id
+  ),
 
   fileName: varchar("file_name", { length: 255 }).notNull(),
   originalName: varchar("original_name", { length: 255 }).notNull(),
