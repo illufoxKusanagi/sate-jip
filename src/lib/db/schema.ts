@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
@@ -219,6 +220,47 @@ export const ticketAttachments = mysqlTable("ticket_attachments", {
   uploadedBy: varchar("uploaded_by", { length: 50 }).notNull(),
   uploadedAt: timestamp("uploaded_at").defaultNow(),
 });
+
+export const ticketCategoriesRelations = relations(
+  ticketCategories,
+  ({ many }) => ({
+    tickets: many(tickets),
+  })
+);
+
+export const ticketsRelations = relations(tickets, ({ one, many }) => ({
+  category: one(ticketCategories, {
+    fields: [tickets.categoryId],
+    references: [ticketCategories.id],
+  }),
+  replies: many(ticketReplies),
+  attachments: many(ticketAttachments),
+}));
+
+export const ticketRepliesRelations = relations(
+  ticketReplies,
+  ({ one, many }) => ({
+    ticket: one(tickets, {
+      fields: [ticketReplies.ticketId],
+      references: [tickets.id],
+    }),
+    attachments: many(ticketAttachments),
+  })
+);
+
+export const ticketAttachmentsRelations = relations(
+  ticketAttachments,
+  ({ one }) => ({
+    ticket: one(tickets, {
+      fields: [ticketAttachments.ticketId],
+      references: [tickets.id],
+    }),
+    reply: one(ticketReplies, {
+      fields: [ticketAttachments.replyId],
+      references: [ticketReplies.id],
+    }),
+  })
+);
 
 // Export types
 export type Location = typeof locations.$inferSelect;
