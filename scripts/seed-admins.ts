@@ -7,6 +7,7 @@ import {
   locations,
   users,
   serverData,
+  ticketCategories,
 } from "../src/lib/db/schema";
 import { adminData } from "../src/lib/data/admins";
 import { locationData } from "../src/lib/data/locations";
@@ -15,6 +16,7 @@ import { adminUser } from "@/lib/data/users";
 import { inputConfig } from "@/lib/data/configs";
 import { inputEvents } from "@/lib/data/events";
 import { mockServerData } from "@/lib/data/mock-servers";
+import { ticketCategoriesData } from "@/lib/data/ticket-categories";
 
 async function seedEvents() {
   try {
@@ -201,6 +203,32 @@ async function seedServerData() {
   }
 }
 
+async function seedTicketCategories() {
+  try {
+    console.log("🌱 Starting ticket category seeding...");
+
+    // Clear existing ticket categories
+    console.log("🗑️ Clearing existing ticket categories...");
+    await db.delete(ticketCategories);
+
+    // Insert ticket categories
+    console.log("📝 Inserting ticket categories...");
+    for (const category of ticketCategoriesData) {
+      await db.insert(ticketCategories).values({
+        name: category.name,
+        description: category.description,
+      });
+    }
+
+    console.log(
+      `✅ Successfully seeded ${ticketCategoriesData.length} ticket categories`,
+    );
+  } catch (error) {
+    console.error("❌ Ticket category seeding failed:", error);
+    throw error;
+  }
+}
+
 async function seedAll() {
   try {
     await seedAdmins();
@@ -209,6 +237,7 @@ async function seedAll() {
     await seedConfigs();
     await seedEvents();
     await seedServerData();
+    await seedTicketCategories();
     console.log("🎉 All data seeded successfully!");
     process.exit(0);
   } catch (error) {

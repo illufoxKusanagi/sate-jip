@@ -42,7 +42,7 @@ export const locations = mysqlTable("locations", {
   dropPoint: varchar("drop_point", { length: 100 }),
   eCat: varchar("e_cat", { length: 255 }),
   status: mysqlEnum("status", ["active", "inactive", "maintenance"]).default(
-    "active"
+    "active",
   ),
 
   createdAt: timestamp("created_at").defaultNow(),
@@ -218,7 +218,7 @@ export const ticketAttachments = mysqlTable("ticket_attachments", {
     .references(() => tickets.id)
     .notNull(),
   replyId: varchar("reply_id", { length: 50 }).references(
-    () => ticketReplies.id
+    () => ticketReplies.id,
   ),
 
   fileName: varchar("file_name", { length: 255 }).notNull(),
@@ -235,7 +235,7 @@ export const ticketCategoriesRelations = relations(
   ticketCategories,
   ({ many }) => ({
     tickets: many(tickets),
-  })
+  }),
 );
 
 export const ticketsRelations = relations(tickets, ({ one, many }) => ({
@@ -255,7 +255,7 @@ export const ticketRepliesRelations = relations(
       references: [tickets.id],
     }),
     attachments: many(ticketAttachments),
-  })
+  }),
 );
 
 export const ticketAttachmentsRelations = relations(
@@ -269,7 +269,7 @@ export const ticketAttachmentsRelations = relations(
       fields: [ticketAttachments.replyId],
       references: [ticketReplies.id],
     }),
-  })
+  }),
 );
 
 // Export types
