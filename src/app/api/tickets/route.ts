@@ -4,6 +4,7 @@ import { eq, desc, and, like, or, lte, gte } from "drizzle-orm";
 import { z } from "zod";
 import db from "@/lib/db/connection";
 import { ticketCategories, tickets } from "@/lib/db/schema";
+import { sendEmail, ticketCreatedEmail } from "@/lib/utils/ticket-utils";
 
 // Validation schema
 const createTicketSchema = z.object({
@@ -41,8 +42,8 @@ export async function GET(request: NextRequest) {
         or(
           like(tickets.subject, `%${search}%`),
           like(tickets.ticketNumber, `%${search}%`),
-          like(tickets.email, `%${search}%`)
-        )
+          like(tickets.email, `%${search}%`),
+        ),
       );
     }
 
@@ -56,13 +57,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: result,
-      count: result.length,
+      count: result?.length,
     });
   } catch (error) {
     console.error("Error fetching tickets:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch tickets" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -110,15 +111,15 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     // TODO: Send email notification
-    // await sendEmail({
-    //   to: validatedData.email,
-    //   subject: `Ticket #${ticketNumber} Created`,
-    //   html: ticketCreatedEmail({
-    //     ticketNumber,
-    //     subject: validatedData.subject,
-    //     customerName: validatedData.submittedBy,
-    //   }),
-    // });
+    await sendEmail({
+      to: validatedData.email,
+      subject: `Ticket #${ticketNumber} Created - ${validatedData.subject}`,
+      html: ticketCreatedEmail(
+        ticketNumber,
+        validatedData.subject,
+        validatedData.submittedBy,
+      ),
+    });
 
     return NextResponse.json(
       {
@@ -126,20 +127,20 @@ export async function POST(request: NextRequest) {
         data: fullTicket,
         message: "Ticket created successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, errors: error },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     console.error("Error creating ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create ticket" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -159,12 +160,10 @@ async function generateTicketNumber(): Promise<string> {
     .select()
     .from(tickets)
     .where(
-      and(gte(tickets.createdAt, startOfDay), lte(tickets.createdAt, endOfDay))
+      and(gte(tickets.createdAt, startOfDay), lte(tickets.createdAt, endOfDay)),
     );
 
   const sequence = (todayTickets.length + 1).toString().padStart(4, "0");
 
   return `${prefix}-${year}${month}-${sequence}`;
 }
-
-function sendEmail(): void {}

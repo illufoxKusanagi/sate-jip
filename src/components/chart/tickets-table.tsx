@@ -156,7 +156,7 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
   });
 
   const table = useReactTable({
-    data: filteredData,
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -278,9 +278,9 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
           {Math.min(
             (table.getState().pagination.pageIndex + 1) *
               table.getState().pagination.pageSize,
-            filteredData.length,
+            data.length,
           )}{" "}
-          of {filteredData.length} tickets
+          of {data.length} tickets
         </div>
         <div className="flex gap-2">
           <Button

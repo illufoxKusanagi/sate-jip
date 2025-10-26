@@ -4,10 +4,12 @@ import {
   Calendar,
   Calendar1,
   ChevronDown,
+  Code,
   Cog,
   Database,
   DatabaseIcon,
   DatabaseZap,
+  HelpCircle,
   Home,
   LayoutDashboard,
   Network,
@@ -15,6 +17,7 @@ import {
   Pin,
   Server,
   Ticket,
+  TicketCheck,
 } from "lucide-react";
 
 import {
@@ -90,6 +93,27 @@ export function AppSidebar() {
     },
   ];
 
+  const ticketItems = [
+    {
+      title: "Form Tiket",
+      url: "/tickets",
+      icon: Ticket,
+      adminOnly: false,
+    },
+    // {
+    //   title: "Detail Tiket",
+    //   url: "/tickets/ticket-detail",
+    //   icon: TicketCheck,
+    //   adminOnly: true,
+    // },
+    {
+      title: "Help desk",
+      url: "/tickets/help-desk",
+      icon: HelpCircle,
+      adminOnly: true,
+    },
+  ];
+
   const calendarItem = [
     {
       title: "Kalender Kegiatan",
@@ -100,15 +124,19 @@ export function AppSidebar() {
   ];
 
   const visibleTikItems = tikItems.filter(
-    (item) => !item.adminOnly || isAuthenticated
+    (item) => !item.adminOnly || isAuthenticated,
   );
 
   const visibleDataCentralItems = dataCentralItem.filter(
-    (item) => !item.adminOnly || isAuthenticated
+    (item) => !item.adminOnly || isAuthenticated,
   );
 
   const visibleCalendarItems = calendarItem.filter(
-    (item) => !item.adminOnly || isAuthenticated
+    (item) => !item.adminOnly || isAuthenticated,
+  );
+
+  const visibleTicketItems = ticketItems.filter(
+    (item) => !item.adminOnly || isAuthenticated,
   );
 
   return (
@@ -118,7 +146,7 @@ export function AppSidebar() {
           "overflow-hidden transition-all duration-500 ease-in-out",
           open
             ? "px-4 pt-4 block opacity-100"
-            : "px-2 pt-4 flex items-center justify-center opacity-100"
+            : "px-2 pt-4 flex items-center justify-center opacity-100",
         )}
       >
         <SidebarMenu>
@@ -149,7 +177,7 @@ export function AppSidebar() {
       <SidebarContent
         className={cn(
           "flex flex-col gap-4 transition-all duration-300",
-          open ? "px-4 py-2" : "px-2 pt-4"
+          open ? "px-4 py-2" : "px-2 pt-4",
         )}
       >
         <SidebarMenu>
@@ -160,7 +188,7 @@ export function AppSidebar() {
                   <CollapsibleTrigger
                     className={cn(
                       "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                      !open && "justify-center px-2"
+                      !open && "justify-center px-2",
                     )}
                   >
                     <Building className={cn(!open && "h-5 w-5")} />
@@ -207,7 +235,7 @@ export function AppSidebar() {
                 <CollapsibleTrigger
                   className={cn(
                     "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                    !open && "justify-center px-2"
+                    !open && "justify-center px-2",
                   )}
                 >
                   <Database className={cn(!open && "h-5 w-5")} />
@@ -242,7 +270,42 @@ export function AppSidebar() {
                 <CollapsibleTrigger
                   className={cn(
                     "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                    !open && "justify-center px-2"
+                    !open && "justify-center px-2",
+                  )}
+                >
+                  <Ticket className={cn(!open && "h-5 w-5")} />
+                  {open && "E-Ticketing"}
+                  {open && (
+                    <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+                  )}
+                </CollapsibleTrigger>
+              </SidebarMenuButton>
+              <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+                <div className="mt-1 space-y-1">
+                  {visibleTicketItems.map((item) => (
+                    <SidebarMenuButton key={item.title} asChild>
+                      <Link
+                        href={item.url}
+                        className={cn(!open && "justify-center px-2")}
+                      >
+                        <item.icon className={cn(!open && "h-5 w-5")} />
+                        {open && <span>{item.title}</span>}
+                      </Link>
+                    </SidebarMenuButton>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupContent className="space-y-1">
+            <Collapsible defaultOpen className="group/collapsible">
+              <SidebarMenuButton asChild>
+                <CollapsibleTrigger
+                  className={cn(
+                    "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
+                    !open && "justify-center px-2",
                   )}
                 >
                   <Calendar className={cn(!open && "h-5 w-5")} />
@@ -274,7 +337,7 @@ export function AppSidebar() {
       <SidebarFooter
         className={cn(
           "w-full bg-accent/50 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
-          open ? "p-4" : "p-2"
+          open ? "p-4" : "p-2",
         )}
       >
         {open ? (

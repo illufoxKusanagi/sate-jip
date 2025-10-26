@@ -8,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SubmitTicketPage() {
-  return (
-    <PageStructure>
-      <TicketForm />
-    </PageStructure>
-  );
+  return <TicketForm />;
 }

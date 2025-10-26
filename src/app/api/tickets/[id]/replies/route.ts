@@ -4,6 +4,7 @@ import { ticketReplies, tickets } from "@/lib/db/schema";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { sendEmail, ticketReplyEmail } from "@/lib/utils/ticket-utils";
 
 const replySchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -74,6 +75,20 @@ export async function POST(
     }
 
     // TODO: Send email notification
+    // After creating reply, add:
+    if (!validatedData.isInternal) {
+      await sendEmail({
+        to: ticket[0].email,
+        subject: `Re: Ticket #${ticket[0].ticketNumber} - ${ticket[0].subject}`,
+        html: ticketReplyEmail(
+          ticket[0].ticketNumber,
+          ticket[0].subject,
+          ticket[0].submittedBy,
+          validatedData.message,
+          validatedData.authorName,
+        ),
+      });
+    }
 
     return NextResponse.json(
       {

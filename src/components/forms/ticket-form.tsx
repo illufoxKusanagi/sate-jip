@@ -97,7 +97,7 @@ export function TicketForm() {
       }
 
       toast.success(
-        `Ticket #${result.data.ticketNumber} created successfully!`
+        `Ticket #${result.data.ticketNumber} created successfully!`,
       );
       setTicketNumber(result.data.ticketNumber);
       form.reset();
@@ -112,7 +112,7 @@ export function TicketForm() {
 
   if (ticketNumber) {
     return (
-      <div className="max-w-2xl mx-auto p-6 text-center">
+      <div className="flex flex-col max-w-2xl p-6 text-center justify-center content-center">
         <div className="rounded-lg border-2 border-green-500 bg-green-50 dark:bg-green-950 p-8">
           <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-4">
             Ticket Submitted Successfully!

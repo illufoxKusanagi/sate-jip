@@ -1,0 +1,4 @@
+1. Make form ticket to card
+2. Re-evaluate all ai generated codes
+3. Re-evaluate about filtered data ticket in src/components/chart/tickets-table.tsx (151:29)
+4. Re-evaluate about rows length in src/components/chart/tickets-table.tsx (239:20)
