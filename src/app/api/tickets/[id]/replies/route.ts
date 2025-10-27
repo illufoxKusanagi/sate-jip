@@ -18,10 +18,10 @@ const replySchema = z.object({
 // POST /api/tickets/[id]/replies - Add reply
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const ticketId = params.id;
+    const ticketId = (await params).id;
     const body = await request.json();
 
     const validatedData = replySchema.parse(body);

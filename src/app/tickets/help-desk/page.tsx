@@ -69,7 +69,9 @@ export default function HelpDeskPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         ) : (
-          <TicketsTable data={tickets} onRowClick={handleRowClick} />
+          <TicketsTable
+          // data={tickets} onRowClick={handleRowClick}
+          />
         )}
       </div>
     </PageStructure>

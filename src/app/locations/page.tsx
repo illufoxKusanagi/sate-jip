@@ -8,7 +8,7 @@ import { useAuth } from "../context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LocationsTable } from "@/components/chart/locations-table";
-import { LocationDialog } from "@/components/location-dialog";
+import { LocationDialog } from "@/components/dialogs/location-dialog";
 import { PageStructure } from "@/components/layout/page-structure";
 
 export default function LocationsPage() {
