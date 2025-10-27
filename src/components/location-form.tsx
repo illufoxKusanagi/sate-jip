@@ -94,7 +94,15 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
         throw new Error(`Failed to fetch congis: ${response.status}`);
       }
 
-      const allData: ConfigData[] = await response.json();
+      const rawData = await response.json();
+      // Parse dataConfig JSON string to object
+      const allData: ConfigData[] = rawData.map((item: any) => ({
+        ...item,
+        dataConfig:
+          typeof item.dataConfig === "string"
+            ? JSON.parse(item.dataConfig)
+            : item.dataConfig,
+      }));
 
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
       const ispConfigs = allData.filter((item) => item.dataType === "ISP");
@@ -155,7 +163,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       toast.success("Location created successfully!");
       form.reset();
       console.log("Location created:", result);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error creating location:", error);
       toast.error(

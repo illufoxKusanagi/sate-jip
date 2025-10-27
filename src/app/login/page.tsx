@@ -13,7 +13,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuth } from "../context/auth-context";
+import { useEffect } from "react";
 
 const schema = z.object({
   username: z.string().min(1, "Username harus diisi"),
@@ -33,7 +34,19 @@ type FormData = z.infer<typeof schema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
+  const redirect = searchParams.get("redirect");
+
+  useEffect(() => {
+    // Show toast if user was redirected due to no authentication
+    if (redirect) {
+      toast.warning("Silakan login untuk mengakses halaman tersebut", {
+        description: `Anda akan diarahkan ke ${redirect} setelah login`,
+      });
+    }
+  }, [redirect]);
+
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -65,11 +78,14 @@ export default function LoginPage() {
         return;
       }
 
-      login(result.user.username, result.token);
+      login(result.user.username, result.token, result.user.role);
       toast.success(
         `Login berhasil, Okaerinasai, ${result.user.username}-san!`
       );
-      router.push("/");
+
+      // Redirect to the page user was trying to access, or dashboard
+      const redirectTo = redirect || "/dashboard";
+      router.push(redirectTo);
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login gagal, silahkan coba lagi");

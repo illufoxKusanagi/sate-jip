@@ -6,6 +6,8 @@ import {
   eventCalendar,
   locations,
   users,
+  serverData,
+  ticketCategories,
 } from "../src/lib/db/schema";
 import { adminData } from "../src/lib/data/admins";
 import { locationData } from "../src/lib/data/locations";
@@ -13,6 +15,8 @@ import bcrypt from "bcryptjs";
 import { adminUser } from "@/lib/data/users";
 import { inputConfig } from "@/lib/data/configs";
 import { inputEvents } from "@/lib/data/events";
+import { mockServerData } from "@/lib/data/mock-servers";
+import { ticketCategoriesData } from "@/lib/data/ticket-categories";
 
 async function seedEvents() {
   try {
@@ -88,6 +92,7 @@ async function seedUsers() {
       await db.insert(users).values({
         username: user.username,
         password: hashedPassword,
+        role: user.role as any,
       });
 
       console.log(`✅ Created user: ${user.username}`);
@@ -141,6 +146,7 @@ async function seedLocations() {
     for (const location of locationData) {
       await db.insert(locations).values({
         locationName: location.locationName,
+        activationDate: (location as any).activationDate || null,
         latitude: location.latitude?.toString() || null,
         longitude: location.longitude?.toString() || null,
         opdPengampu: location.opdPengampu,
@@ -163,6 +169,66 @@ async function seedLocations() {
   }
 }
 
+async function seedServerData() {
+  try {
+    console.log("🌱 Starting server data seeding...");
+
+    // Clear existing server data
+    console.log("🗑️ Clearing existing server data...");
+    await db.delete(serverData);
+
+    // Insert server data
+    console.log("🖥️ Inserting server data...");
+    for (const server of mockServerData) {
+      await db.insert(serverData).values({
+        rackName: server.rackName,
+        unitPosition: server.unitPosition,
+        unitSize: server.unitSize,
+        serverName: server.serverName,
+        brand: server.brand,
+        assetNumber: server.assetNumber,
+        serialNumber: server.serialNumber,
+        ipAddress: server.ipAddress,
+        status: server.status as any,
+        specification: server.specifications,
+        installedApps: server.installedApps,
+        notes: server.notes || "",
+      });
+    }
+
+    console.log(`✅ Successfully seeded ${mockServerData.length} servers`);
+  } catch (error) {
+    console.error("❌ Server data seeding failed:", error);
+    throw error;
+  }
+}
+
+async function seedTicketCategories() {
+  try {
+    console.log("🌱 Starting ticket category seeding...");
+
+    // Clear existing ticket categories
+    console.log("🗑️ Clearing existing ticket categories...");
+    await db.delete(ticketCategories);
+
+    // Insert ticket categories
+    console.log("📝 Inserting ticket categories...");
+    for (const category of ticketCategoriesData) {
+      await db.insert(ticketCategories).values({
+        name: category.name,
+        description: category.description,
+      });
+    }
+
+    console.log(
+      `✅ Successfully seeded ${ticketCategoriesData.length} ticket categories`,
+    );
+  } catch (error) {
+    console.error("❌ Ticket category seeding failed:", error);
+    throw error;
+  }
+}
+
 async function seedAll() {
   try {
     await seedAdmins();
@@ -170,6 +236,8 @@ async function seedAll() {
     await seedUsers();
     await seedConfigs();
     await seedEvents();
+    await seedServerData();
+    await seedTicketCategories();
     console.log("🎉 All data seeded successfully!");
     process.exit(0);
   } catch (error) {

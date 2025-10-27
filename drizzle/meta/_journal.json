@@ -50,6 +50,41 @@
       "when": 1759664112082,
       "tag": "0006_light_komodo",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1759900157835,
+      "tag": "0007_charming_rhino",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1761031981329,
+      "tag": "0008_violet_cargill",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1761032456995,
+      "tag": "0009_lovely_titanium_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1761199028228,
+      "tag": "0010_hesitant_cyclops",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1761367837988,
+      "tag": "0011_lively_nomad",
+      "breakpoints": true
     }
   ]
 }

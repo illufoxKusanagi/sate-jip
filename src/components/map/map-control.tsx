@@ -4,17 +4,31 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 
 export default function MapControls() {
   const { map } = useMap();
+
   const zoomIn = () => {
-    map?.zoomIn();
+    if (map) {
+      const currentZoom = map.getZoom();
+      map.zoomTo(currentZoom + 1, {
+        duration: 300,
+        essential: true,
+      });
+    }
   };
+
   const zoomOut = () => {
-    map?.zoomOut();
+    if (map) {
+      const currentZoom = map.getZoom();
+      map.zoomTo(currentZoom - 1, {
+        duration: 300,
+        essential: true,
+      });
+    }
   };
 
   return (
     <>
-      <aside className="flex flex-col gap-2 *:absolute bottom-8 right-4 z-10 bg-background p2 rounded-lg shadow-lg">
-        <Button variant={"ghost"} size={"icon"} onClick={zoomIn}>
+      <aside className="absolute bottom-8 right-4 z-10 flex flex-col gap-2 bg-background p-2 rounded-lg shadow-lg">
+        <Button variant="ghost" size="icon" onClick={zoomIn}>
           <PlusIcon className="w-5 h-5" />
           <span className="sr-only">Zoom in</span>
         </Button>

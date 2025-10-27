@@ -1,0 +1,356 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { AdminData, ConfigData } from "@/lib/types";
+
+import { Command, CommandGroup, CommandItem, CommandList } from "./ui/command";
+import { CommandInput } from "./ui/command";
+import { Check, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+const formSchema = z.object({
+  fullName: z.string().min(4, {
+    message: "Full name must be at least 4 characters.",
+  }),
+  idNumber: z
+    .string()
+    .optional()
+    .refine((val) => !val || (val.length === 18 && /^\d+$/.test(val)), {
+      message: "NIP must be exactly 18 digits (or leave empty).",
+    }),
+  position: z.string().min(1, {
+    message: "Enter a valid position.",
+  }),
+  opdName: z.string().min(1, {
+    message: "Enter a valid Nama OPD.",
+  }),
+  whatsappNumber: z
+    .string()
+    .min(10, { message: "WhatsApp number must be at least 10 digits." })
+    .max(15, { message: "WhatsApp number must not exceed 15 digits." })
+    .regex(/^\d+$/, { message: "WhatsApp number must contain only numbers." }),
+});
+
+interface PicDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  editingItem: AdminData | null;
+  onSuccess?: () => void;
+}
+
+export function PicDialog({
+  isOpen,
+  onOpenChange,
+  editingItem,
+  onSuccess,
+}: PicDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [opdData, setOpdData] = useState<ConfigData[]>([]);
+  const [open, setOpen] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      idNumber: "",
+      position: "",
+      opdName: "",
+      whatsappNumber: "",
+    },
+  });
+
+  const fetchOpdOptions = async () => {
+    try {
+      const response = await fetch("/api/configs");
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch configs: ${response.status}`);
+      }
+
+      const rawData = await response.json();
+      // Parse dataConfig JSON string to object
+      const allData: ConfigData[] = rawData.map((item: any) => ({
+        ...item,
+        dataConfig:
+          typeof item.dataConfig === "string"
+            ? JSON.parse(item.dataConfig)
+            : item.dataConfig,
+      }));
+
+      const opdConfigs = allData.filter((item) => item.dataType === "OPD");
+
+      setOpdData(opdConfigs);
+    } catch (error) {
+      console.error("Unexpected error: ", error);
+      toast.error("Failed to load OPD and ISP data. Please refresh the page.");
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchOpdOptions();
+      if (editingItem) {
+        form.reset({
+          fullName: editingItem.fullName,
+          idNumber: editingItem.idNumber,
+          position: editingItem.position,
+          opdName: editingItem.opdName,
+          whatsappNumber: editingItem.whatsappNumber,
+        });
+      } else {
+        form.reset({
+          fullName: "",
+          idNumber: "",
+          position: "",
+          opdName: "",
+          whatsappNumber: "",
+        });
+      }
+    }
+  }, [isOpen, editingItem, form]);
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+
+    try {
+      const adminData = {
+        fullName: values.fullName,
+        idNumber: values.idNumber || "",
+        position: values.position,
+        opdName: values.opdName,
+        whatsappNumber: values.whatsappNumber,
+      };
+
+      console.log("Submitting admin data:", adminData);
+
+      const url = editingItem ? `/api/admins/${editingItem.id}` : "/api/admins";
+      const method = editingItem ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(adminData),
+      });
+
+      if (!response.ok) {
+        let errorMessage = "Failed to save admin";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {}
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+
+      toast.success(
+        editingItem
+          ? "Admin updated successfully!"
+          : "Admin created successfully!"
+      );
+      form.reset();
+      onOpenChange(false);
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error("Error saving admin:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to save admin"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>
+            {editingItem ? "Edit Admin" : "Add New Admin"}
+          </DialogTitle>
+          <DialogDescription>
+            {editingItem
+              ? "Update admin information"
+              : "Add a new admin/PIC member"}
+          </DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Nama Lengkap <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Masukkan nama lengkap" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="idNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>NIP</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter 18-digit NIP (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="position"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Jabatan <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Masukkan jabatan" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="opdName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Nama OPD <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? opdData.find(
+                                (opd) => opd.dataConfig.name === field.value
+                              )?.dataConfig.name
+                            : "Pilih OPD"}
+                          <ChevronDown className="" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Cari OPD..." />
+                        <CommandList>
+                          <CommandGroup heading="Opsi opd">
+                            {opdData.map((opd) => (
+                              <CommandItem
+                                value={opd.dataConfig.name}
+                                key={opd.id}
+                                onSelect={() => {
+                                  form.setValue("opdName", opd.dataConfig.name);
+                                  setOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    opd.dataConfig.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {opd.dataConfig.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="whatsappNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Nomor WhatsApp <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Masukkan nomor WhatsApp" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex flex-col sm:flex-row gap-2 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto"
+              >
+                {isSubmitting
+                  ? "Saving..."
+                  : editingItem
+                  ? "Update Admin"
+                  : "Add Admin"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

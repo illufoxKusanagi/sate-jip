@@ -203,7 +203,15 @@ export function AddEditEventDialog({
   const fetchOpdDatas = async () => {
     try {
       const response = await fetch("/api/configs");
-      const allData: ConfigData[] = await response.json();
+      const rawData = await response.json();
+      // Parse dataConfig JSON string to object
+      const allData: ConfigData[] = rawData.map((item: any) => ({
+        ...item,
+        dataConfig:
+          typeof item.dataConfig === "string"
+            ? JSON.parse(item.dataConfig)
+            : item.dataConfig,
+      }));
 
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
 
