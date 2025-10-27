@@ -36,6 +36,17 @@ ENV NEXT_PUBLIC_MAPBOX_TOKEN=$NEXT_PUBLIC_MAPBOX_TOKEN
 ENV NEXT_PUBLIC_MAPBOX_SESSION_TOKEN=$NEXT_PUBLIC_MAPBOX_SESSION_TOKEN
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
+# Build arguments - these won't actually be used during build
+# but prevents Next.js from trying to evaluate them
+ARG DATABASE_URL=mysql://build:build@localhost:3306/build
+ARG DB_HOST=localhost
+ARG RESEND_API_KEY=re_build
+
+# Set dummy environment variables for build only
+ENV DATABASE_URL=$DATABASE_URL
+ENV DB_HOST=$DB_HOST
+ENV RESEND_API_KEY=$RESEND_API_KEY
+
 # Build the Next.js application
 # This generates the production build and the standalone output
 RUN npm run build
