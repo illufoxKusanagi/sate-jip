@@ -75,7 +75,7 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/src/lib/db ./src/lib/db
-COPY --from=builder /app/scripts ./scripts
+# COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/package.json ./package.json
 
 # Copy entrypoint script
