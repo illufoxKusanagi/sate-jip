@@ -41,11 +41,13 @@ ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ARG DATABASE_URL=mysql://build:build@localhost:3306/build
 ARG DB_HOST=localhost
 ARG RESEND_API_KEY=re_build
+ARG DB_TYPE=mysql
 
 # Set dummy environment variables for build only
 ENV DATABASE_URL=$DATABASE_URL
 ENV DB_HOST=$DB_HOST
 ENV RESEND_API_KEY=$RESEND_API_KEY
+ENV DB_TYPE=$DB_TYPE
 
 # Build the Next.js application
 # This generates the production build and the standalone output
