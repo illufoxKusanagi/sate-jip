@@ -4,9 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Lock, ArrowLeft, Home } from "lucide-react";
 import { useAuth } from "@/app/context/auth-context";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function UnauthorizedPage() {
+function UnauthorizedContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, isAdmin } = useAuth();
@@ -85,5 +85,21 @@ export default function UnauthorizedPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function UnauthorizedPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          </div>
+        </div>
+      }
+    >
+      <UnauthorizedContent />
+    </Suspense>
   );
 }

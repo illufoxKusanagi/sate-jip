@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuth } from "../context/auth-context";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 const schema = z.object({
   username: z.string().min(1, "Username harus diisi"),
@@ -32,7 +32,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -80,7 +80,7 @@ export default function LoginPage() {
 
       login(result.user.username, result.token, result.user.role);
       toast.success(
-        `Login berhasil, Okaerinasai, ${result.user.username}-san!`
+        `Login berhasil, Okaerinasai, ${result.user.username}-san!`,
       );
 
       // Redirect to the page user was trying to access, or dashboard
@@ -151,5 +151,21 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          </div>
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }

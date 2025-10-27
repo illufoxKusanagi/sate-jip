@@ -7,10 +7,10 @@ import { z } from "zod";
 // GET /api/tickets/[id] - Get single ticket with replies
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const ticketId = params.id;
+    const ticketId = (await params).id;
 
     // Get ticket
     const ticket = await db
@@ -59,10 +59,10 @@ export async function GET(
 // PUT /api/tickets/[id] - Update ticket
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const ticketId = params.id;
+    const ticketId = (await params).id;
     const body = await request.json();
 
     const updateData: any = {};
@@ -98,10 +98,10 @@ export async function PUT(
 // DELETE /api/tickets/[id] - Delete ticket
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const ticketId = params.id;
+    const ticketId = (await params).id;
 
     // Delete replies first (foreign key)
     await db.delete(ticketReplies).where(eq(ticketReplies.ticketId, ticketId));
