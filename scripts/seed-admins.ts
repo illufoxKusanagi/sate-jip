@@ -291,7 +291,9 @@ async function seedTickets() {
       categories.push(...newCategories);
     }
 
-    const categoryIds = categories.map((c) => c.id);
+    const categoryIds = categories.map(
+      (c: typeof ticketCategories.$inferSelect) => c.id,
+    );
 
     // Generate ticket numbers
     const generateTicketNumber = (index: number) => {
