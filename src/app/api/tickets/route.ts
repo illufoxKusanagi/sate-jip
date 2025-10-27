@@ -25,34 +25,64 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search");
     const categoryId = searchParams.get("categoryId");
     const assignedTo = searchParams.get("assignedTo");
+    const priority = searchParams.get("priority");
+    const dateFrom = searchParams.get("dateFrom");
+    const dateTo = searchParams.get("dateTo");
+    let query;
 
-    const query = db
+    query = db
       .select()
       .from(tickets)
-      .leftJoin(ticketCategories, eq(tickets.categoryId, ticketCategories.id))
+      // .leftJoin(ticketCategories, eq(tickets.categoryId, ticketCategories.id))
       .orderBy(desc(tickets.createdAt));
 
     // Apply filters
     const conditions = [];
-    if (status) conditions.push(eq(tickets.status, status as any));
-    if (categoryId) conditions.push(eq(tickets.categoryId, categoryId));
-    if (assignedTo) conditions.push(eq(tickets.assignedTo, assignedTo));
+
+    if (status && status !== "all") {
+      conditions.push(eq(tickets.status, status as any));
+    }
+
+    if (priority && priority !== "all") {
+      conditions.push(eq(tickets.priority, priority as any));
+    }
+
+    if (categoryId) {
+      conditions.push(eq(tickets.categoryId, categoryId));
+    }
+
+    if (assignedTo) {
+      conditions.push(eq(tickets.assignedTo, assignedTo));
+    }
+
     if (search) {
       conditions.push(
         or(
           like(tickets.subject, `%${search}%`),
           like(tickets.ticketNumber, `%${search}%`),
-          like(tickets.email, `%${search}%`),
-        ),
+          like(tickets.email, `%${search}%`)
+        )
       );
     }
 
-    let newQuery;
-    if (conditions.length > 0) {
-      newQuery = query.where(and(...conditions));
+    if (dateFrom) {
+      conditions.push(gte(tickets.createdAt, new Date(dateFrom)));
     }
 
-    const result = await newQuery;
+    if (dateTo) {
+      conditions.push(lte(tickets.createdAt, new Date(dateTo)));
+    }
+
+    // Apply filters
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+
+    // Limit to 100 rows by default
+    query = query.limit(100);
+
+    // Execute query
+    const result = await query;
 
     return NextResponse.json({
       success: true,
@@ -63,7 +93,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching tickets:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch tickets" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -117,7 +147,7 @@ export async function POST(request: NextRequest) {
       html: ticketCreatedEmail(
         ticketNumber,
         validatedData.subject,
-        validatedData.submittedBy,
+        validatedData.submittedBy
       ),
     });
 
@@ -127,20 +157,20 @@ export async function POST(request: NextRequest) {
         data: fullTicket,
         message: "Ticket created successfully",
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, errors: error },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     console.error("Error creating ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create ticket" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -151,6 +181,7 @@ async function generateTicketNumber(): Promise<string> {
   const date = new Date();
   const year = date.getFullYear().toString().slice(-2);
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
 
   // Get count of tickets created today
   const startOfDay = new Date(date.setHours(0, 0, 0, 0));
@@ -160,10 +191,10 @@ async function generateTicketNumber(): Promise<string> {
     .select()
     .from(tickets)
     .where(
-      and(gte(tickets.createdAt, startOfDay), lte(tickets.createdAt, endOfDay)),
+      and(gte(tickets.createdAt, startOfDay), lte(tickets.createdAt, endOfDay))
     );
 
   const sequence = (todayTickets.length + 1).toString().padStart(4, "0");
 
-  return `${prefix}-${year}${month}-${sequence}`;
+  return `${prefix}-${year}${month}${day}-${sequence}`;
 }
