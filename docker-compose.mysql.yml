@@ -1,0 +1,70 @@
+# Docker Compose for MySQL setup
+# Usage: docker compose -f docker-compose.mysql.yml up -d
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: sate-jip-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-12345678Haha}
+      MYSQL_DATABASE: ${DB_NAME:-sate_jip_db}
+      MYSQL_USER: ${DB_USER:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-12345678Haha}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - sate-jip-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${DB_PASSWORD:-12345678Haha}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: sate-jip-app-diskominfo
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+      - DB_TYPE=mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - sate-jip-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  sate-jip-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
