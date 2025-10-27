@@ -11,7 +11,7 @@ async function seedTickets() {
 
     if (categories.length === 0) {
       console.log(
-        "⚠️  No categories found. Creating default categories first..."
+        "⚠️  No categories found. Creating default categories first...",
       );
 
       const defaultCategories = [
@@ -61,7 +61,9 @@ async function seedTickets() {
       categories.push(...newCategories);
     }
 
-    const categoryIds = categories.map((c) => c.id);
+    const categoryIds = categories.map(
+      (c: typeof ticketCategories.$inferSelect) => c.id,
+    );
 
     // Generate ticket numbers
     const generateTicketNumber = (index: number) => {
@@ -385,7 +387,7 @@ async function seedTickets() {
 
     console.log("✅ Seeding completed successfully!");
     console.log(
-      `\n📊 Summary:\n   - ${dummyTickets.length} tickets created\n   - ${ticketRepliesData.length} replies created\n`
+      `\n📊 Summary:\n   - ${dummyTickets.length} tickets created\n   - ${ticketRepliesData.length} replies created\n`,
     );
   } catch (error) {
     console.error("❌ Error seeding tickets:", error);
