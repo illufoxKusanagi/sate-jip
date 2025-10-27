@@ -47,7 +47,6 @@ ENV DATABASE_URL=$DATABASE_URL
 ENV DB_HOST=$DB_HOST
 ENV RESEND_API_KEY=$RESEND_API_KEY
 
-
 # Build the Next.js application
 # This generates the production build and the standalone output
 RUN npm run build
