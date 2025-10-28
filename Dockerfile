@@ -59,6 +59,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_DB_WAIT=true
 
 # Create non-root user and group for security
 RUN addgroup -g 1001 -S nextjs && \
