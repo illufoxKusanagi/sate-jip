@@ -60,8 +60,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create non-root user for security
-RUN adduser -S -u 1001 nextjs
+# Create non-root user and group for security
+RUN addgroup -g 1001 -S nextjs && \
+    adduser -S -u 1001 -G nextjs nextjs
 
 # Install netcat for health checks in entrypoint
 RUN apk add --no-cache netcat-openbsd
