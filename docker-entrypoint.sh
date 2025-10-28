@@ -15,34 +15,59 @@ else
   echo "🔍 Checking database availability..."
 
   if [ "$DB_TYPE" = "postgres" ]; then
-    # Wait for PostgreSQL to be ready
-    # Use postgres as default host for Docker Compose
-    DB_HOST=${DB_HOST:-postgres}
-    DB_PORT=${DB_PORT:-5432}
+    # For PostgreSQL, prefer extracting from DATABASE_URL
+    if [ -n "$DATABASE_URL" ]; then
+      # Extract host and port from DATABASE_URL
+      # Format: postgresql://user:pass@host:port/database
+      EXTRACTED_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@\([^:\/]*\).*/\1/p')
+      EXTRACTED_PORT=$(echo "$DATABASE_URL" | sed -n 's/.*@[^:]*:\([0-9]*\)\/.*/\1/p')
 
-    echo "⏳ Waiting for PostgreSQL at $DB_HOST:$DB_PORT..."
+      # Use extracted values if valid, otherwise use defaults
+      if [ -n "$EXTRACTED_HOST" ] && [ "$EXTRACTED_HOST" != "localhost" ]; then
+        DB_WAIT_HOST="$EXTRACTED_HOST"
+        DB_WAIT_PORT="${EXTRACTED_PORT:-5432}"
+      else
+        # Local setup
+        DB_WAIT_HOST="${DB_HOST:-postgres}"
+        DB_WAIT_PORT="${DB_PORT:-5432}"
+      fi
+    else
+      # No DATABASE_URL, use environment variables or defaults
+      DB_WAIT_HOST="${DB_HOST:-postgres}"
+      DB_WAIT_PORT="${DB_PORT:-5432}"
+    fi
 
-    # Wait for the database to be ready
-    until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
-      echo "PostgreSQL is unavailable - sleeping"
-      sleep 2
-    done
-    echo "✅ PostgreSQL is ready!"
+    echo "⏳ Waiting for PostgreSQL at $DB_WAIT_HOST:$DB_WAIT_PORT..."
+
+    # Only wait if it's a local Docker container (not external managed DB)
+    if [ "$DB_WAIT_HOST" = "postgres" ] || [ "$DB_WAIT_HOST" = "localhost" ] || [ "$DB_WAIT_HOST" = "127.0.0.1" ]; then
+      until nc -z "$DB_WAIT_HOST" "$DB_WAIT_PORT" 2>/dev/null; do
+        echo "PostgreSQL is unavailable - sleeping"
+        sleep 2
+      done
+      echo "✅ PostgreSQL is ready!"
+    else
+      echo "ℹ️  Using external PostgreSQL at $DB_WAIT_HOST:$DB_WAIT_PORT (skipping wait)"
+    fi
 
   elif [ "$DB_TYPE" = "mysql" ]; then
     # Wait for MySQL to be ready
     # Use mysql as default host for Docker Compose
-    DB_HOST=${DB_HOST:-mysql}
-    DB_PORT=${DB_PORT:-3306}
+    DB_WAIT_HOST="${DB_HOST:-mysql}"
+    DB_WAIT_PORT="${DB_PORT:-3306}"
 
-    echo "⏳ Waiting for MySQL at $DB_HOST:$DB_PORT..."
+    echo "⏳ Waiting for MySQL at $DB_WAIT_HOST:$DB_WAIT_PORT..."
 
-    # Wait for the database to be ready
-    until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
-      echo "MySQL is unavailable - sleeping"
-      sleep 2
-    done
-    echo "✅ MySQL is ready!"
+    # Only wait if it's a local Docker container (not external managed DB)
+    if [ "$DB_WAIT_HOST" = "mysql" ] || [ "$DB_WAIT_HOST" = "localhost" ] || [ "$DB_WAIT_HOST" = "127.0.0.1" ]; then
+      until nc -z "$DB_WAIT_HOST" "$DB_WAIT_PORT" 2>/dev/null; do
+        echo "MySQL is unavailable - sleeping"
+        sleep 2
+      done
+      echo "✅ MySQL is ready!"
+    else
+      echo "ℹ️  Using external MySQL at $DB_WAIT_HOST:$DB_WAIT_PORT (skipping wait)"
+    fi
 
   else
     echo "⚠️  Unknown DB_TYPE: $DB_TYPE"
