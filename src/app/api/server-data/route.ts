@@ -11,21 +11,23 @@ export async function GET() {
       .orderBy(serverData.assetNumber);
 
     // Convert installedApps from object to array if needed
-    const parsedServerData = rawServerDatas.map((server) => ({
-      ...server,
-      installedApps:
-        server.installedApps && typeof server.installedApps === "object"
-          ? Array.isArray(server.installedApps)
-            ? server.installedApps
-            : Object.values(server.installedApps)
-          : [],
-    }));
+    const parsedServerData = rawServerDatas.map(
+      (server: typeof serverData.$inferSelect) => ({
+        ...server,
+        installedApps:
+          server.installedApps && typeof server.installedApps === "object"
+            ? Array.isArray(server.installedApps)
+              ? server.installedApps
+              : Object.values(server.installedApps)
+            : [],
+      }),
+    );
 
     return NextResponse.json({ success: true, data: parsedServerData });
   } catch (error) {
     return NextResponse.json(
       { success: false, error: "Failed to fetch server datas" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -53,7 +55,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to add server data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
