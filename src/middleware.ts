@@ -4,10 +4,9 @@ import { jwtVerify } from "jose";
 import { geolocation } from "@vercel/functions";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "your-secret-key"
+  process.env.JWT_SECRET || "your-secret-key",
 );
 
-// Routes that require authentication
 const protectedRoutes = [
   "/admins",
   "/locations",
@@ -17,7 +16,6 @@ const protectedRoutes = [
   "/data-central-dashboard",
 ];
 
-// Routes that only admins can access
 const adminOnlyRoutes = ["/server-management", "/server-data", "/data-config"];
 const publicRoutes = ["/login", "/dashboard", "/activity-calendar", "/"];
 const geolocationBypassRoutes = ["/access-denied", "/unauthorized"];
@@ -44,17 +42,13 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-
-  // Check if route requires authentication
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
 
   if (!isProtectedRoute) {
     return NextResponse.next();
   }
-
-  // Get token from cookies
   const token = request.cookies.get("auth-token")?.value;
 
   if (!token) {
@@ -62,8 +56,6 @@ export async function middleware(request: NextRequest) {
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
-
-  // Verify token and check role
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
     const decoded = payload as {
@@ -71,14 +63,11 @@ export async function middleware(request: NextRequest) {
       username: string;
       role: string;
     };
-
-    // Check if route is admin-only
     const isAdminRoute = adminOnlyRoutes.some((route) =>
-      pathname.startsWith(route)
+      pathname.startsWith(route),
     );
 
     if (isAdminRoute && decoded.role !== "admin") {
-      // Redirect to unauthorized page with information about the attempted access
       const unauthorizedUrl = new URL("/unauthorized", request.url);
       unauthorizedUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(unauthorizedUrl);

@@ -19,7 +19,6 @@ export default function ServerManagement() {
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
   const [selectedServer, setSelectedServer] = useState<ServerData | null>(null);
 
-  // Fetch server data from API
   const fetchServerData = async () => {
     try {
       setLoading(true);

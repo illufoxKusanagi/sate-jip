@@ -10,7 +10,6 @@ export async function GET() {
       .from(serverData)
       .orderBy(serverData.assetNumber);
 
-    // Convert installedApps from object to array if needed
     const parsedServerData = rawServerDatas.map(
       (server: typeof serverData.$inferSelect) => ({
         ...server,

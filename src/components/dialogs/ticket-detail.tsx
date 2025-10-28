@@ -195,13 +195,13 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="open">Open</SelectItem>
-                <SelectItem value="in_progress">In Progress</SelectItem>
-                <SelectItem value="waiting_response">
-                  Waiting Response
+                <SelectItem value="terbuka">Terbuka</SelectItem>
+                <SelectItem value="dalam_progress">Dalam Progress</SelectItem>
+                <SelectItem value="menunggu_jawaban">
+                  Menunggu Jawaban
                 </SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
-                <SelectItem value="closed">Closed</SelectItem>
+                <SelectItem value="selesai">Selesai</SelectItem>
+                <SelectItem value="ditutup">Ditutup</SelectItem>
               </SelectContent>
             </Select>
 
@@ -210,9 +210,9 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="high">High</SelectItem>
+                <SelectItem value="rendah">Rendah</SelectItem>
+                <SelectItem value="sedang">Sedang</SelectItem>
+                <SelectItem value="tinggi">Tinggi</SelectItem>
                 <SelectItem value="urgent">Urgent</SelectItem>
               </SelectContent>
             </Select>

@@ -1,7 +1,6 @@
 import { ServerData } from "@/lib/types";
 
 export const mockServerData: ServerData[] = [
-  // Rack A
   {
     id: "srv-001",
     rackName: "Rak A",
@@ -112,7 +111,6 @@ export const mockServerData: ServerData[] = [
     installedApps: ["PowerChute Network", "SNMP Agent"],
   },
 
-  // Rack B
   {
     id: "srv-006",
     rackName: "Rak B",
@@ -227,7 +225,6 @@ export const mockServerData: ServerData[] = [
     installedApps: ["PowerChute Network", "SNMP Agent"],
   },
 
-  // Rack C
   {
     id: "srv-012",
     rackName: "Rak C",
@@ -289,7 +286,6 @@ export const mockServerData: ServerData[] = [
     ],
   },
 
-  // Rack D
   {
     id: "srv-015",
     rackName: "Rak D",

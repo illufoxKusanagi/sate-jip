@@ -16,7 +16,6 @@ const replySchema = z.object({
   isInternal: z.boolean().default(false),
 });
 
-// POST /api/tickets/[id]/replies - Add reply
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -27,7 +26,6 @@ export async function POST(
 
     const validatedData = replySchema.parse(body);
 
-    // Check if ticket exists
     const ticket = await db
       .select()
       .from(tickets)
@@ -41,10 +39,7 @@ export async function POST(
       );
     }
 
-    // Get IP address
     const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
-
-    // Create reply
     const newReply = {
       id: nanoid(),
       ticketId,
@@ -59,7 +54,6 @@ export async function POST(
 
     await db.insert(ticketReplies).values(newReply);
 
-    // Update ticket status if needed
     if (validatedData.isStaffReply && ticket[0].status === "menunggu_jawaban") {
       await db
         .update(tickets)
@@ -67,7 +61,6 @@ export async function POST(
         .where(eq(tickets.id, ticketId));
     }
 
-    // Update firstResponseAt if this is first staff reply
     if (validatedData.isStaffReply && !ticket[0].firstResponseAt) {
       await db
         .update(tickets)
@@ -75,7 +68,6 @@ export async function POST(
         .where(eq(tickets.id, ticketId));
     }
 
-    // Send email notification to customer if not internal reply
     if (!validatedData.isInternal && validatedData.isStaffReply) {
       const emailResult = await sendEmail({
         to: ticket[0].email,
@@ -94,7 +86,6 @@ export async function POST(
           "Failed to send reply notification email:",
           emailResult.error,
         );
-        // Don't fail the request if email fails, just log it
       }
     }
 

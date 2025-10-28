@@ -64,7 +64,6 @@ export function TicketForm() {
     },
   });
 
-  // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       try {

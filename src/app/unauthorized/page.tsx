@@ -13,7 +13,6 @@ function UnauthorizedContent() {
   const from = searchParams.get("from") || "/dashboard";
 
   useEffect(() => {
-    // If user becomes admin, redirect them back
     if (isAdmin()) {
       router.push(from);
     }

@@ -1,4 +1,3 @@
-// src/lib/db/connection.ts
 import { drizzle as drizzleMysql } from "drizzle-orm/mysql2";
 import { drizzle as drizzlePostgres } from "drizzle-orm/postgres-js";
 import mysql from "mysql2/promise";
@@ -6,12 +5,8 @@ import postgres from "postgres";
 import * as mysqlSchema from "./schema.mysql";
 import * as postgresSchema from "./schema.postgres";
 
-// Determine which database to use
 const DB_TYPE = process.env.DB_TYPE || "mysql";
-
 let db: any;
-
-// Check if we're in build mode
 const isBuildMode =
   process.env.NODE_ENV === "production" &&
   !process.env.DATABASE_URL &&
@@ -19,10 +14,8 @@ const isBuildMode =
 
 if (isBuildMode) {
   console.log("⚠️  Build mode - database not initialized");
-  // Create a dummy db object for build time
   db = {} as any;
 } else if (DB_TYPE === "postgres") {
-  // PostgreSQL connection (for Vercel/Render)
   const connectionString = process.env.DATABASE_URL || "";
 
   if (
@@ -41,14 +34,11 @@ if (isBuildMode) {
     db = {} as any;
   }
 } else {
-  // MySQL connection (for company server)
   const dbHost = process.env.DB_HOST || "localhost";
   const dbPort = parseInt(process.env.DB_PORT || "3306");
   const dbUser = process.env.DB_USER || "root";
   const dbPassword = process.env.DB_PASSWORD || "12345678Haha";
   const dbName = process.env.DB_NAME || "sate_jip_db";
-
-  // Only initialize MySQL if not in build mode
   if (dbHost && dbName && dbPassword) {
     try {
       const connection = mysql.createPool({

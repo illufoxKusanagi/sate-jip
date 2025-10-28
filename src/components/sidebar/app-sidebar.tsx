@@ -100,12 +100,6 @@ export function AppSidebar() {
       icon: Ticket,
       adminOnly: false,
     },
-    // {
-    //   title: "Detail Tiket",
-    //   url: "/tickets/ticket-detail",
-    //   icon: TicketCheck,
-    //   adminOnly: true,
-    // },
     {
       title: "Help desk",
       url: "/tickets/help-desk",
@@ -150,7 +144,7 @@ export function AppSidebar() {
         )}
       >
         <SidebarMenu>
-          <SidebarMenuButton asChild className="hover:bg-accent/50 h-16">
+          <SidebarMenuButton asChild className="hover:bg-accent/50 h-full">
             {open ? (
               <div className="flex items-center gap-3 w-full px-2">
                 <Network className="h-6 w-6 text-primary-600 dark:text-primary-300 shrink-0" />
@@ -159,15 +153,14 @@ export function AppSidebar() {
                   <p className="body-big-bold text-primary-600 dark:text-primary-300 truncate">
                     SATE-ITIK
                   </p>
-                  <CardDescription className="text-xs truncate w-full">
-                    Sistem Analisis Terpadu
+                  <CardDescription className="text-xs text-wrap w-full">
+                    Sistem Akses Terpadu Infrastruktur Jaringan TIK
                   </CardDescription>
                 </div>
               </div>
             ) : (
               <div className="flex items-center justify-center w-full">
                 <Network className="h-6 w-6 text-primary-600 dark:text-primary-300" />
-                {/* <CustomSateItikIcon className="h-6 w-6 text-primary-600 dark:text-primary-300" /> */}
               </div>
             )}
           </SidebarMenuButton>
@@ -214,55 +207,46 @@ export function AppSidebar() {
                   </div>
                 </CollapsibleContent>
               </Collapsible>
-
-              {/* {items.map((item) => (
-                  <SidebarHeader key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarHeader>
-                ))} */}
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarMenu>
-        <SidebarGroup>
-          <SidebarGroupContent className="space-y-1">
-            <Collapsible defaultOpen className="group/collapsible">
-              <SidebarMenuButton asChild>
-                <CollapsibleTrigger
-                  className={cn(
-                    "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                    !open && "justify-center px-2",
-                  )}
-                >
-                  <Database className={cn(!open && "h-5 w-5")} />
-                  {open && "Pusat Data Pemerintah"}
-                  {open && (
-                    <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
-                  )}
-                </CollapsibleTrigger>
-              </SidebarMenuButton>
-              <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
-                <div className="mt-1 space-y-1">
-                  {visibleDataCentralItems.map((item) => (
-                    <SidebarMenuButton key={item.title} asChild>
-                      <Link
-                        href={item.url}
-                        className={cn(!open && "justify-center px-2")}
-                      >
-                        <item.icon className={cn(!open && "h-5 w-5")} />
-                        {open && <span>{item.title}</span>}
-                      </Link>
-                    </SidebarMenuButton>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {isAuthenticated && (
+          <SidebarGroup>
+            <SidebarGroupContent className="space-y-1">
+              <Collapsible defaultOpen className="group/collapsible">
+                <SidebarMenuButton asChild>
+                  <CollapsibleTrigger
+                    className={cn(
+                      "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
+                      !open && "justify-center px-2",
+                    )}
+                  >
+                    <Database className={cn(!open && "h-5 w-5")} />
+                    {open && "Pusat Data Pemerintah"}
+                    {open && (
+                      <ChevronDown className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+                    )}
+                  </CollapsibleTrigger>
+                </SidebarMenuButton>
+                <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
+                  <div className="mt-1 space-y-1">
+                    {visibleDataCentralItems.map((item) => (
+                      <SidebarMenuButton key={item.title} asChild>
+                        <Link
+                          href={item.url}
+                          className={cn(!open && "justify-center px-2")}
+                        >
+                          <item.icon className={cn(!open && "h-5 w-5")} />
+                          {open && <span>{item.title}</span>}
+                        </Link>
+                      </SidebarMenuButton>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupContent className="space-y-1">
             <Collapsible defaultOpen className="group/collapsible">

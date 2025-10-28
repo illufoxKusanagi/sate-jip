@@ -1,6 +1,5 @@
 import { defineConfig } from "drizzle-kit";
 
-// Determine which database to use
 const DB_TYPE = process.env.DB_TYPE || "mysql";
 
 const config =

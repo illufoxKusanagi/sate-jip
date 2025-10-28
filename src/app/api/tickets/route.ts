@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { nanoid } from "nanoid";
 import { eq, desc, and, like, or, lte, gte } from "drizzle-orm";
 import { z } from "zod";
 import db from "@/lib/db/connection";
-import { ticketCategories, tickets } from "@/lib/db/schema";
+import { tickets } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email";
 import { ticketCreatedEmail } from "@/lib/email/templates";
 
-// Validation schema
 const createTicketSchema = z.object({
   subject: z.string().min(5, "Subject must be at least 5 characters"),
   description: z.string().min(20, "Please provide more details"),
@@ -18,7 +16,6 @@ const createTicketSchema = z.object({
   priority: z.enum(["rendah", "sedang", "tinggi", "urgent"]).default("sedang"),
 });
 
-// GET /api/tickets - List all tickets
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -31,31 +28,20 @@ export async function GET(request: NextRequest) {
     const dateTo = searchParams.get("dateTo");
     let query;
 
-    query = db
-      .select()
-      .from(tickets)
-      // .leftJoin(ticketCategories, eq(tickets.categoryId, ticketCategories.id))
-      .orderBy(desc(tickets.createdAt));
-
-    // Apply filters
+    query = db.select().from(tickets).orderBy(desc(tickets.createdAt));
     const conditions = [];
-
     if (status && status !== "all") {
       conditions.push(eq(tickets.status, status as any));
     }
-
     if (priority && priority !== "all") {
       conditions.push(eq(tickets.priority, priority as any));
     }
-
     if (categoryId) {
       conditions.push(eq(tickets.categoryId, categoryId));
     }
-
     if (assignedTo) {
       conditions.push(eq(tickets.assignedTo, assignedTo));
     }
-
     if (search) {
       conditions.push(
         or(
@@ -74,15 +60,10 @@ export async function GET(request: NextRequest) {
       conditions.push(lte(tickets.createdAt, new Date(dateTo)));
     }
 
-    // Apply filters
     if (conditions.length > 0) {
       query = query.where(and(...conditions));
     }
-
-    // Limit to 100 rows by default
     query = query.limit(100);
-
-    // Execute query
     const result = await query;
 
     return NextResponse.json({
@@ -99,25 +80,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/tickets - Create new ticket
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // Validate input
     const validatedData = createTicketSchema.parse(body);
-
-    // Generate ticket number
     const ticketNumber = await generateTicketNumber();
-
-    // Get client IP and user agent
     const ipAddress =
       request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
       "unknown";
     const userAgent = request.headers.get("user-agent") || "unknown";
 
-    // Create ticket
     const newTicket = {
       ticketNumber,
       subject: validatedData.subject,
@@ -141,7 +114,6 @@ export async function POST(request: NextRequest) {
       .where(eq(tickets.ticketNumber, ticketNumber))
       .limit(1);
 
-    // Send email notification
     const emailResult = await sendEmail({
       to: validatedData.email,
       subject: `Ticket #${ticketNumber} Created - ${validatedData.subject}`,
@@ -154,7 +126,6 @@ export async function POST(request: NextRequest) {
 
     if (!emailResult.success) {
       console.error("Failed to send ticket creation email:", emailResult.error);
-      // Don't fail the request if email fails, just log it
     }
 
     return NextResponse.json(
@@ -181,15 +152,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper function to generate unique ticket number
 async function generateTicketNumber(): Promise<string> {
   const prefix = process.env.NEXT_PUBLIC_TICKET_PREFIX || "TKT";
   const date = new Date();
   const year = date.getFullYear().toString().slice(-2);
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
-
-  // Get count of tickets created today
   const startOfDay = new Date(date.setHours(0, 0, 0, 0));
   const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 

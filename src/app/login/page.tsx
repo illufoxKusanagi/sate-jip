@@ -39,7 +39,6 @@ function LoginPageContent() {
   const redirect = searchParams.get("redirect");
 
   useEffect(() => {
-    // Show toast if user was redirected due to no authentication
     if (redirect) {
       toast.warning("Silakan login untuk mengakses halaman tersebut", {
         description: `Anda akan diarahkan ke ${redirect} setelah login`,
@@ -83,7 +82,6 @@ function LoginPageContent() {
         `Login berhasil, Okaerinasai, ${result.user.username}-san!`,
       );
 
-      // Redirect to the page user was trying to access, or dashboard
       const redirectTo = redirect || "/dashboard";
       router.push(redirectTo);
     } catch (error) {
