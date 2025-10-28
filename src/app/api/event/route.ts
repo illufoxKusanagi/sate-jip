@@ -16,21 +16,23 @@ export async function GET(request: NextRequest) {
   try {
     const events = await db.select().from(eventCalendar);
 
-    const formattedEvents = events.map((event) => ({
-      id: event.id,
-      opdName: event.opdName,
-      startDate: event.startDate.toISOString(),
-      endDate: event.endDate.toISOString(),
-      title: event.title,
-      description: event.description || "",
-      color: event.color,
-    }));
+    const formattedEvents = events.map(
+      (event: typeof eventCalendar.$inferSelect) => ({
+        id: event.id,
+        opdName: event.opdName,
+        startDate: event.startDate.toISOString(),
+        endDate: event.endDate.toISOString(),
+        title: event.title,
+        description: event.description || "",
+        color: event.color,
+      }),
+    );
     return NextResponse.json(formattedEvents);
   } catch (error) {
     console.error("Error fetching events: ", error);
     return NextResponse.json(
       { error: "Failed to fetch events" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -65,13 +67,13 @@ export async function POST(request: NextRequest) {
     // );
     return NextResponse.json(
       { success: true, message: "Event created successfully" },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error adding event: ", error);
     return NextResponse.json(
       { error: "Failed to create new event" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
