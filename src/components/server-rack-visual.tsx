@@ -80,7 +80,6 @@ export function ServerRackVisual({
           </div>
         )}
 
-        {/* Tooltip */}
         {isOccupied && server && (
           <div className="absolute left-full ml-2 top-0 bg-popover border border-border rounded-md shadow-lg p-3 min-w-[280px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none">
             <h4 className="heading-4 mb-2 border-b border-border pb-2">

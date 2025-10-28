@@ -148,7 +148,6 @@ export function AppSidebar() {
             {open ? (
               <div className="flex items-center gap-3 w-full px-2">
                 <Network className="h-6 w-6 text-primary-600 dark:text-primary-300 shrink-0" />
-                {/* <CustomSateItikIcon className="h-6 w-6 text-primary-600 dark:text-primary-300 shrink-0" /> */}
                 <div className="flex flex-col items-start overflow-hidden">
                   <p className="body-big-bold text-primary-600 dark:text-primary-300 truncate">
                     SATE-ITIK

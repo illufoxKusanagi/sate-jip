@@ -126,7 +126,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
 
   return (
     <div className="space-y-6">
-      {/* Ticket Header */}
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
@@ -183,7 +182,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
         </CardContent>
       </Card>
 
-      {/* Update Ticket Status/Priority */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Update Ticket</CardTitle>
@@ -225,7 +223,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
         </CardContent>
       </Card>
 
-      {/* Replies */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
@@ -278,7 +275,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
 
           <Separator />
 
-          {/* Reply Form */}
           <div className="space-y-3">
             <Textarea
               placeholder="Type your reply..."

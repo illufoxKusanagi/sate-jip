@@ -117,7 +117,6 @@ export default function ServerManagement() {
               />
             </div>
 
-            {/* Legend */}
             <div className="mt-6 p-4 bg-card border border-border rounded-lg">
               <p className="heading-3 mb-3">Status Legend</p>
               <div className="flex flex-wrap gap-4">
@@ -150,7 +149,6 @@ export default function ServerManagement() {
           </TabsContent>
         </Tabs>
 
-        {/* Add Server Dialog */}
         <ServerDialog
           isOpen={isAddDialogOpen}
           onOpenChange={setIsAddDialogOpen}
@@ -158,7 +156,6 @@ export default function ServerManagement() {
           editingItem={null}
         />
 
-        {/* Server Info Dialog (from rack visualization) */}
         <ServerInfoDialog
           isOpen={isInfoDialogOpen}
           onOpenChange={setIsInfoDialogOpen}

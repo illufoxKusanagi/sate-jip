@@ -629,7 +629,6 @@ export default function HalamanBaru() {
     <PageStructure>
       <div className="flex flex-col gap-6">
         <h1 className="heading-1">Halaman Baru</h1>
-        {/* Konten halaman */}
       </div>
     </PageStructure>
   );

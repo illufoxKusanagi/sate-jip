@@ -489,7 +489,6 @@ export function ServerTable({
         </div>
       </div>
 
-      {/* Edit Dialog */}
       <ServerDialog
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
@@ -497,14 +496,12 @@ export function ServerTable({
         onSuccess={handleDialogSuccess}
       />
 
-      {/* Info Dialog */}
       <ServerInfoDialog
         isOpen={isInfoDialogOpen}
         onOpenChange={setIsInfoDialogOpen}
         server={infoServer}
       />
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}

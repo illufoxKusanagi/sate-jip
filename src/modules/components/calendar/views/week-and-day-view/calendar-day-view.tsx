@@ -59,7 +59,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         isWithinInterval(now, {
           start: parseISO(event.startDate),
           end: parseISO(event.endDate),
-        })
+        }),
       ) || []
     );
   };
@@ -86,7 +86,6 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             multiDayEvents={multiDayEvents}
           />
 
-          {/* Day header */}
           <div className="relative z-20 flex border-b">
             <div className="w-12 sm:w-18"></div>
             <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
@@ -100,7 +99,6 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
         <ScrollArea className="h-full" type="always" ref={scrollAreaRef}>
           <div className="flex">
-            {/* Hours column */}
             <div className="relative w-12 sm:w-18">
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
@@ -109,7 +107,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       <span className="text-xs text-t-quaternary">
                         {format(
                           new Date().setHours(hour, 0, 0, 0),
-                          use24HourFormat ? "HH:00" : "h a"
+                          use24HourFormat ? "HH:00" : "h a",
                         )}
                       </span>
                     )}
@@ -181,7 +179,6 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           mode="single"
           selected={selectedDate}
           onSelect={(date) => date && setSelectedDate(date)}
-          initialFocus
         />
 
         <div className="flex-1 space-y-3">
@@ -231,12 +228,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         <span className="text-sm text-t-tertiary">
                           {format(
                             parseISO(event.startDate),
-                            use24HourFormat ? "HH:mm" : "hh:mm a"
+                            use24HourFormat ? "HH:mm" : "hh:mm a",
                           )}{" "}
                           -
                           {format(
                             parseISO(event.endDate),
-                            use24HourFormat ? "HH:mm" : "hh:mm a"
+                            use24HourFormat ? "HH:mm" : "hh:mm a",
                           )}
                         </span>
                       </div>

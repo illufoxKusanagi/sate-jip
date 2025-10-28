@@ -286,7 +286,6 @@ export function TicketsTable({
 
   return (
     <div className="w-full space-y-4">
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <Input
           placeholder="Cari tiket (subjek, nomor, email)..."
@@ -359,7 +358,6 @@ export function TicketsTable({
         </DropdownMenu>
       </div>
 
-      {/* Table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -415,7 +413,6 @@ export function TicketsTable({
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-between px-2">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}

@@ -532,7 +532,6 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         </div>
       </div>
 
-      {/* Edit Dialog */}
       <LocationDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
@@ -540,7 +539,6 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         onSuccess={handleDialogSuccess}
       />
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
