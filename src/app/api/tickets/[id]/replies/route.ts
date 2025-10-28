@@ -4,7 +4,8 @@ import { ticketReplies, tickets } from "@/lib/db/schema";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { sendEmail, ticketReplyEmail } from "@/lib/utils/ticket-utils";
+import { sendEmail } from "@/lib/email";
+import { ticketReplyEmail } from "@/lib/email/templates";
 
 const replySchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -74,20 +75,27 @@ export async function POST(
         .where(eq(tickets.id, ticketId));
     }
 
-    // TODO: Send email notification
-    // After creating reply, add:
-    if (!validatedData.isInternal) {
-      await sendEmail({
+    // Send email notification to customer if not internal reply
+    if (!validatedData.isInternal && validatedData.isStaffReply) {
+      const emailResult = await sendEmail({
         to: ticket[0].email,
-        subject: `Re: Ticket #${ticket[0].ticketNumber} - ${ticket[0].subject}`,
-        html: ticketReplyEmail(
-          ticket[0].ticketNumber,
-          ticket[0].subject,
-          ticket[0].submittedBy,
-          validatedData.message,
-          validatedData.authorName,
-        ),
+        subject: `New Reply on Ticket #${ticket[0].ticketNumber}`,
+        html: ticketReplyEmail({
+          ticketNumber: ticket[0].ticketNumber,
+          subject: ticket[0].subject,
+          customerName: ticket[0].submittedBy,
+          replyMessage: validatedData.message,
+          staffName: validatedData.authorName,
+        }),
       });
+
+      if (!emailResult.success) {
+        console.error(
+          "Failed to send reply notification email:",
+          emailResult.error,
+        );
+        // Don't fail the request if email fails, just log it
+      }
     }
 
     return NextResponse.json(

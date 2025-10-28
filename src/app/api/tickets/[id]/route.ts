@@ -3,6 +3,8 @@ import { db } from "@/lib/db/connection";
 import { tickets, ticketReplies, ticketAttachments } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { sendEmail } from "@/lib/email";
+import { ticketStatusChangedEmail } from "@/lib/email/templates";
 
 // GET /api/tickets/[id] - Get single ticket with replies
 export async function GET(
@@ -65,7 +67,22 @@ export async function PUT(
     const ticketId = (await params).id;
     const body = await request.json();
 
+    // Get current ticket data before update
+    const currentTicket = await db
+      .select()
+      .from(tickets)
+      .where(eq(tickets.id, ticketId))
+      .limit(1);
+
+    if (currentTicket.length === 0) {
+      return NextResponse.json(
+        { success: false, error: "Ticket not found" },
+        { status: 404 },
+      );
+    }
+
     const updateData: any = {};
+    const oldStatus = currentTicket[0].status;
 
     if (body.status) updateData.status = body.status;
     if (body.priority) updateData.priority = body.priority;
@@ -81,6 +98,26 @@ export async function PUT(
     }
 
     await db.update(tickets).set(updateData).where(eq(tickets.id, ticketId));
+
+    // Send email notification if status changed
+    if (body.status && body.status !== oldStatus) {
+      const emailResult = await sendEmail({
+        to: currentTicket[0].email,
+        subject: `Ticket Status Updated - #${currentTicket[0].ticketNumber}`,
+        html: ticketStatusChangedEmail({
+          ticketNumber: currentTicket[0].ticketNumber,
+          subject: currentTicket[0].subject,
+          customerName: currentTicket[0].submittedBy,
+          oldStatus: oldStatus,
+          newStatus: body.status,
+        }),
+      });
+
+      if (!emailResult.success) {
+        console.error("Failed to send status change email:", emailResult.error);
+        // Don't fail the request if email fails, just log it
+      }
+    }
 
     return NextResponse.json({
       success: true,

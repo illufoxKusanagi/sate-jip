@@ -25,7 +25,9 @@
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "db:seed": "dotenv -e .env.local -- tsx scripts/seed-admins.ts"
+    "db:seed": "dotenv -e .env.local -- tsx scripts/seed-admins.ts",
+    "test:email": "dotenv -e .env.local -- tsx scripts/test-email.ts",
+    "test:resend": "dotenv -e .env.local -- tsx scripts/test-resend.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.19",
