@@ -12,39 +12,37 @@ echo "📊 Database type: $DB_TYPE"
 if [ "$SKIP_DB_WAIT" = "true" ]; then
   echo "⏭️  Skipping database connection wait (using managed database)"
 else
+  echo "🔍 Checking database availability..."
+
   if [ "$DB_TYPE" = "postgres" ]; then
     # Wait for PostgreSQL to be ready
+    # Use postgres as default host for Docker Compose
     DB_HOST=${DB_HOST:-postgres}
     DB_PORT=${DB_PORT:-5432}
+
     echo "⏳ Waiting for PostgreSQL at $DB_HOST:$DB_PORT..."
 
-    # Only wait if host is reachable (not for external managed DBs)
-    if nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null || [ "$DB_HOST" != "postgres" ]; then
-      until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
-        echo "PostgreSQL is unavailable - sleeping"
-        sleep 2
-      done
-      echo "✅ PostgreSQL is ready!"
-    else
-      echo "ℹ️  Using external PostgreSQL (skipping wait)"
-    fi
+    # Wait for the database to be ready
+    until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
+      echo "PostgreSQL is unavailable - sleeping"
+      sleep 2
+    done
+    echo "✅ PostgreSQL is ready!"
 
   elif [ "$DB_TYPE" = "mysql" ]; then
     # Wait for MySQL to be ready
+    # Use mysql as default host for Docker Compose
     DB_HOST=${DB_HOST:-mysql}
     DB_PORT=${DB_PORT:-3306}
+
     echo "⏳ Waiting for MySQL at $DB_HOST:$DB_PORT..."
 
-    # Only wait if host is reachable (not for external managed DBs)
-    if nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null || [ "$DB_HOST" != "mysql" ]; then
-      until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
-        echo "MySQL is unavailable - sleeping"
-        sleep 2
-      done
-      echo "✅ MySQL is ready!"
-    else
-      echo "ℹ️  Using external MySQL (skipping wait)"
-    fi
+    # Wait for the database to be ready
+    until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
+      echo "MySQL is unavailable - sleeping"
+      sleep 2
+    done
+    echo "✅ MySQL is ready!"
 
   else
     echo "⚠️  Unknown DB_TYPE: $DB_TYPE"
@@ -54,15 +52,11 @@ fi
 
 # Run database migrations
 echo "🔄 Running database migrations..."
-if [ "$DB_TYPE" = "postgres" ]; then
-  npm run db:migrate:docker || echo "⚠️  Migration failed or already applied"
-elif [ "$DB_TYPE" = "mysql" ]; then
-  npm run db:migrate:docker || echo "⚠️  Migration failed or already applied"
-fi
+npm run db:migrate || echo "⚠️  Migration failed or already applied"
 
 # Seed database if needed (optional - comment out in production if not needed)
 # echo "🌱 Seeding database..."
-# npm run db:seed:docker || echo "⚠️  Seeding failed or already done"
+# npm run db:seed || echo "⚠️  Seeding failed or already done"
 
 echo "✅ Database setup complete!"
 
