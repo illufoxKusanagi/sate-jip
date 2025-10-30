@@ -14,9 +14,16 @@ const protectedRoutes = [
   "/server-management",
   "/server-data",
   "/data-central-dashboard",
+  "/tickets/help-desk",
+  "/tickets/help-desk/[id]",
 ];
 
-const adminOnlyRoutes = ["/server-management", "/server-data", "/data-config"];
+const adminOnlyRoutes = [
+  "/server-management",
+  "/server-data",
+  "/tickets/help-desk/[id]",
+];
+
 const publicRoutes = ["/login", "/dashboard", "/activity-calendar", "/"];
 const geolocationBypassRoutes = ["/access-denied", "/unauthorized"];
 
