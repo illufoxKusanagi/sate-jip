@@ -39,7 +39,6 @@ function LoginPageContent() {
   const redirect = searchParams.get("redirect");
 
   useEffect(() => {
-    // Show toast if user was redirected due to no authentication
     if (redirect) {
       toast.warning("Silakan login untuk mengakses halaman tersebut", {
         description: `Anda akan diarahkan ke ${redirect} setelah login`,
@@ -57,8 +56,6 @@ function LoginPageContent() {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      console.log("Sending login request with:", data);
-
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -68,7 +65,6 @@ function LoginPageContent() {
       });
 
       const result = await response.json();
-      console.log("Login response:", result);
 
       if (!response.ok) {
         form.setError("root", {
@@ -80,10 +76,9 @@ function LoginPageContent() {
 
       login(result.user.username, result.token, result.user.role);
       toast.success(
-        `Login berhasil, Okaerinasai, ${result.user.username}-san!`,
+        `Login berhasil, Okaerinasai, ${result.user.username}-san!`
       );
 
-      // Redirect to the page user was trying to access, or dashboard
       const redirectTo = redirect || "/dashboard";
       router.push(redirectTo);
     } catch (error) {

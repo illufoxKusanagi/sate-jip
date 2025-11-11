@@ -45,7 +45,6 @@ const DEFAULT_SETTINGS: CalendarSettings = {
   agendaModeGroupBy: "date",
 };
 
-// Migration function to handle old English view values
 const migrateViewValue = (view: string): TCalendarView => {
   const viewMigrationMap: Record<string, TCalendarView> = {
     day: "hari",
@@ -55,17 +54,14 @@ const migrateViewValue = (view: string): TCalendarView => {
     agenda: "agenda",
   };
 
-  // If it's already an Indonesian value or a valid view, return it
   if (["hari", "minggu", "bulan", "tahun", "agenda"].includes(view)) {
     return view as TCalendarView;
   }
 
-  // If it's an old English value, migrate it
   if (viewMigrationMap[view]) {
     return viewMigrationMap[view];
   }
 
-  // Fallback to default
   console.warn(`Unknown view value: ${view}, falling back to minggu`);
   return "minggu";
 };
@@ -89,13 +85,10 @@ export function CalendarProvider({
       ...DEFAULT_SETTINGS,
       badgeVariant: badge,
       view: view,
-    }
+    },
   );
 
-  // Migrate view value if it's an old English value
   const migratedView = migrateViewValue(settings.view);
-
-  // Update settings if migration occurred
   if (migratedView !== settings.view) {
     console.log(`Migrating view from ${settings.view} to ${migratedView}`);
     setSettings({
@@ -105,12 +98,12 @@ export function CalendarProvider({
   }
 
   const [badgeVariant, setBadgeVariantState] = useState<"dot" | "colored">(
-    settings.badgeVariant
+    settings.badgeVariant,
   );
   const [currentView, setCurrentViewState] =
     useState<TCalendarView>(migratedView);
   const [use24HourFormat, setUse24HourFormatState] = useState<boolean>(
-    settings.use24HourFormat
+    settings.use24HourFormat,
   );
   const [agendaModeGroupBy, setAgendaModeGroupByState] = useState<
     "date" | "color"
@@ -118,7 +111,7 @@ export function CalendarProvider({
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
-    "all"
+    "all",
   );
   const [selectedColors, setSelectedColors] = useState<TEventColor[]>([]);
 
@@ -155,7 +148,7 @@ export function CalendarProvider({
 
   const applyColorFilter = (
     eventsList: IEvent[],
-    colors: TEventColor[] = selectedColors
+    colors: TEventColor[] = selectedColors,
   ) => {
     if (colors.length === 0) return eventsList;
     return eventsList.filter((event) => colors.includes(event.color || "blue"));

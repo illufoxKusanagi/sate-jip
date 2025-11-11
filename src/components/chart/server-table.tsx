@@ -185,7 +185,6 @@ export function ServerTable({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleEdit = (server: ServerData) => {
-    // Close info dialog if open
     setIsInfoDialogOpen(false);
     setInfoServer(null);
 
@@ -194,7 +193,6 @@ export function ServerTable({
   };
 
   const handleViewInfo = (server: ServerData) => {
-    // Close edit dialog if open
     setIsEditDialogOpen(false);
     setEditingServer(null);
 
@@ -203,7 +201,6 @@ export function ServerTable({
   };
 
   const handleDelete = (server: ServerData) => {
-    // Close other dialogs if open
     setIsInfoDialogOpen(false);
     setInfoServer(null);
     setIsEditDialogOpen(false);
@@ -372,7 +369,7 @@ export function ServerTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -388,7 +385,6 @@ export function ServerTable({
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-muted/50 cursor-pointer"
                   onClick={(e) => {
-                    // Don't trigger row click if clicking on button or inside dropdown
                     const target = e.target as HTMLElement;
                     if (
                       target.closest("button") ||
@@ -405,7 +401,7 @@ export function ServerTable({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -493,7 +489,6 @@ export function ServerTable({
         </div>
       </div>
 
-      {/* Edit Dialog */}
       <ServerDialog
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
@@ -501,14 +496,12 @@ export function ServerTable({
         onSuccess={handleDialogSuccess}
       />
 
-      {/* Info Dialog */}
       <ServerInfoDialog
         isOpen={isInfoDialogOpen}
         onOpenChange={setIsInfoDialogOpen}
         server={infoServer}
       />
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}

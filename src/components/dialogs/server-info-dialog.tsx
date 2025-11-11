@@ -53,7 +53,6 @@ export function ServerInfoDialog({
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
-          {/* Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
@@ -102,7 +101,6 @@ export function ServerInfoDialog({
             </div>
           </div>
 
-          {/* Specifications */}
           {server.specifications &&
             Object.keys(server.specifications).length > 0 && (
               <div className="border-t border-border pt-4">
@@ -167,7 +165,6 @@ export function ServerInfoDialog({
               </div>
             )}
 
-          {/* Installed Apps */}
           {server.installedApps && server.installedApps.length > 0 && (
             <div className="border-t border-border pt-4">
               <p className="heading-3 mb-3">
@@ -183,7 +180,6 @@ export function ServerInfoDialog({
             </div>
           )}
 
-          {/* Notes */}
           {server.notes && (
             <div className="border-t border-border pt-4">
               <p className="heading-3 mb-2">Notes</p>

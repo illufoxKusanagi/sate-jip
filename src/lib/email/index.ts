@@ -20,17 +20,15 @@ interface EmailResult {
   error?: any;
 }
 
-// Check which email service to use
 const useResend = process.env.RESEND_API_KEY && !process.env.USE_SMTP;
-const useSmtp = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD;
+const useSmtp =
+  process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD;
 
-// Initialize Resend if available
 let resend: Resend | null = null;
 if (useResend) {
   resend = new Resend(process.env.RESEND_API_KEY);
 }
 
-// Initialize SMTP transporter if configured
 let transporter: nodemailer.Transporter | null = null;
 if (useSmtp) {
   transporter = nodemailer.createTransport({
@@ -53,13 +51,16 @@ export async function sendEmail({
   html,
   from,
 }: SendEmailParams): Promise<EmailResult> {
-  const fromAddress = from || process.env.RESEND_FROM || process.env.SMTP_FROM || "noreply@example.com";
+  const fromAddress =
+    from ||
+    process.env.RESEND_FROM ||
+    process.env.SMTP_FROM ||
+    "noreply@example.com";
 
-  // Try Resend first (if configured and not explicitly using SMTP)
   if (resend && !process.env.USE_SMTP) {
     try {
       console.log(`📧 Sending via Resend to: ${to}`);
-      
+
       const { data, error } = await resend.emails.send({
         from: fromAddress,
         to: Array.isArray(to) ? to : [to],
@@ -80,11 +81,10 @@ export async function sendEmail({
     }
   }
 
-  // Fallback to SMTP (Gmail, etc.)
   if (transporter) {
     try {
       console.log(`📧 Sending via SMTP to: ${to}`);
-      
+
       const info = await transporter.sendMail({
         from: fromAddress,
         to: Array.isArray(to) ? to.join(", ") : to,
@@ -100,8 +100,9 @@ export async function sendEmail({
     }
   }
 
-  // No email service configured
-  console.error("❌ No email service configured! Set either RESEND_API_KEY or SMTP credentials.");
+  console.error(
+    "❌ No email service configured! Set either RESEND_API_KEY or SMTP credentials.",
+  );
   return {
     success: false,
     error: "No email service configured",
@@ -136,7 +137,6 @@ export async function testEmailConnection(): Promise<boolean> {
   }
 
   if (service === "resend") {
-    // Resend doesn't have a verify method, so we'll just check if it's configured
     console.log("✅ Resend is configured");
     return true;
   }

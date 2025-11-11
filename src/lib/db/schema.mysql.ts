@@ -272,7 +272,6 @@ export const ticketAttachmentsRelations = relations(
   }),
 );
 
-// Export types
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
 export type Admin = typeof admins.$inferSelect;

@@ -1,7 +1,18 @@
-import db from "@/lib/db/connection";
+import { db } from "@/lib/db/connection";
 import { serverData } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, not } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import {
+  successResponse,
+  errorResponse,
+  notFoundResponse,
+} from "@/lib/api/response";
+import {
+  handleApiError,
+  safeParseJson,
+  validateSchema,
+} from "@/lib/api/errors";
+import { updateServerSchema } from "@/lib/validations/server";
 
 export async function PUT(
   request: NextRequest,
@@ -10,42 +21,80 @@ export async function PUT(
   try {
     const { id } = await params;
     if (!id) {
-      return NextResponse.json(
-        { error: "Missing id parameter" },
-        { status: 400 }
-      );
+      return errorResponse("Missing id parameter", 400);
     }
 
-    const data = await request.json();
-    const updatedServerData = {
-      rackName: data.rackName,
-      unitPosition: data.unitPosition,
-      unitSize: data.unitSize,
-      serverName: data.serverName,
-      brand: data.brand,
-      assetNumber: data.assetNumber,
-      serialNumber: data.serialNumber,
-      ipAddress: data.ipAddress,
-      status: data.status,
-      specification: data.specification,
-      installedApps: data.installedApps,
-      notes: data.notes,
-    };
+    // Check if server exists
+    const existingServer = await db
+      .select()
+      .from(serverData)
+      .where(eq(serverData.id, id))
+      .limit(1);
 
-    await db
-      .update(serverData)
-      .set(updatedServerData)
-      .where(eq(serverData.id, id));
+    if (existingServer.length === 0) {
+      return notFoundResponse("Server");
+    }
 
-    return NextResponse.json({
-      message: "Server data updated successfully",
-    });
+    // Parse and validate request body
+    const body = await safeParseJson(request);
+    const validatedData = validateSchema(updateServerSchema, body);
+
+    // Check for duplicate position if rack/unit changed
+    if (validatedData.rackName || validatedData.unitPosition) {
+      const rackName = validatedData.rackName || existingServer[0].rackName;
+      const unitPosition =
+        validatedData.unitPosition || existingServer[0].unitPosition;
+
+      const duplicate = await db
+        .select()
+        .from(serverData)
+        .where(
+          and(
+            eq(serverData.rackName, rackName),
+            eq(serverData.unitPosition, unitPosition),
+            not(eq(serverData.id, id))
+          )
+        )
+        .limit(1);
+
+      if (duplicate.length > 0) {
+        return errorResponse(
+          `Unit position ${unitPosition} in ${rackName} is already occupied by ${duplicate[0].serverName}`,
+          409
+        );
+      }
+    }
+
+    // Check for duplicate asset number if changed
+    if (
+      validatedData.assetNumber &&
+      validatedData.assetNumber !== existingServer[0].assetNumber
+    ) {
+      const duplicateAsset = await db
+        .select()
+        .from(serverData)
+        .where(
+          and(
+            eq(serverData.assetNumber, validatedData.assetNumber),
+            not(eq(serverData.id, id))
+          )
+        )
+        .limit(1);
+
+      if (duplicateAsset.length > 0) {
+        return errorResponse(
+          `Asset number ${validatedData.assetNumber} is already in use`,
+          409
+        );
+      }
+    }
+
+    // Update server
+    await db.update(serverData).set(validatedData).where(eq(serverData.id, id));
+
+    return successResponse(null, "Server data updated successfully");
   } catch (error) {
-    console.error("Error updating config:", error);
-    return NextResponse.json(
-      { error: "Failed to update configuration" },
-      { status: 500 }
-    );
+    return handleApiError(error, "PUT /api/server-data/[id]");
   }
 }
 
@@ -55,16 +104,23 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+
+    // Check if server exists
+    const existingServer = await db
+      .select()
+      .from(serverData)
+      .where(eq(serverData.id, id))
+      .limit(1);
+
+    if (existingServer.length === 0) {
+      return notFoundResponse("Server");
+    }
+
+    // Delete server
     await db.delete(serverData).where(eq(serverData.id, id));
 
-    return NextResponse.json({
-      message: "Configuration deleted successfully",
-    });
+    return successResponse(null, "Server deleted successfully");
   } catch (error) {
-    console.error("Error deleting config:", error);
-    return NextResponse.json(
-      { error: "Failed to delete configuration" },
-      { status: 500 }
-    );
+    return handleApiError(error, "DELETE /api/server-data/[id]");
   }
 }

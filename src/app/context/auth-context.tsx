@@ -14,7 +14,7 @@ interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
   login: (username: string, token: string, role: string) => void;
-  logout: () => Promise<void>; // Updated to return Promise
+  logout: () => Promise<void>;
   isLoading: boolean;
   isAdmin: () => boolean;
   isUser: () => boolean;
@@ -32,16 +32,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = localStorage.getItem("auth-token");
     const userData = localStorage.getItem("authUser");
 
-    // console.log("AuthProvider useEffect - Token:", token ? "exists" : "none");
-    // console.log(
-    //   "AuthProvider useEffect - UserData:",
-    //   userData ? "exists" : "none"
-    // );
-
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
-        console.log("AuthProvider useEffect - Parsed user:", parsedUser);
         setUser(parsedUser);
       } catch (error) {
         console.error("Error parsing user data:", error);
@@ -53,7 +46,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (username: string, token: string, role: string) => {
-    console.log("AuthProvider login - Username:", username, "Token:", token);
     const userData = { id: "1", username, role };
 
     localStorage.setItem("auth-token", token);
@@ -62,16 +54,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    console.log("AuthProvider logout");
-
-    // Call logout API to clear httpOnly cookie
     try {
       await fetch("/api/logout", { method: "POST" });
     } catch (error) {
       console.error("Error calling logout API:", error);
     }
 
-    // Clear localStorage
     localStorage.removeItem("auth-token");
     localStorage.removeItem("authUser");
     setUser(null);
@@ -84,13 +72,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const hasRole = (role: string) => user?.role === role;
 
   const isAuthenticated = !!user;
-
-  console.log(
-    "AuthProvider render - isAuthenticated:",
-    isAuthenticated,
-    "user:",
-    user
-  );
 
   return (
     <AuthContext.Provider

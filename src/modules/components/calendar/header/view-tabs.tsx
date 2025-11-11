@@ -14,11 +14,6 @@ const tabs = [
     value: "agenda",
     icon: () => <CalendarRange className="h-4 w-4" />,
   },
-  // {
-  //   name: "Hari",
-  //   value: "hari",
-  //   icon: () => <Grid2X2 className="h-4 w-4" />,
-  // },
   {
     name: "Minggu",
     value: "minggu",
@@ -55,7 +50,7 @@ function Views() {
               layout
               className={cn(
                 "flex h-8 items-center justify-center overflow-hidden rounded-md",
-                isActive ? "flex-1" : "flex-none"
+                isActive ? "flex-1" : "flex-none",
               )}
               onClick={() => setView(value as TCalendarView)}
               initial={false}

@@ -81,15 +81,11 @@ export async function DELETE(
       );
     }
 
-    console.log("Attempting to delete event with ID:", id);
-
     const existingEvent = await db
       .select()
       .from(eventCalendar)
       .where(eq(eventCalendar.id, id))
       .limit(1);
-
-    console.log("Existing event found:", existingEvent);
 
     if (existingEvent.length === 0) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -98,8 +94,6 @@ export async function DELETE(
     const deleteResult = await db
       .delete(eventCalendar)
       .where(eq(eventCalendar.id, id));
-
-    console.log("Delete executed, result:", deleteResult);
 
     return NextResponse.json({
       success: true,

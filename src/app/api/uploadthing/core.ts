@@ -9,11 +9,9 @@ export const ourFileRouter = {
     text: { maxFileSize: "2MB", maxFileCount: 5 },
   })
     .middleware(async ({ req }) => {
-      // Add authentication check here if needed
       return { userId: "user-id" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete:", file.url);
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;

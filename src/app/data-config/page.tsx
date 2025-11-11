@@ -167,7 +167,6 @@ export default function InputDataConfigPage() {
   const fetchAllData = async () => {
     try {
       setIsConfigLoading(true);
-      console.log("Fetching config data...");
       const response = await fetch("/api/configs");
 
       if (!response.ok) {
@@ -182,19 +181,12 @@ export default function InputDataConfigPage() {
             ? JSON.parse(item.dataConfig)
             : item.dataConfig,
       }));
-      console.log("Fetched config data:", allData);
 
       const opdConfigs = allData.filter((item) => item.dataType === "OPD");
       const ispConfigs = allData.filter((item) => item.dataType === "ISP");
 
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
-      console.log(
-        "OPD configs:",
-        opdConfigs.length,
-        "ISP configs:",
-        ispConfigs.length
-      );
     } catch (error) {
       console.error("Fetch error details:", error);
       toast.error(
@@ -242,8 +234,6 @@ export default function InputDataConfigPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log("Submitting form data:", formData);
-
       let payload: any;
       if (formData.dataType === "OPD") {
         payload = {
@@ -265,14 +255,10 @@ export default function InputDataConfigPage() {
         };
       }
 
-      console.log("Payload:", payload);
-
       const url = editingItem
         ? `/api/configs/${editingItem.id}`
         : "/api/configs";
       const method = editingItem ? "PUT" : "POST";
-
-      console.log(`Making ${method} request to ${url}`);
 
       const response = await fetch(url, {
         method,
@@ -289,7 +275,6 @@ export default function InputDataConfigPage() {
       }
 
       const result = await response.json();
-      console.log("Submit result:", result);
 
       await fetchAllData();
       resetFormData();
@@ -392,7 +377,6 @@ export default function InputDataConfigPage() {
         </TabsContent>
       </Tabs>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}

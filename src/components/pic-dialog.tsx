@@ -89,7 +89,6 @@ export function PicDialog({
       }
 
       const rawData = await response.json();
-      // Parse dataConfig JSON string to object
       const allData: ConfigData[] = rawData.map((item: any) => ({
         ...item,
         dataConfig:
@@ -141,8 +140,6 @@ export function PicDialog({
         opdName: values.opdName,
         whatsappNumber: values.whatsappNumber,
       };
-
-      console.log("Submitting admin data:", adminData);
 
       const url = editingItem ? `/api/admins/${editingItem.id}` : "/api/admins";
       const method = editingItem ? "PUT" : "POST";

@@ -4,7 +4,8 @@ import { ticketReplies, tickets } from "@/lib/db/schema";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { sendEmail, ticketReplyEmail } from "@/lib/utils/ticket-utils";
+import { sendEmail } from "@/lib/email";
+import { ticketReplyEmail } from "@/lib/email/templates";
 
 const replySchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -15,7 +16,6 @@ const replySchema = z.object({
   isInternal: z.boolean().default(false),
 });
 
-// POST /api/tickets/[id]/replies - Add reply
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -26,7 +26,6 @@ export async function POST(
 
     const validatedData = replySchema.parse(body);
 
-    // Check if ticket exists
     const ticket = await db
       .select()
       .from(tickets)
@@ -40,10 +39,7 @@ export async function POST(
       );
     }
 
-    // Get IP address
     const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
-
-    // Create reply
     const newReply = {
       id: nanoid(),
       ticketId,
@@ -58,7 +54,6 @@ export async function POST(
 
     await db.insert(ticketReplies).values(newReply);
 
-    // Update ticket status if needed
     if (validatedData.isStaffReply && ticket[0].status === "menunggu_jawaban") {
       await db
         .update(tickets)
@@ -66,7 +61,6 @@ export async function POST(
         .where(eq(tickets.id, ticketId));
     }
 
-    // Update firstResponseAt if this is first staff reply
     if (validatedData.isStaffReply && !ticket[0].firstResponseAt) {
       await db
         .update(tickets)
@@ -74,20 +68,25 @@ export async function POST(
         .where(eq(tickets.id, ticketId));
     }
 
-    // TODO: Send email notification
-    // After creating reply, add:
-    if (!validatedData.isInternal) {
-      await sendEmail({
+    if (!validatedData.isInternal && validatedData.isStaffReply) {
+      const emailResult = await sendEmail({
         to: ticket[0].email,
-        subject: `Re: Ticket #${ticket[0].ticketNumber} - ${ticket[0].subject}`,
-        html: ticketReplyEmail(
-          ticket[0].ticketNumber,
-          ticket[0].subject,
-          ticket[0].submittedBy,
-          validatedData.message,
-          validatedData.authorName,
-        ),
+        subject: `New Reply on Ticket #${ticket[0].ticketNumber}`,
+        html: ticketReplyEmail({
+          ticketNumber: ticket[0].ticketNumber,
+          subject: ticket[0].subject,
+          customerName: ticket[0].submittedBy,
+          replyMessage: validatedData.message,
+          staffName: validatedData.authorName,
+        }),
       });
+
+      if (!emailResult.success) {
+        console.error(
+          "Failed to send reply notification email:",
+          emailResult.error,
+        );
+      }
     }
 
     return NextResponse.json(

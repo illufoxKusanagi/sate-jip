@@ -1,7 +1,14 @@
-import db from "@/lib/db/connection";
+import { db } from "@/lib/db/connection";
 import { serverData } from "@/lib/db/schema";
-import { ServerData } from "@/lib/types";
 import { NextRequest, NextResponse } from "next/server";
+import { successResponse, errorResponse } from "@/lib/api/response";
+import {
+  handleApiError,
+  safeParseJson,
+  validateSchema,
+} from "@/lib/api/errors";
+import { serverSchema } from "@/lib/validations/server";
+import { and, eq } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -10,7 +17,6 @@ export async function GET() {
       .from(serverData)
       .orderBy(serverData.assetNumber);
 
-    // Convert installedApps from object to array if needed
     const parsedServerData = rawServerDatas.map(
       (server: typeof serverData.$inferSelect) => ({
         ...server,
@@ -20,42 +26,63 @@ export async function GET() {
               ? server.installedApps
               : Object.values(server.installedApps)
             : [],
-      }),
+      })
     );
 
-    return NextResponse.json({ success: true, data: parsedServerData });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch server datas" },
-      { status: 500 },
+    return successResponse(
+      parsedServerData,
+      undefined,
+      parsedServerData.length
     );
+  } catch (error) {
+    return handleApiError(error, "GET /api/server-data");
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json();
+    // Parse and validate request body
+    const body = await safeParseJson(request);
+    const validatedData = validateSchema(serverSchema, body);
 
-    const newServerData = {
-      rackName: data.rackName,
-      unitPosition: data.unitPosition,
-      unitSize: data.unitSize,
-      serverName: data.serverName,
-      brand: data.brand || "",
-      assetNumber: data.assetNumber,
-      serialNumber: data.serialNumber || "",
-      ipAddress: data.ipAddress || "",
-      status: data.status,
-      specification: data.specification || null,
-      installedApps: data.installedApps || [],
-      notes: data.notes || "",
-    };
-    const result = await db.insert(serverData).values(newServerData);
-    return NextResponse.json({ success: true, result });
+    // Check for duplicate server in same rack/unit position
+    const existingServer = await db
+      .select()
+      .from(serverData)
+      .where(
+        and(
+          eq(serverData.rackName, validatedData.rackName),
+          eq(serverData.unitPosition, validatedData.unitPosition)
+        )
+      )
+      .limit(1);
+
+    if (existingServer.length > 0) {
+      return errorResponse(
+        `Unit position ${validatedData.unitPosition} in ${validatedData.rackName} is already occupied by ${existingServer[0].serverName}`,
+        409 // Conflict
+      );
+    }
+
+    // Check for duplicate asset number
+    const existingAsset = await db
+      .select()
+      .from(serverData)
+      .where(eq(serverData.assetNumber, validatedData.assetNumber))
+      .limit(1);
+
+    if (existingAsset.length > 0) {
+      return errorResponse(
+        `Asset number ${validatedData.assetNumber} is already in use`,
+        409 // Conflict
+      );
+    }
+
+    // Insert new server
+    const result = await db.insert(serverData).values(validatedData);
+
+    return successResponse(result, "Server added successfully");
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to add server data" },
-      { status: 500 },
-    );
+    return handleApiError(error, "POST /api/server-data");
   }
 }

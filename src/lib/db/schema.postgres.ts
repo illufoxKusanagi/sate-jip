@@ -13,7 +13,6 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-// ===== DEFINE ALL ENUMS FIRST =====
 export const opdTypeEnum = pgEnum("opd_type", [
   "OPD Utama",
   "OPD Pendukung",
@@ -58,7 +57,6 @@ export const ticketStatusEnum = pgEnum("ticket_status", [
   "ditutup",
 ]);
 
-// ===== TABLES =====
 export const locations = pgTable("locations", {
   id: varchar("id", { length: 50 })
     .primaryKey()
@@ -74,7 +72,9 @@ export const locations = pgTable("locations", {
   ispName: varchar("isp_name", { length: 100 }).notNull(),
   internetSpeed: varchar("internet_speed", { length: 50 }).notNull(),
   internetRatio: varchar("internet_ratio", { length: 50 }).notNull(),
-  internetInfrastructure: internetInfrastructureEnum("internet_infrastructure").notNull(),
+  internetInfrastructure: internetInfrastructureEnum(
+    "internet_infrastructure",
+  ).notNull(),
   jip: jipEnum("jip").default("unchecked").notNull(),
 
   dropPoint: varchar("drop_point", { length: 100 }),
@@ -251,7 +251,6 @@ export const ticketAttachments = pgTable("ticket_attachments", {
   uploadedAt: timestamp("uploaded_at").defaultNow().notNull(),
 });
 
-// ===== RELATIONS =====
 export const ticketCategoriesRelations = relations(
   ticketCategories,
   ({ many }) => ({
@@ -293,7 +292,6 @@ export const ticketAttachmentsRelations = relations(
   }),
 );
 
-// ===== EXPORT TYPES =====
 export type Location = typeof locations.$inferSelect;
 export type NewLocation = typeof locations.$inferInsert;
 export type Admin = typeof admins.$inferSelect;

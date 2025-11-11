@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PageStructure } from "@/components/layout/page-structure";
 import { TicketsTable, Ticket } from "@/components/chart/tickets-table";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Plus, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function HelpDeskPage() {
+  const router = useRouter();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,8 +36,7 @@ export default function HelpDeskPage() {
   }, []);
 
   const handleRowClick = (ticket: Ticket) => {
-    // Navigate to ticket detail page
-    window.location.href = `/help-desk/${ticket.id}`;
+    router.push(`/tickets/help-desk/${ticket.id}`);
   };
 
   return (
@@ -57,7 +58,7 @@ export default function HelpDeskPage() {
               <RefreshCcw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            <Button onClick={() => (window.location.href = "/tickets")}>
+            <Button onClick={() => router.push("/tickets")}>
               <Plus className="h-4 w-4 mr-2" />
               New Ticket
             </Button>
@@ -69,9 +70,7 @@ export default function HelpDeskPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         ) : (
-          <TicketsTable
-          // data={tickets} onRowClick={handleRowClick}
-          />
+          <TicketsTable data={tickets} onRowClick={handleRowClick} />
         )}
       </div>
     </PageStructure>
