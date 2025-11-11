@@ -140,7 +140,6 @@ export default function ConfigTable({
         )}
       </div>
 
-      {/* Responsive table container */}
       <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
@@ -156,7 +155,7 @@ export default function ConfigTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -178,7 +177,7 @@ export default function ConfigTable({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -198,7 +197,6 @@ export default function ConfigTable({
         </Table>
       </div>
 
-      {/* Responsive pagination */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           <div className="flex items-center justify-between sm:justify-start gap-2">

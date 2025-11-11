@@ -56,7 +56,7 @@ export default function TicketDetailPage() {
           <p className="text-muted-foreground mb-4">
             The ticket you're looking for doesn't exist.
           </p>
-          <Button onClick={() => router.push("/help-desk")}>
+          <Button onClick={() => router.push("/tickets/help-desk")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Tickets
           </Button>
@@ -68,7 +68,10 @@ export default function TicketDetailPage() {
   return (
     <PageStructure>
       <div className="space-y-4">
-        <Button variant="ghost" onClick={() => router.push("/help-desk")}>
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/tickets/help-desk")}
+        >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Tickets
         </Button>

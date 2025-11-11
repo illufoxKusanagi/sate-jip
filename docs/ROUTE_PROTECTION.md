@@ -152,8 +152,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar variant="floating" collapsible="icon">
-      {/* ... header ... */}
-      
+
       <SidebarContent>
         <SidebarGroup>
           <Collapsible defaultOpen>
@@ -266,11 +265,11 @@ const tikItems = [
 // src/app/admins/page.tsx
 export default function AdminsPage() {
   const { isAdmin } = useAuth();
-  
+
   if (!isAdmin()) {
     redirect('/dashboard');
   }
-  
+
   return <AdminContent />;
 }
 ```
@@ -304,17 +303,17 @@ interface AuthContextType {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   // ... existing code ...
-  
+
   const isAdmin = () => user?.role === 'admin';
-  
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
+    <AuthContext.Provider value={{
+      user,
+      isAuthenticated,
       isAdmin,  // ⬅️ Add this
-      login, 
-      logout, 
-      isLoading 
+      login,
+      logout,
+      isLoading
     }}>
       {children}
     </AuthContext.Provider>

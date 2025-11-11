@@ -801,7 +801,6 @@ export const locationData = [
     eCat: "Internet Mix Wifi/10 lokasi",
     status: "active",
   },
-  // ...existing code...
   {
     activationDate: "2024-01-15",
     locationName: "Alun-Alun Caruban 1",
@@ -1122,7 +1121,6 @@ export const locationData = [
     eCat: "",
     status: "active",
   },
-  // ...existing code...
   {
     activationDate: "2024-01-15",
     locationName: "Dinas Kb Jiwan",
@@ -1364,7 +1362,6 @@ export const locationData = [
     eCat: "Internet Mix OPD/30 lokasi",
     status: "active",
   },
-  // ...existing code...
   {
     activationDate: "2024-01-15",
     locationName: "Dinas Tenaga Kerja",

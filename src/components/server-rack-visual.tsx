@@ -15,7 +15,6 @@ export function ServerRackVisual({
   servers,
   onUnitClick,
 }: ServerRackVisualProps) {
-  // Create a map of occupied units
   const occupiedUnits = new Map<number, ServerData>();
   const unitStatus = new Map<
     number,
@@ -24,11 +23,8 @@ export function ServerRackVisual({
 
   servers.forEach((server) => {
     if (server.rackName === rackName) {
-      // Mark the main unit
       occupiedUnits.set(server.unitPosition, server);
       unitStatus.set(server.unitPosition, { server, isMaster: true });
-
-      // Mark additional units if server occupies more than 1U
       for (let i = 1; i < server.unitSize; i++) {
         const occupiedUnit = server.unitPosition - i;
         if (occupiedUnit > 0) {
@@ -68,9 +64,9 @@ export function ServerRackVisual({
           isOccupied
             ? cn(
                 getStatusColor(server?.status || ""),
-                "border-l-4 text-foreground font-medium"
+                "border-l-4 text-foreground font-medium",
               )
-            : "bg-card hover:bg-muted/50 text-muted-foreground"
+            : "bg-card hover:bg-muted/50 text-muted-foreground",
         )}
         onClick={() => onUnitClick?.(u, server)}
       >
@@ -84,7 +80,6 @@ export function ServerRackVisual({
           </div>
         )}
 
-        {/* Tooltip */}
         {isOccupied && server && (
           <div className="absolute left-full ml-2 top-0 bg-popover border border-border rounded-md shadow-lg p-3 min-w-[280px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none">
             <h4 className="heading-4 mb-2 border-b border-border pb-2">
@@ -126,7 +121,7 @@ export function ServerRackVisual({
                     server.status === "maintenance" &&
                       "bg-yellow-500/20 text-yellow-700 dark:text-yellow-400",
                     server.status === "standby" &&
-                      "bg-blue-500/20 text-blue-700 dark:text-blue-400"
+                      "bg-blue-500/20 text-blue-700 dark:text-blue-400",
                   )}
                 >
                   {server.status}
@@ -135,7 +130,7 @@ export function ServerRackVisual({
             </div>
           </div>
         )}
-      </div>
+      </div>,
     );
   }
 

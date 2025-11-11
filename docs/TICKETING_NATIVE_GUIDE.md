@@ -187,16 +187,16 @@ export const ticketCategories = mysqlTable("ticket_categories", {
 export const tickets = mysqlTable("tickets", {
   id: varchar("id", { length: 50 }).primaryKey(),
   ticketNumber: varchar("ticket_number", { length: 20 }).notNull().unique(),
-  
+
   // Content
   subject: varchar("subject", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  
+
   // Submitter Information
   submittedBy: varchar("submitted_by", { length: 100 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 20 }),
-  
+
   // Classification
   categoryId: varchar("category_id", { length: 50 }),
   priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium"),
@@ -207,15 +207,15 @@ export const tickets = mysqlTable("tickets", {
     "resolved",
     "closed"
   ]).default("open"),
-  
+
   // Assignment
   assignedTo: varchar("assigned_to", { length: 50 }), // admin user ID
-  
+
   // Metadata
   source: varchar("source", { length: 50 }).default("web"), // web, email, api
   ipAddress: varchar("ip_address", { length: 45 }),
   userAgent: text("user_agent"),
-  
+
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
@@ -228,21 +228,21 @@ export const tickets = mysqlTable("tickets", {
 export const ticketReplies = mysqlTable("ticket_replies", {
   id: varchar("id", { length: 50 }).primaryKey(),
   ticketId: varchar("ticket_id", { length: 50 }).notNull(),
-  
+
   // Content
   message: text("message").notNull(),
   messageHtml: text("message_html"), // rich text HTML
-  
+
   // Author
   authorId: varchar("author_id", { length: 50 }).notNull(),
   authorName: varchar("author_name", { length: 100 }).notNull(),
   authorEmail: varchar("author_email", { length: 255 }).notNull(),
   isStaffReply: boolean("is_staff_reply").default(false),
-  
+
   // Metadata
   isInternal: boolean("is_internal").default(false), // internal notes vs customer-visible
   ipAddress: varchar("ip_address", { length: 45 }),
-  
+
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
@@ -252,14 +252,14 @@ export const ticketAttachments = mysqlTable("ticket_attachments", {
   id: varchar("id", { length: 50 }).primaryKey(),
   ticketId: varchar("ticket_id", { length: 50 }).notNull(),
   replyId: varchar("reply_id", { length: 50 }), // null if attached to main ticket
-  
+
   // File Info
   fileName: varchar("file_name", { length: 255 }).notNull(),
   originalName: varchar("original_name", { length: 255 }).notNull(),
   fileUrl: varchar("file_url", { length: 500 }).notNull(),
   fileSize: int("file_size").notNull(), // bytes
   mimeType: varchar("mime_type", { length: 100 }).notNull(),
-  
+
   // Upload Info
   uploadedBy: varchar("uploaded_by", { length: 50 }).notNull(),
   uploadedAt: timestamp("uploaded_at").defaultNow(),
@@ -363,9 +363,9 @@ const categories = [
 
 async function seed() {
   console.log("Seeding ticket categories...");
-  
+
   await db.insert(ticketCategories).values(categories);
-  
+
   console.log("✅ Categories seeded successfully!");
 }
 
@@ -410,13 +410,13 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search");
     const categoryId = searchParams.get("categoryId");
     const assignedTo = searchParams.get("assignedTo");
-    
+
     let query = db
       .select()
       .from(tickets)
       .leftJoin(ticketCategories, eq(tickets.categoryId, ticketCategories.id))
       .orderBy(desc(tickets.createdAt));
-    
+
     // Apply filters
     const conditions = [];
     if (status) conditions.push(eq(tickets.status, status as any));
@@ -431,13 +431,13 @@ export async function GET(request: NextRequest) {
         )
       );
     }
-    
+
     if (conditions.length > 0) {
       query = query.where(and(...conditions));
     }
-    
+
     const result = await query;
-    
+
     return NextResponse.json({
       success: true,
       data: result,
@@ -456,19 +456,19 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate input
     const validatedData = createTicketSchema.parse(body);
-    
+
     // Generate ticket number
     const ticketNumber = await generateTicketNumber();
-    
+
     // Get client IP and user agent
-    const ipAddress = request.headers.get("x-forwarded-for") || 
-                     request.headers.get("x-real-ip") || 
+    const ipAddress = request.headers.get("x-forwarded-for") ||
+                     request.headers.get("x-real-ip") ||
                      "unknown";
     const userAgent = request.headers.get("user-agent") || "unknown";
-    
+
     // Create ticket
     const newTicket = {
       id: nanoid(),
@@ -485,17 +485,17 @@ export async function POST(request: NextRequest) {
       ipAddress,
       userAgent,
     };
-    
+
     await db.insert(tickets).values(newTicket);
-    
+
     // TODO: Send email notification
-    
+
     return NextResponse.json({
       success: true,
       data: newTicket,
       message: "Ticket created successfully",
     }, { status: 201 });
-    
+
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -503,7 +503,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     console.error("Error creating ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create ticket" },
@@ -518,11 +518,11 @@ async function generateTicketNumber(): Promise<string> {
   const date = new Date();
   const year = date.getFullYear().toString().slice(-2);
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  
+
   // Get count of tickets created today
   const startOfDay = new Date(date.setHours(0, 0, 0, 0));
   const endOfDay = new Date(date.setHours(23, 59, 59, 999));
-  
+
   const todayTickets = await db
     .select()
     .from(tickets)
@@ -532,9 +532,9 @@ async function generateTicketNumber(): Promise<string> {
         lte(tickets.createdAt, endOfDay)
       )
     );
-  
+
   const sequence = (todayTickets.length + 1).toString().padStart(4, "0");
-  
+
   return `${prefix}-${year}${month}-${sequence}`;
 }
 ```
@@ -557,34 +557,34 @@ export async function GET(
 ) {
   try {
     const ticketId = params.id;
-    
+
     // Get ticket
     const ticket = await db
       .select()
       .from(tickets)
       .where(eq(tickets.id, ticketId))
       .limit(1);
-    
+
     if (ticket.length === 0) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
         { status: 404 }
       );
     }
-    
+
     // Get replies
     const replies = await db
       .select()
       .from(ticketReplies)
       .where(eq(ticketReplies.ticketId, ticketId))
       .orderBy(ticketReplies.createdAt);
-    
+
     // Get attachments
     const attachments = await db
       .select()
       .from(ticketAttachments)
       .where(eq(ticketAttachments.ticketId, ticketId));
-    
+
     return NextResponse.json({
       success: true,
       data: {
@@ -610,14 +610,14 @@ export async function PUT(
   try {
     const ticketId = params.id;
     const body = await request.json();
-    
+
     const updateData: any = {};
-    
+
     if (body.status) updateData.status = body.status;
     if (body.priority) updateData.priority = body.priority;
     if (body.assignedTo !== undefined) updateData.assignedTo = body.assignedTo;
     if (body.categoryId !== undefined) updateData.categoryId = body.categoryId;
-    
+
     // Handle status-specific timestamps
     if (body.status === "resolved" && !updateData.resolvedAt) {
       updateData.resolvedAt = new Date();
@@ -625,12 +625,12 @@ export async function PUT(
     if (body.status === "closed" && !updateData.closedAt) {
       updateData.closedAt = new Date();
     }
-    
+
     await db
       .update(tickets)
       .set(updateData)
       .where(eq(tickets.id, ticketId));
-    
+
     return NextResponse.json({
       success: true,
       message: "Ticket updated successfully",
@@ -651,16 +651,16 @@ export async function DELETE(
 ) {
   try {
     const ticketId = params.id;
-    
+
     // Delete replies first (foreign key)
     await db.delete(ticketReplies).where(eq(ticketReplies.ticketId, ticketId));
-    
+
     // Delete attachments
     await db.delete(ticketAttachments).where(eq(ticketAttachments.ticketId, ticketId));
-    
+
     // Delete ticket
     await db.delete(tickets).where(eq(tickets.id, ticketId));
-    
+
     return NextResponse.json({
       success: true,
       message: "Ticket deleted successfully",
@@ -704,26 +704,26 @@ export async function POST(
   try {
     const ticketId = params.id;
     const body = await request.json();
-    
+
     const validatedData = replySchema.parse(body);
-    
+
     // Check if ticket exists
     const ticket = await db
       .select()
       .from(tickets)
       .where(eq(tickets.id, ticketId))
       .limit(1);
-    
+
     if (ticket.length === 0) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
         { status: 404 }
       );
     }
-    
+
     // Get IP address
     const ipAddress = request.headers.get("x-forwarded-for") || "unknown";
-    
+
     // Create reply
     const newReply = {
       id: nanoid(),
@@ -736,9 +736,9 @@ export async function POST(
       isInternal: validatedData.isInternal,
       ipAddress,
     };
-    
+
     await db.insert(ticketReplies).values(newReply);
-    
+
     // Update ticket status if needed
     if (validatedData.isStaffReply && ticket[0].status === "waiting_response") {
       await db
@@ -746,7 +746,7 @@ export async function POST(
         .set({ status: "in_progress" })
         .where(eq(tickets.id, ticketId));
     }
-    
+
     // Update firstResponseAt if this is first staff reply
     if (validatedData.isStaffReply && !ticket[0].firstResponseAt) {
       await db
@@ -754,15 +754,15 @@ export async function POST(
         .set({ firstResponseAt: new Date() })
         .where(eq(tickets.id, ticketId));
     }
-    
+
     // TODO: Send email notification
-    
+
     return NextResponse.json({
       success: true,
       data: newReply,
       message: "Reply added successfully",
     }, { status: 201 });
-    
+
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -770,7 +770,7 @@ export async function POST(
         { status: 400 }
       );
     }
-    
+
     console.error("Error adding reply:", error);
     return NextResponse.json(
       { success: false, error: "Failed to add reply" },
@@ -898,13 +898,13 @@ export function TicketForm() {
             Ticket Submitted Successfully!
           </h2>
           <p className="text-lg mb-4">
-            Your ticket number is: 
+            Your ticket number is:
             <span className="font-mono font-bold text-xl ml-2">
               {ticketNumber}
             </span>
           </p>
           <p className="text-muted-foreground mb-6">
-            We've sent a confirmation email to your address. 
+            We've sent a confirmation email to your address.
             You can track your ticket status using the ticket number above.
           </p>
           <Button onClick={() => setTicketNumber(null)}>
@@ -1029,9 +1029,9 @@ export function TicketForm() {
               <FormItem>
                 <FormLabel>Subject *</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="Brief description of your issue" 
-                    {...field} 
+                  <Input
+                    placeholder="Brief description of your issue"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -1272,7 +1272,6 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -1285,7 +1284,7 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
             className="pl-9"
           />
         </div>
-        
+
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filter by status" />
@@ -1314,7 +1313,6 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
         </Select>
       </div>
 
-      {/* Table */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -1365,7 +1363,6 @@ export function TicketsTable({ data, onRowClick }: TicketsTableProps) {
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
           Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
@@ -1424,7 +1421,7 @@ export default function HelpDeskPage() {
     try {
       const response = await fetch("/api/tickets");
       const result = await response.json();
-      
+
       if (result.success) {
         setTickets(result.data);
       } else {
@@ -1620,7 +1617,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
 
   return (
     <div className="space-y-6">
-      {/* Ticket Header */}
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
@@ -1677,7 +1673,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
         </CardContent>
       </Card>
 
-      {/* Update Ticket Status/Priority */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Update Ticket</CardTitle>
@@ -1717,7 +1712,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
         </CardContent>
       </Card>
 
-      {/* Replies */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
@@ -1770,7 +1764,6 @@ export function TicketDetail({ ticket, onUpdate }: TicketDetailProps) {
 
           <Separator />
 
-          {/* Reply Form */}
           <div className="space-y-3">
             <Textarea
               placeholder="Type your reply..."
@@ -1826,7 +1819,7 @@ export default function TicketDetailPage() {
   const params = useParams();
   const router = useRouter();
   const ticketId = params.id as string;
-  
+
   const [ticket, setTicket] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -1835,7 +1828,7 @@ export default function TicketDetailPage() {
     try {
       const response = await fetch(`/api/tickets/${ticketId}`);
       const result = await response.json();
-      
+
       if (result.success) {
         setTicket(result.data);
       } else {
@@ -1889,7 +1882,7 @@ export default function TicketDetailPage() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Tickets
         </Button>
-        
+
         <TicketDetail ticket={ticket} onUpdate={fetchTicket} />
       </div>
     </PageStructure>

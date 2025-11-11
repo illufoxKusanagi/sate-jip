@@ -1,8 +1,8 @@
-# SATE-JIP: Sistem Informasi Infrastruktur Regional
+# SATE-ITIK: Sistem Akses Terpadu Infrastruktur Jaringan TIK
 
 ## Gambaran Umum
 
-SATE-JIP (Sistem Aplikasi Terintegrasi - Jaringan Infrastruktur Pemerintah) adalah aplikasi berbasis web yang komprehensif yang dirancang untuk mengelola dan memantau data infrastruktur pemerintah Kabupaten Madiun. Sistem ini menyediakan manajemen terpusat untuk lokasi infrastruktur internet, personel administratif, dan penjadwalan kegiatan di seluruh kantor pemerintah (OPD).
+SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berbasis web yang komprehensif yang dirancang untuk mengelola dan memantau data infrastruktur pemerintah Kabupaten Madiun. Sistem ini menyediakan manajemen terpusat untuk lokasi infrastruktur internet, personel administratif, penjadwalan kegiatan, server datacenter, dan sistem helpdesk di seluruh kantor pemerintah (OPD).
 
 ## Fitur Utama
 
@@ -16,8 +16,29 @@ SATE-JIP (Sistem Aplikasi Terintegrasi - Jaringan Infrastruktur Pemerintah) adal
 ### Manajemen Administratif
 - Sistem informasi personel (PIC) untuk setiap kantor pemerintah
 - Manajemen kontak dengan integrasi WhatsApp
-- Kontrol akses berbasis peran untuk administrator
-- Autentikasi pengguna dan manajemen sesi
+- Kontrol akses berbasis peran (role-based access control)
+- Autentikasi pengguna dengan JWT (JSON Web Tokens)
+- Manajemen sesi yang aman dengan enkripsi password menggunakan bcrypt
+
+### Manajemen Server & Datacenter
+- **Visualisasi Rak Server**: Tampilan visual interaktif dari rak server (Rak A, B, C, D)
+- **Manajemen Unit Server**: Pelacakan posisi unit, ukuran, dan status setiap server
+- **Monitoring Status**: Pemantauan real-time status server (online, offline, maintenance, standby)
+- **Informasi Aset**: Pencatatan nomor aset, serial number, IP address, dan spesifikasi teknis
+- **Aplikasi Terinstal**: Dokumentasi aplikasi yang terinstal di setiap server
+- **Dual View**: Mode visualisasi rak dan tabel data untuk kemudahan manajemen
+
+### Sistem Helpdesk & Ticketing
+- **Pembuatan Tiket**: Form pengajuan tiket dukungan dari pengguna
+- **Kategori Tiket**: Klasifikasi tiket berdasarkan kategori yang dapat dikonfigurasi
+- **Prioritas Tiket**: Manajemen prioritas (rendah, sedang, tinggi, urgent)
+- **Status Tracking**: Pelacakan status tiket (terbuka, dalam progress, menunggu jawaban, selesai, ditutup)
+- **Sistem Balasan**: Thread komunikasi antara pengguna dan staff
+- **File Attachment**: Dukungan upload file untuk dokumentasi masalah
+- **Rich Text Editor**: Editor TipTap untuk format pesan yang lebih baik
+- **Email Notification**: Integrasi dengan Resend & Nodemailer untuk notifikasi email
+- **Assignment System**: Penugasan tiket ke staff tertentu
+- **Response Metrics**: Pelacakan waktu respon pertama dan waktu penyelesaian
 
 ### Kalender Aktivitas
 - Sistem kalender interaktif dengan berbagai mode tampilan (bulan, minggu, hari, tahun)
@@ -26,6 +47,7 @@ SATE-JIP (Sistem Aplikasi Terintegrasi - Jaringan Infrastruktur Pemerintah) adal
 - Penjadwalan ulang acara dengan drag-and-drop
 - Klasifikasi acara dengan kode warna
 - Kemampuan filter dan pencarian acara
+- Pengaturan format waktu 12/24 jam
 
 ### Visualisasi Data
 - Dashboard statistik dengan diagram lingkaran dan tabel
@@ -33,48 +55,62 @@ SATE-JIP (Sistem Aplikasi Terintegrasi - Jaringan Infrastruktur Pemerintah) adal
 - Statistik penyedia ISP
 - Distribusi jenis infrastruktur
 - Analisis kecepatan internet dan infrastruktur
+- Dashboard pusat data untuk monitoring menyeluruh
 
 ### Manajemen Konfigurasi
 - Konfigurasi OPD (Organisasi Perangkat Daerah)
 - Pengaturan penyedia ISP
-- Manajemen konfigurasi sistem
+- Manajemen kategori tiket
+- Konfigurasi sistem umum
 
 ## Stack Teknologi
 
 ### Frontend
-- **Framework**: Next.js 15.1.4 (React 19)
+- **Framework**: Next.js 15.5.3 (React 19.1)
 - **Komponen UI**: Radix UI, shadcn/ui
 - **Styling**: Tailwind CSS v4
-- **Animasi**: Framer Motion
+- **Animasi**: Framer Motion, Motion
 - **Peta**: Mapbox GL JS, React Map GL
-- **Form**: React Hook Form dengan validasi Zod
+- **Form**: React Hook Form dengan validasi Zod v4
 - **Tabel**: TanStack Table (React Table v8)
 - **Grafik**: Recharts
 - **Ikon**: Lucide React
+- **Kalender**: FullCalendar v6.1
+- **Rich Text Editor**: TipTap v3.8 dengan Extension Image & Link
+- **File Upload**: UploadThing
+- **Notifikasi**: Sonner (Toast notifications)
+- **Theming**: next-themes untuk dark/light mode
 
 ### Backend
-- **Runtime**: Node.js 18
-- **Database ORM**: Drizzle ORM
-- **Database**: MySQL
-- **API**: Next.js API Routes
+- **Runtime**: Node.js 20+
+- **Database ORM**: Drizzle ORM v0.44
+- **Database**: MySQL 8.0+ / PostgreSQL (Multi-database support)
+- **API**: Next.js API Routes dengan Vercel Functions
+- **Autentikasi**: JWT (JSON Web Tokens) dengan jose library
+- **Password Hashing**: bcryptjs
+- **Email Service**: Resend, Nodemailer
+- **ID Generation**: UUID v13, NanoID v5
 
 ### Alat Pengembangan
-- **Bahasa**: TypeScript
+- **Bahasa**: TypeScript 5
 - **Package Manager**: npm
 - **Linting**: ESLint
-- **Code Formatting**: Prettier (implisit melalui ESLint)
+- **Database Tools**: Drizzle Kit v0.31
+- **Script Runner**: tsx untuk TypeScript execution
+- **Environment Management**: dotenv-cli
 
 ### Deployment
 - **Containerization**: Docker dengan multi-stage builds
 - **Development**: Docker Compose dengan hot-reload
 - **Production**: Build standalone Next.js yang teroptimasi
+- **Multi-Database**: Support untuk MySQL dan PostgreSQL via Docker Compose
 
 ## Persyaratan Sistem
 
 ### Untuk Pengembangan
-- Node.js 18 atau lebih tinggi
+- Node.js 20 atau lebih tinggi
 - npm 9 atau lebih tinggi
-- MySQL 8.0 atau lebih tinggi
+- MySQL 8.0+ atau PostgreSQL 14+
 - Git
 
 ### Untuk Deployment Docker
@@ -88,7 +124,7 @@ SATE-JIP (Sistem Aplikasi Terintegrasi - Jaringan Infrastruktur Pemerintah) adal
 1. Clone repository:
 ```bash
 git clone https://github.com/diskominfo-madiunkab/sate-itik-diskominfo.git
-cd sate-jip
+cd sate-itik
 ```
 
 2. Install dependencies:
@@ -101,21 +137,49 @@ npm install
 cp .env.local.example .env.local
 ```
 
-Edit `.env.local` dengan kredensial database Anda:
+Edit `.env.local` dengan kredensial Anda:
 ```env
+# Database Configuration (MySQL)
+DB_TYPE=mysql
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=password_anda
-DB_NAME=sate_jip_db
+DB_PASSWORD=your_password
+DB_NAME=sate_itik_db
+
+# Atau untuk PostgreSQL
+# DB_TYPE=postgres
+# DATABASE_URL=postgresql://user:password@localhost:5432/sate_itik_db
+
+# JWT Secret (generate dengan: openssl rand -base64 32)
+JWT_SECRET=your_jwt_secret_key
+
+# Mapbox (opsional)
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_token
+
+# Email Service (opsional)
+RESEND_API_KEY=your_resend_api_key
+
+# UploadThing (opsional)
+UPLOADTHING_SECRET=your_uploadthing_secret
+UPLOADTHING_APP_ID=your_uploadthing_app_id
 ```
 
 4. Jalankan migrasi database:
 ```bash
+# Untuk MySQL
 npm run db:push
+
+# Untuk PostgreSQL
+DB_TYPE=postgres npm run db:push
 ```
 
-5. Jalankan development server:
+5. Seed data admin awal (opsional):
+```bash
+npm run db:seed
+```
+
+6. Jalankan development server:
 ```bash
 npm run dev
 ```
@@ -126,21 +190,34 @@ Aplikasi akan tersedia di `http://localhost:3000`.
 
 #### Mode Development
 
-1. Jalankan container development:
+1. Jalankan dengan MySQL:
 ```bash
-docker compose -f docker-compose.dev.yml up
+npm run docker:up:mysql
+```
+
+Atau dengan PostgreSQL:
+```bash
+npm run docker:up:postgres
 ```
 
 Mode ini mencakup:
 - Fungsi hot-reload
 - Source code di-mount sebagai volume
 - Port 3000 diekspos
+- Database service terintegrasi
+
+2. Lihat logs:
+```bash
+npm run docker:logs:mysql
+# atau
+npm run docker:logs:postgres
+```
 
 #### Mode Production
 
 1. Build dan jalankan container production:
 ```bash
-docker compose up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 Mode ini mencakup:
@@ -148,15 +225,11 @@ Mode ini mencakup:
 - Server Next.js standalone
 - Konfigurasi production-ready
 - Non-root user untuk keamanan
+- Health checks
 
-2. Lihat logs:
+2. Hentikan container:
 ```bash
-docker compose logs -f
-```
-
-3. Hentikan container:
-```bash
-docker compose down
+npm run docker:down
 ```
 
 ## Panduan Pengguna
@@ -165,9 +238,10 @@ docker compose down
 
 1. Navigasi ke `/login`
 2. Masukkan kredensial admin:
-   - Username: `admin`
-   - Password: `password`
-3. Klik "Login" untuk mengakses dashboard
+   - Username: sesuai data seed
+   - Password: sesuai data seed
+3. Sistem akan menggunakan JWT untuk manajemen sesi
+4. Token disimpan secara aman di localStorage
 
 ### Navigasi Dashboard
 
@@ -175,27 +249,72 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
 
 - **Tampilan Peta**: Visualisasi Mapbox interaktif dari semua lokasi infrastruktur
 - **Tabel Lokasi**: Tabel komprehensif dari semua lokasi terdaftar dengan filter dan sorting
-- **Tabel Admin**: Manajemen informasi personel dan kontak
+- **Tabel Admin/PIC**: Manajemen informasi personel dan kontak
 - **Statistik**: Analitik visual dari distribusi infrastruktur
 
-### Mengelola Lokasi
+### Manajemen Lokasi
 
-1. Navigasi ke dashboard
+1. Navigasi ke `/locations` atau dashboard
 2. Gunakan peta untuk melihat pin lokasi
-3. Klik pada pin mana pun untuk melihat informasi terperinci
+3. Klik pada pin untuk melihat informasi terperinci
 4. Gunakan tabel lokasi untuk:
    - Mencari lokasi tertentu
    - Filter berdasarkan berbagai kriteria
    - Sorting berdasarkan kolom
-   - Ekspor data
+   - Edit atau hapus data (untuk admin)
 
-### Kalender Aktivitas
+### Manajemen Server (`/server-management`)
 
-Akses kalender di `/activityCalendar`:
+1. **Visualisasi Rak**:
+   - Lihat tampilan visual dari 4 rak server (A, B, C, D)
+   - Setiap unit menampilkan status dengan kode warna
+   - Klik unit untuk melihat detail server
+
+2. **Menambah Server**:
+   - Klik tombol "Add Server"
+   - Isi informasi: nama server, posisi unit, ukuran, rak, brand
+   - Tambahkan nomor aset, serial number, IP address
+   - Pilih status (online, offline, maintenance, standby)
+   - Input spesifikasi teknis (JSON format)
+   - Daftar aplikasi terinstal
+
+3. **Data Table View**:
+   - Lihat semua server dalam format tabel
+   - Filter dan sort data
+   - Edit atau hapus server
+
+### Sistem Helpdesk (`/tickets`)
+
+1. **Mengajukan Tiket**:
+   - Navigasi ke `/tickets`
+   - Isi form tiket:
+     - Subject (judul masalah)
+     - Kategori (pilih dari daftar)
+     - Prioritas (rendah, sedang, tinggi, urgent)
+     - Deskripsi detail
+     - Email dan nomor telepon
+     - Upload file pendukung (opsional)
+
+2. **Manajemen Tiket** (`/tickets/help-desk`):
+   - Lihat semua tiket yang masuk
+   - Filter berdasarkan status, prioritas, kategori
+   - Assign tiket ke staff
+   - Update status tiket
+   - Balas tiket dengan rich text editor
+   - Upload file attachment dalam balasan
+
+3. **Status Tiket**:
+   - **Terbuka**: Tiket baru yang belum ditangani
+   - **Dalam Progress**: Sedang dikerjakan
+   - **Menunggu Jawaban**: Menunggu respon dari pengguna
+   - **Selesai**: Masalah telah diselesaikan
+   - **Ditutup**: Tiket ditutup secara permanen
+
+### Kalender Aktivitas (`/activity-calendar`)
 
 1. **Melihat Acara**:
    - Beralih antara tampilan Bulan, Minggu, Hari, dan Tahun
-   - Klik pada acara mana pun untuk melihat detail
+   - Klik pada acara untuk melihat detail
    - Gunakan navigator tanggal untuk berpindah antar periode
 
 2. **Membuat Acara**:
@@ -217,17 +336,19 @@ Akses kalender di `/activityCalendar`:
 
 4. **Drag and Drop**:
    - Drag acara untuk menjadwal ulang
-   - Dialog konfirmasi muncul (jika diaktifkan di pengaturan)
+   - Dialog konfirmasi muncul (jika diaktifkan)
    - Konfirmasi atau batalkan perubahan
 
-5. **Pengaturan Kalender**:
-   - Toggle format 12/24 jam
-   - Aktifkan/nonaktifkan konfirmasi drag
-   - Ubah gaya badge acara (dot/standard)
+### Manajemen Admin/PIC (`/admins`)
 
-### Manajemen Konfigurasi
+1. Navigasi ke halaman Admin
+2. Lihat daftar seluruh PIC (Penanggung Jawab)
+3. Tambah PIC baru (untuk admin):
+   - Klik "Tambahkan PIC"
+   - Isi nama, NIP, jabatan, instansi, nomor WhatsApp
+4. Edit atau hapus data PIC yang ada
 
-Akses konfigurasi di `/dataConfig`:
+### Konfigurasi Data (`/data-config`)
 
 1. **Konfigurasi OPD**:
    - Tambahkan kantor pemerintah baru
@@ -238,6 +359,11 @@ Akses konfigurasi di `/dataConfig`:
    - Tambahkan penyedia layanan internet
    - Update informasi penyedia
 
+3. **Kategori Tiket**:
+   - Buat kategori tiket baru
+   - Atur warna dan ikon kategori
+   - Aktifkan/nonaktifkan kategori
+
 ## Panduan Developer
 
 ### Struktur Proyek
@@ -245,23 +371,48 @@ Akses konfigurasi di `/dataConfig`:
 ```
 src/
 ├── app/                          # Direktori aplikasi Next.js
-│   ├── activityCalendar/        # Halaman kalender
+│   ├── access-denied/           # Halaman akses ditolak
+│   ├── activity-calendar/       # Halaman kalender
+│   ├── admins/                  # Halaman manajemen PIC
 │   ├── api/                     # Route API
+│   │   ├── admins/             # Endpoint manajemen admin
+│   │   ├── configs/            # Endpoint konfigurasi
 │   │   ├── event/              # Endpoint manajemen event
-│   │   └── statistics/         # Endpoint statistik
+│   │   ├── locations/          # Endpoint lokasi
+│   │   ├── login/              # Endpoint autentikasi
+│   │   ├── logout/             # Endpoint logout
+│   │   ├── server-data/        # Endpoint data server
+│   │   ├── statistics/         # Endpoint statistik
+│   │   ├── tickets/            # Endpoint tiket helpdesk
+│   │   └── uploadthing/        # Endpoint upload file
 │   ├── context/                # Context React
+│   │   ├── auth-context.tsx   # Context autentikasi
+│   │   └── map-context.tsx    # Context peta
 │   ├── dashboard/              # Halaman dashboard
-│   ├── dataConfig/             # Halaman konfigurasi
-│   └── login/                  # Halaman autentikasi
+│   ├── data-central-dashboard/ # Dashboard pusat data
+│   ├── data-config/            # Halaman konfigurasi
+│   ├── locations/              # Halaman lokasi
+│   ├── login/                  # Halaman autentikasi
+│   ├── server-management/      # Halaman manajemen server
+│   ├── tickets/                # Halaman tiket helpdesk
+│   │   └── help-desk/         # Dashboard admin tiket
+│   └── unauthorized/           # Halaman unauthorized
 ├── components/                  # Komponen bersama
-│   ├── chart/                  # Komponen chart
+│   ├── chart/                  # Komponen chart & tabel
+│   ├── dialogs/                # Dialog components
+│   ├── forms/                  # Form components
+│   ├── layout/                 # Layout components
 │   ├── map/                    # Komponen map
 │   ├── sidebar/                # Sidebar navigasi
-│   └── ui/                     # Primitif UI
+│   └── ui/                     # Primitif UI (shadcn)
 ├── lib/                        # Utilitas dan konfigurasi
 │   ├── data/                   # Data statis dan mock data
 │   ├── db/                     # Konfigurasi database
+│   │   ├── schema.mysql.ts    # Schema MySQL
+│   │   ├── schema.postgres.ts # Schema PostgreSQL
+│   │   └── connection.ts      # Database connection
 │   ├── mapbox/                 # Utilitas Mapbox
+│   ├── types/                  # TypeScript types
 │   └── utils/                  # Fungsi helper
 └── modules/                    # Modul fitur
     └── components/
@@ -270,22 +421,92 @@ src/
 
 ### Skema Database
 
-Aplikasi menggunakan Drizzle ORM dengan MySQL. Tabel utama:
+Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel utama:
 
-**eventCalendar**
-- `id`: Primary key auto-increment
-- `title`: Judul event (wajib)
-- `description`: Deskripsi event (opsional)
-- `opdName`: Nama OPD terkait (wajib)
-- `startDate`: Timestamp mulai event (wajib)
-- `endDate`: Timestamp selesai event (wajib)
-- `color`: Warna kategori event (wajib)
-- `createdAt`: Timestamp pembuatan record
-- `updatedAt`: Timestamp update record
+**locations** - Lokasi infrastruktur
+- `id`: Primary key (UUID)
+- `locationName`: Nama lokasi
+- `latitude`, `longitude`: Koordinat geografis
+- `opdPengampu`: OPD pengelola
+- `ispName`: Nama ISP
+- `internetSpeed`, `internetRatio`: Spesifikasi internet
+- `status`: Status lokasi (active, inactive, maintenance)
 
-Lihat `src/lib/db/schema.ts` untuk definisi skema lengkap.
+**admins** - Data PIC/Admin
+- `id`: Primary key (UUID)
+- `nama`, `nip`, `jabatan`: Informasi personel
+- `instansi`: Instansi tempat bekerja
+- `whatsapp`: Nomor kontak
+
+**users** - Pengguna sistem
+- `id`: Primary key (UUID)
+- `username`: Username (unique)
+- `password`: Password terenkripsi (bcrypt)
+- `role`: Peran (admin, user)
+
+**eventCalendar** - Event/Kegiatan
+- `id`: Primary key (UUID)
+- `title`, `description`: Informasi event
+- `startDate`, `endDate`: Waktu event
+- `opdName`: OPD penyelenggara
+- `color`: Warna kategori
+
+**serverData** - Data Server
+- `id`: Primary key (UUID)
+- `serverName`: Nama server
+- `unitPosition`, `unitSize`: Posisi di rak
+- `rackName`: Nama rak (A, B, C, D)
+- `assetNumber`, `serialNumber`: Nomor identifikasi
+- `ipAddress`: IP Address
+- `status`: Status (online, offline, maintenance, standby)
+- `specification`: Spesifikasi teknis (JSON)
+- `installedApps`: Aplikasi terinstal (JSON array)
+
+**tickets** - Tiket Helpdesk
+- `id`: Primary key (NanoID)
+- `ticketNumber`: Nomor tiket (unique)
+- `subject`, `description`: Isi tiket
+- `submittedBy`, `email`, `phone`: Info pelapor
+- `categoryId`: Kategori tiket (foreign key)
+- `priority`: Prioritas (rendah, sedang, tinggi, urgent)
+- `status`: Status tiket
+- `assignedTo`: Staff yang ditugaskan
+- `firstResponseAt`, `resolvedAt`, `closedAt`: Metrics
+
+**ticketCategories** - Kategori Tiket
+- `id`: Primary key (NanoID)
+- `name`, `description`: Informasi kategori
+- `color`, `icon`: Tampilan visual
+- `sortOrder`: Urutan tampilan
+- `isActive`: Status aktif
+
+**ticketReplies** - Balasan Tiket
+- `id`: Primary key (NanoID)
+- `ticketId`: ID tiket (foreign key)
+- `message`, `messageHtml`: Isi balasan
+- `authorId`, `authorName`, `authorEmail`: Info penulis
+- `isStaffReply`: Balasan dari staff atau user
+- `isInternal`: Catatan internal
+
+**ticketAttachments** - File Attachment
+- `id`: Primary key (NanoID)
+- `ticketId`, `replyId`: Relasi
+- `fileName`, `fileUrl`: Informasi file
+- `fileSize`, `mimeType`: Metadata
+
+Lihat `src/lib/db/schema.mysql.ts` atau `src/lib/db/schema.postgres.ts` untuk definisi lengkap.
 
 ### Endpoint API
+
+#### Autentikasi
+
+**POST /api/login**
+- Body: `{ username: string, password: string }`
+- Returns: JWT token dan user data
+
+**POST /api/logout**
+- Membersihkan sesi pengguna
+- Returns: Status sukses
 
 #### Manajemen Event
 
@@ -295,98 +516,210 @@ Lihat `src/lib/db/schema.ts` untuk definisi skema lengkap.
 
 **POST /api/event**
 - Membuat event baru
-- Body: Data event sesuai eventSchema
+- Body: Data event sesuai schema
 - Returns: Objek event yang dibuat
 
 **GET /api/event/[id]**
 - Mengambil satu event
-- Params: Event ID
 - Returns: Objek event
 
 **PUT /api/event/[id]**
 - Update event
-- Params: Event ID
-- Body: Data event yang diupdate
 - Returns: Objek event yang diupdate
 
 **DELETE /api/event/[id]**
 - Hapus event
-- Params: Event ID
 - Returns: Status sukses
 
-Lihat `src/app/api/event/route.ts` untuk detail implementasi.
+#### Manajemen Server
+
+**GET /api/server-data**
+- Mengambil semua data server
+- Returns: Array objek server
+
+**POST /api/server-data**
+- Menambah server baru
+- Body: Data server
+- Returns: Server yang dibuat
+
+**PUT /api/server-data/[id]**
+- Update data server
+- Returns: Server yang diupdate
+
+**DELETE /api/server-data/[id]**
+- Hapus server
+- Returns: Status sukses
+
+#### Manajemen Tiket
+
+**GET /api/tickets**
+- Mengambil semua tiket
+- Query params: status, priority, category untuk filter
+- Returns: Array tiket
+
+**POST /api/tickets**
+- Membuat tiket baru
+- Body: Data tiket
+- Returns: Tiket yang dibuat dengan nomor tiket otomatis
+
+**GET /api/tickets/[id]**
+- Mengambil detail tiket dengan replies dan attachments
+- Returns: Objek tiket lengkap
+
+**PUT /api/tickets/[id]**
+- Update tiket (status, assignment, dll)
+- Returns: Tiket yang diupdate
+
+**DELETE /api/tickets/[id]**
+- Hapus tiket
+- Returns: Status sukses
+
+**POST /api/tickets/[id]/reply**
+- Menambahkan balasan ke tiket
+- Body: Message, author info
+- Returns: Reply yang dibuat
+
+### Autentikasi & Autorisasi
+
+Sistem menggunakan JWT (JSON Web Tokens) untuk autentikasi:
+
+1. **Login**: User mengirim credentials → server validasi → generate JWT
+2. **Token Storage**: Token disimpan di localStorage client
+3. **Request**: Setiap API request menyertakan token di header
+4. **Verification**: Server verify token sebelum proses request
+5. **Role Check**: Middleware memeriksa role untuk akses tertentu
+
+Implementasi di `src/app/context/auth-context.tsx` dan middleware di API routes.
+
+### Multi-Database Support
+
+Aplikasi mendukung MySQL dan PostgreSQL:
+
+1. Set `DB_TYPE` di environment variable:
+   - `DB_TYPE=mysql` untuk MySQL
+   - `DB_TYPE=postgres` untuk PostgreSQL
+
+2. Database credentials:
+   - MySQL: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+   - PostgreSQL: `DATABASE_URL`
+
+3. Schema files:
+   - MySQL: `src/lib/db/schema.mysql.ts`
+   - PostgreSQL: `src/lib/db/schema.postgres.ts`
+
+4. Generate migrations:
+```bash
+npm run db:generate:mysql
+# atau
+npm run db:generate:postgres
+```
 
 ### Menambahkan Fitur Baru
 
 #### Menambahkan Halaman Baru
 
-1. Buat file halaman di `src/app/halaman-anda/page.tsx`:
+1. Buat file halaman di `src/app/halaman-baru/page.tsx`:
 ```typescript
 "use client";
 
+import { PageStructure } from "@/components/layout/page-structure";
+
 export default function HalamanBaru() {
-  return <div>Konten Halaman Baru</div>;
+  return (
+    <PageStructure>
+      <div className="flex flex-col gap-6">
+        <h1 className="heading-1">Halaman Baru</h1>
+      </div>
+    </PageStructure>
+  );
 }
 ```
 
-2. Tambahkan route ke sidebar di `src/components/sidebar/app-sidebar.tsx`:
+2. Tambahkan route ke sidebar di `src/components/sidebar/app-sidebar.tsx`
+
+#### Menambahkan Tabel Database
+
+1. Tambahkan definisi tabel di schema:
 ```typescript
-{
-  title: "Fitur Baru",
-  url: "/fitur-baru",
-  icon: Icon,
-}
+// src/lib/db/schema.mysql.ts atau schema.postgres.ts
+export const tableBaru = mysqlTable("table_baru", {
+  id: varchar("id", { length: 50 })
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  // ... kolom lainnya
+  createdAt: timestamp("created_at").defaultNow(),
+});
 ```
 
-#### Menambahkan Route API Baru
+2. Generate migration:
+```bash
+npm run db:generate
+```
 
-1. Buat file route di `src/app/api/route-anda/route.ts`:
+3. Push ke database:
+```bash
+npm run db:push
+```
+
+#### Menambahkan API Endpoint
+
+1. Buat file route di `src/app/api/endpoint-baru/route.ts`:
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db/connection";
+import { tableBaru } from "@/lib/db/schema";
 
 export async function GET(request: NextRequest) {
-  // Implementasi
-  return NextResponse.json({ data: [] });
+  try {
+    const data = await db.select().from(tableBaru);
+    return NextResponse.json({ success: true, data });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
 ```
 
-2. Implementasikan request handler dengan validasi yang tepat menggunakan Zod
-3. Gunakan Drizzle ORM untuk operasi database
-
-#### Membuat Komponen Baru
-
-1. Buat file komponen di direktori yang sesuai:
-```typescript
-"use client"; // Jika menggunakan fitur client-side
-
-interface ComponentProps {
-  // Definisi props
-}
-
-export function KomponenBaru({ }: ComponentProps) {
-  return <div>Konten Komponen</div>;
-}
-```
-
-2. Export dari index jika membuat library komponen
+2. Implementasikan validasi menggunakan Zod
+3. Tambahkan autentikasi jika diperlukan
 
 ### Environment Variables
 
 Variabel yang diperlukan di `.env.local`:
 
 ```env
-# Konfigurasi Database
+# Database Configuration
+DB_TYPE=mysql
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=password_anda
-DB_NAME=sate_jip_db
+DB_PASSWORD=your_password
+DB_NAME=sate_itik_db
 
-# Mapbox (jika diperlukan)
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=token_anda
+# PostgreSQL Alternative
+# DB_TYPE=postgres
+# DATABASE_URL=postgresql://user:password@localhost:5432/sate_itik_db
+
+# JWT Secret
+JWT_SECRET=your_secret_key_minimum_32_chars
+
+# Mapbox
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_token
+
+# Email Services
+RESEND_API_KEY=your_resend_api_key
+
+# File Upload
+UPLOADTHING_SECRET=your_uploadthing_secret
+UPLOADTHING_APP_ID=your_uploadthing_app_id
+
+# Node Environment
+NODE_ENV=development
 ```
 
-### Migrasi Database
+### Database Management
 
 Menggunakan Drizzle Kit:
 
@@ -397,65 +730,93 @@ npm run db:generate
 # Push perubahan langsung ke database
 npm run db:push
 
-# Buka Drizzle Studio
+# Buka Drizzle Studio untuk GUI database
 npm run db:studio
+
+# Seed data admin
+npm run db:seed
+
+# Test email functionality
+npm run test:email
+npm run test:resend
 ```
 
-Lihat `drizzle.config.ts` untuk konfigurasi.
+### Docker Commands
+
+```bash
+# Development dengan MySQL
+npm run docker:up:mysql
+npm run docker:logs:mysql
+npm run docker:down:mysql
+
+# Development dengan PostgreSQL
+npm run docker:up:postgres
+npm run docker:logs:postgres
+npm run docker:down:postgres
+
+# Production
+docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml down
+```
 
 ### Panduan Gaya Kode
 
 - Gunakan TypeScript untuk semua kode baru
 - Ikuti pola komponen fungsional React
-- Gunakan directive `"use client"` untuk komponen client
-- Implementasikan error handling yang tepat dengan try-catch
+- Gunakan directive `"use client"` untuk komponen client-side
+- Implementasikan error handling dengan try-catch
 - Gunakan Zod untuk validasi skema
-- Ikuti konvensi penamaan yang ada
-- Tambahkan komentar JSDoc untuk fungsi yang kompleks
+- Ikuti konvensi penamaan yang ada:
+  - Components: PascalCase (`MyComponent.tsx`)
+  - Files: kebab-case (`my-file.ts`)
+  - Functions: camelCase (`myFunction`)
+- Tambahkan komentar JSDoc untuk fungsi kompleks
+- Gunakan TypeScript types/interfaces yang jelas
 
-### Checklist Testing
+### Testing Checklist
 
 Sebelum deployment:
 
-1. Test alur autentikasi
-2. Verifikasi semua operasi CRUD
-3. Cek fungsionalitas kalender di semua tampilan
-4. Validasi pengiriman form
-5. Test fitur drag-and-drop
-6. Verifikasi persistensi data
-7. Cek desain responsif
-8. Test Docker builds
+- [ ] Test alur autentikasi dan autorisasi
+- [ ] Verifikasi semua operasi CRUD
+- [ ] Test sistem tiket (buat, balas, update status)
+- [ ] Cek manajemen server (add, edit, delete, visualisasi)
+- [ ] Test fungsionalitas kalender di semua view
+- [ ] Validasi form submission dengan Zod
+- [ ] Test drag-and-drop features
+- [ ] Verifikasi persistensi data
+- [ ] Cek responsive design (mobile, tablet, desktop)
+- [ ] Test upload file dan email notifications
+- [ ] Verifikasi Docker builds (MySQL & PostgreSQL)
+- [ ] Test role-based access control
 
 ## Referensi API
 
-### API Event Kalender
+### API Tiket Helpdesk
 
-Semua endpoint event berada di `/api/event`.
-
-**Skema Event**:
+**Skema Tiket**:
 ```typescript
 {
-  title: string;          // Wajib, minimal 1 karakter
-  description?: string;   // Opsional
-  opdName: string;        // Wajib, minimal 1 karakter
-  startDate: string;      // Wajib, format ISO 8601
-  endDate: string;        // Wajib, format ISO 8601
-  color: "blue" | "green" | "red" | "yellow" | "purple" | "orange"; // Wajib
+  subject: string;              // Wajib
+  description: string;          // Wajib
+  submittedBy: string;         // Wajib
+  email: string;               // Wajib, format email
+  phone?: string;              // Opsional
+  categoryId: string;          // Wajib
+  priority: "rendah" | "sedang" | "tinggi" | "urgent";
 }
 ```
 
-**Format Response**:
+**Skema Balasan**:
 ```typescript
 {
-  id: number;
-  title: string;
-  description: string | null;
-  opdName: string;
-  startDate: string;
-  endDate: string;
-  color: string;
-  createdAt: string;
-  updatedAt: string;
+  ticketId: string;            // Wajib
+  message: string;             // Wajib
+  authorId: string;            // Wajib
+  authorName: string;          // Wajib
+  authorEmail: string;         // Wajib
+  isStaffReply: boolean;       // Default: false
+  isInternal?: boolean;        // Default: false
 }
 ```
 
@@ -463,80 +824,214 @@ Semua endpoint event berada di `/api/event`.
 
 ### Checklist Deployment Production
 
-1. Update environment variables untuk production
-2. Set kredensial database yang aman
-3. Konfigurasi host database production
-4. Build Docker image:
+1. **Environment Variables**:
+   - Set semua environment variables untuk production
+   - Generate JWT_SECRET yang kuat
+   - Konfigurasi database credentials
+   - Setup email service (Resend API key)
+   - Konfigurasi UploadThing untuk file upload
+
+2. **Database**:
+   - Backup database development
+   - Setup database production (MySQL/PostgreSQL)
+   - Jalankan migrations
+   - Seed data awal jika diperlukan
+
+3. **Docker Build**:
 ```bash
-docker compose build
+docker compose -f docker-compose.prod.yml build
 ```
 
-5. Jalankan services:
+4. **Jalankan Services**:
 ```bash
-docker compose up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
-6. Verifikasi deployment:
+5. **Verifikasi**:
 ```bash
-docker compose logs -f
+docker compose -f docker-compose.prod.yml logs -f
 ```
 
-7. Test semua fungsionalitas kritis
-8. Setup monitoring dan logging
+6. **Testing Production**:
+   - Test semua fungsionalitas kritis
+   - Verifikasi autentikasi dan autorisasi
+   - Test email notifications
+   - Cek file upload functionality
 
-### Konfigurasi Docker
+7. **Monitoring**:
+   - Setup logging
+   - Konfigurasi monitoring
+   - Setup backup otomatis database
 
-Konfigurasi production menggunakan:
-- Build multi-stage untuk optimasi
+### Konfigurasi Docker Production
+
+File `docker-compose.prod.yml` menggunakan:
+- Multi-stage builds untuk optimasi
+- Health checks untuk database dan app
 - Non-root user untuk keamanan
-- Output standalone Next.js
-- Port 3000 diekspos
+- Volume untuk persistensi data
+- Network isolation
+- Restart policy untuk high availability
 
-Lihat `Dockerfile` dan `docker-compose.yml` untuk detail.
+### Database Backup
+
+Backup MySQL:
+```bash
+docker exec mysql-container mysqldump -u root -p sate_itik_db > backup.sql
+```
+
+Backup PostgreSQL:
+```bash
+docker exec postgres-container pg_dump -U postgres sate_itik_db > backup.sql
+```
+
+Restore:
+```bash
+# MySQL
+docker exec -i mysql-container mysql -u root -p sate_itik_db < backup.sql
+
+# PostgreSQL
+docker exec -i postgres-container psql -U postgres sate_itik_db < backup.sql
+```
 
 ## Troubleshooting
 
 ### Masalah Umum
 
 **Koneksi Database Gagal**
-- Verifikasi kredensial database di `.env.local`
-- Cek service MySQL berjalan
-- Konfirmasi database ada dan dapat diakses
+- Verifikasi credentials di `.env.local`
+- Cek service database berjalan: `docker ps`
+- Periksa port tidak konflik
+- Verifikasi database exists dan accessible
+- Check logs: `npm run docker:logs:mysql` atau `npm run docker:logs:postgres`
+
+**JWT Token Invalid**
+- Pastikan JWT_SECRET sama di semua environment
+- Clear localStorage dan login ulang
+- Periksa token expiration settings
 
 **Docker Build Gagal**
-- Bersihkan cache Docker: `docker system prune -a`
+- Bersihkan cache: `docker system prune -a`
 - Rebuild tanpa cache: `docker compose build --no-cache`
-- Cek ketersediaan ruang disk
+- Cek ketersediaan ruang disk: `df -h`
+- Periksa Docker daemon status
 
-**Event Kalender Tidak Tersimpan**
-- Verifikasi endpoint API dapat diakses
-- Cek network tab untuk error response
-- Validasi data event terhadap skema
+**Upload File Gagal**
+- Verifikasi UploadThing credentials
+- Cek file size limits
+- Periksa network connectivity
+- Review browser console untuk error
+
+**Email Tidak Terkirim**
+- Verifikasi Resend API key valid
+- Cek email format valid
+- Review email service logs
+- Test dengan: `npm run test:resend`
+
+**Tiket Tidak Muncul**
+- Periksa database connection
+- Verifikasi API endpoint: `/api/tickets`
+- Check browser network tab untuk errors
+- Review server logs
+
+**Server Visualization Kosong**
+- Pastikan data server ada di database
+- Periksa endpoint `/api/server-data`
+- Verifikasi format data sesuai schema
 
 **Peta Tidak Ditampilkan**
-- Verifikasi token Mapbox valid
-- Cek browser console untuk error
+- Verifikasi Mapbox token valid
+- Cek browser console untuk errors
 - Pastikan koordinat geografis valid
+- Review network requests
+
+**Kalender Event Tidak Tersimpan**
+- Validasi data event terhadap schema
+- Cek endpoint `/api/event`
+- Review form validation errors
+- Periksa database constraints
+
+### Debug Mode
+
+Enable debug logging:
+```typescript
+// Di component
+console.log("Debug info:", data);
+
+// Di API route
+console.error("Error details:", error);
+```
+
+Check server logs:
+```bash
+# Docker
+docker compose logs -f app
+
+# Local development
+# Logs akan muncul di terminal
+```
+
+### Performance Issues
+
+**Slow Page Load**
+- Enable Next.js caching
+- Optimize images dengan Next Image
+- Lazy load components
+- Review database queries
+- Add indexes ke frequently queried columns
+
+**Large Bundle Size**
+- Analyze bundle: `npm run build`
+- Use dynamic imports
+- Remove unused dependencies
+- Optimize third-party libraries
 
 ### Mendapatkan Bantuan
 
-Untuk masalah yang tidak tercakup di sini:
-1. Cek dokumentasi yang ada di `CALENDAR_INTEGRATION_PLAN.md`
-2. Review `DOCKER_DEPLOYMENT.md` untuk masalah deployment
-3. Inspeksi browser console untuk error client-side
-4. Cek server logs untuk error API
+Untuk masalah yang tidak tercakup:
+1. Review dokumentasi di folder `/docs`
+2. Check existing issues di repository
+3. Inspeksi browser console untuk client-side errors
+4. Review server logs untuk API errors
+5. Gunakan Drizzle Studio untuk debug database: `npm run db:studio`
+
+## Fitur Mendatang
+
+Berdasarkan TODO dan roadmap pengembangan:
+- [ ] Enhanced ticket card view
+- [ ] Advanced filtering untuk ticket dashboard
+- [ ] Email template customization
+- [ ] Export data ke Excel/PDF
+- [ ] Advanced analytics dashboard
+- [ ] Mobile app companion
+- [ ] Real-time notifications dengan WebSocket
+- [ ] Multi-language support
 
 ## Kontribusi
 
 Ketika berkontribusi pada proyek ini:
 
 1. Fork repository
-2. Buat feature branch
+2. Buat feature branch: `git checkout -b feature/nama-fitur`
 3. Ikuti gaya kode dan konvensi yang ada
-4. Tulis commit message yang jelas
+4. Tulis commit message yang jelas dan deskriptif
 5. Test secara menyeluruh sebelum submit
 6. Update dokumentasi sesuai kebutuhan
 7. Submit pull request dengan deskripsi detail
+8. Pastikan semua tests pass
+9. Review feedback dan lakukan perbaikan
+
+### Commit Message Convention
+
+```
+feat: menambahkan fitur baru
+fix: memperbaiki bug
+docs: update dokumentasi
+style: formatting, missing semicolons, etc
+refactor: refactoring code
+test: menambahkan test
+chore: update dependencies, build config, etc
+```
 
 ## Lisensi
 
@@ -548,11 +1043,15 @@ Proyek ini adalah perangkat lunak proprietary yang dikembangkan untuk Dinas Komu
 
 **Informasi Proyek**
 
-Versi: 1.0.0 | Terakhir Diperbarui: 2025
+Versi: 2.0.0 | Terakhir Diperbarui: Januari 2025
 
 Dipelihara oleh: [Arief Satria](https://github.com/illufoxKusanagi)
 
 Organisasi: Dinas Komunikasi dan Informatika Kabupaten Madiun
+
+**Tech Stack**
+
+Next.js 15 • React 19 • TypeScript • Tailwind CSS v4 • Drizzle ORM • MySQL/PostgreSQL • Docker
 
 ---
 

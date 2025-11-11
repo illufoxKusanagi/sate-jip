@@ -95,7 +95,6 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       }
 
       const rawData = await response.json();
-      // Parse dataConfig JSON string to object
       const allData: ConfigData[] = rawData.map((item: any) => ({
         ...item,
         dataConfig:
@@ -167,7 +166,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
     } catch (error) {
       console.error("Error creating location:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create location"
+        error instanceof Error ? error.message : "Failed to create location",
       );
     } finally {
       setIsSubmitting(false);
@@ -178,7 +177,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
   useEffect(() => {
     if (selectedOpdName) {
       const selectedOpd = opdData.find(
-        (opd) => opd.dataConfig.name === selectedOpdName
+        (opd) => opd.dataConfig.name === selectedOpdName,
       );
       if (selectedOpd?.dataConfig.opdType) {
         form.setValue("opdType", selectedOpd.dataConfig.opdType);

@@ -113,7 +113,6 @@ export default function LandingPage() {
   return (
     <PageStructure>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
-        {/* Header */}
         <header className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
@@ -141,7 +140,6 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* Hero Section */}
         <motion.section
           className="pt-32 pb-20 px-4 sm:px-6 lg:px-8"
           initial="hidden"
@@ -196,7 +194,6 @@ export default function LandingPage() {
               </Button>
             </motion.div>
 
-            {/* Stats */}
             <motion.div
               className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto"
               variants={itemVariants}
@@ -223,7 +220,6 @@ export default function LandingPage() {
           </div>
         </motion.section>
 
-        {/* Features Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-slate-900/50">
           <div className="container mx-auto">
             <motion.div
@@ -276,7 +272,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Benefits Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="container mx-auto">
             <motion.div
@@ -331,7 +326,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-indigo-600">
           <motion.div
             className="container mx-auto text-center"
@@ -370,7 +364,6 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
-        {/* Footer */}
         <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-slate-900 dark:bg-slate-950">
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between">

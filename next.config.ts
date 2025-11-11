@@ -25,13 +25,9 @@ const nextConfig: NextConfig = {
     ];
   },
   crossOrigin: "anonymous",
-  /* config options here */
-  output: "standalone", // Enable standalone output for Docker deployment
-  // Production optimizations
-  compress: true, // Enable gzip compression
-  poweredByHeader: false, // Remove X-Powered-By header for security
-
-  // Image optimization
+  output: "standalone",
+  compress: true,
+  poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,

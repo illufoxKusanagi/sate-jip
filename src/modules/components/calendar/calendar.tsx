@@ -18,7 +18,7 @@ export function Calendar() {
       try {
         setIsLoading(true);
         const data = await getEvents();
-        console.log("Fetched events:", data); // Debug
+        console.log("Fetched events:", data);
         setEvents(data);
         setError(null);
       } catch (err) {

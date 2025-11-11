@@ -31,7 +31,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(20, "Please provide more details (min 20 characters)"),
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   submittedBy: z.string().min(2, "Name is required"),
   phone: z.string().optional(),
   categoryId: z.string().min(1, "Please select a category"),
@@ -64,7 +64,6 @@ export function TicketForm() {
     },
   });
 
-  // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -97,8 +96,9 @@ export function TicketForm() {
       }
 
       toast.success(
-        `Ticket #${result.data.ticketNumber} created successfully!`,
+        `Ticket #${result.data[0].ticketNumber} created successfully!`,
       );
+      console.log("The result is: ", result);
       setTicketNumber(result.data.ticketNumber);
       form.reset();
     } catch (error: unknown) {

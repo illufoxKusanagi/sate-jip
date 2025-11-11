@@ -193,12 +193,12 @@ export default function InputDataConfigPage() {
         "OPD configs:",
         opdConfigs.length,
         "ISP configs:",
-        ispConfigs.length
+        ispConfigs.length,
       );
     } catch (error) {
       console.error("Fetch error details:", error);
       toast.error(
-        "Failed to fetch configurations. Please check your connection."
+        "Failed to fetch configurations. Please check your connection.",
       );
     } finally {
       setIsConfigLoading(false);
@@ -284,7 +284,7 @@ export default function InputDataConfigPage() {
         const errorData = await response.text();
         console.error("Server response error:", response.status, errorData);
         throw new Error(
-          `HTTP Error! status: ${response.status} - ${errorData}`
+          `HTTP Error! status: ${response.status} - ${errorData}`,
         );
       }
 
@@ -296,14 +296,14 @@ export default function InputDataConfigPage() {
       toast.success(
         editingItem
           ? "Configuration updated successfully!"
-          : "Configuration created successfully!"
+          : "Configuration created successfully!",
       );
     } catch (error) {
       console.error("Submit error details:", error);
       toast.error(
         editingItem
           ? "Failed to update configuration. Please check your connection."
-          : "Failed to create configuration. Please check your connection."
+          : "Failed to create configuration. Please check your connection.",
       );
     }
   };
@@ -392,7 +392,6 @@ export default function InputDataConfigPage() {
         </TabsContent>
       </Tabs>
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
