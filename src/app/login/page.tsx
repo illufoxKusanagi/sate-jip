@@ -56,8 +56,6 @@ function LoginPageContent() {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      console.log("Sending login request with:", data);
-
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -67,7 +65,6 @@ function LoginPageContent() {
       });
 
       const result = await response.json();
-      console.log("Login response:", result);
 
       if (!response.ok) {
         form.setError("root", {
@@ -79,7 +76,7 @@ function LoginPageContent() {
 
       login(result.user.username, result.token, result.user.role);
       toast.success(
-        `Login berhasil, Okaerinasai, ${result.user.username}-san!`,
+        `Login berhasil, Okaerinasai, ${result.user.username}-san!`
       );
 
       const redirectTo = redirect || "/dashboard";

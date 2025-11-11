@@ -235,7 +235,6 @@ export function TicketsTable({
       }
 
       const result = await response.json();
-      console.log("📊 Fetched tickets:", result.data?.length || 0, "tickets");
       setData(Array.isArray(result.data) ? result.data : []);
     } catch (error) {
       console.error("Error fetching tickets:", error);
@@ -370,7 +369,7 @@ export function TicketsTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -393,7 +392,7 @@ export function TicketsTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

@@ -35,7 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
-        console.log("AuthProvider useEffect - Parsed user:", parsedUser);
         setUser(parsedUser);
       } catch (error) {
         console.error("Error parsing user data:", error);
@@ -47,7 +46,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (username: string, token: string, role: string) => {
-    console.log("AuthProvider login - Username:", username, "Token:", token);
     const userData = { id: "1", username, role };
 
     localStorage.setItem("auth-token", token);
@@ -56,8 +54,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    console.log("AuthProvider logout");
-
     try {
       await fetch("/api/logout", { method: "POST" });
     } catch (error) {
@@ -76,13 +72,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const hasRole = (role: string) => user?.role === role;
 
   const isAuthenticated = !!user;
-
-  console.log(
-    "AuthProvider render - isAuthenticated:",
-    isAuthenticated,
-    "user:",
-    user,
-  );
 
   return (
     <AuthContext.Provider

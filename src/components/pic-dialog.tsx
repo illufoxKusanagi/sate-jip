@@ -141,8 +141,6 @@ export function PicDialog({
         whatsappNumber: values.whatsappNumber,
       };
 
-      console.log("Submitting admin data:", adminData);
-
       const url = editingItem ? `/api/admins/${editingItem.id}` : "/api/admins";
       const method = editingItem ? "PUT" : "POST";
 
@@ -168,7 +166,7 @@ export function PicDialog({
       toast.success(
         editingItem
           ? "Admin updated successfully!"
-          : "Admin created successfully!",
+          : "Admin created successfully!"
       );
       form.reset();
       onOpenChange(false);
@@ -176,7 +174,7 @@ export function PicDialog({
     } catch (error) {
       console.error("Error saving admin:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to save admin",
+        error instanceof Error ? error.message : "Failed to save admin"
       );
     } finally {
       setIsSubmitting(false);
@@ -263,12 +261,12 @@ export function PicDialog({
                           role="combobox"
                           className={cn(
                             "w-full justify-between",
-                            !field.value && "text-muted-foreground",
+                            !field.value && "text-muted-foreground"
                           )}
                         >
                           {field.value
                             ? opdData.find(
-                                (opd) => opd.dataConfig.name === field.value,
+                                (opd) => opd.dataConfig.name === field.value
                               )?.dataConfig.name
                             : "Pilih OPD"}
                           <ChevronDown className="" />
@@ -294,7 +292,7 @@ export function PicDialog({
                                     "mr-2 h-4 w-4",
                                     opd.dataConfig.name === field.value
                                       ? "opacity-100"
-                                      : "opacity-0",
+                                      : "opacity-0"
                                   )}
                                 />
                                 {opd.dataConfig.name}
@@ -343,8 +341,8 @@ export function PicDialog({
                 {isSubmitting
                   ? "Saving..."
                   : editingItem
-                    ? "Update Admin"
-                    : "Add Admin"}
+                  ? "Update Admin"
+                  : "Add Admin"}
               </Button>
             </div>
           </form>

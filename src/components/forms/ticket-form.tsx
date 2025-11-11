@@ -96,9 +96,8 @@ export function TicketForm() {
       }
 
       toast.success(
-        `Ticket #${result.data[0].ticketNumber} created successfully!`,
+        `Ticket #${result.data[0].ticketNumber} created successfully!`
       );
-      console.log("The result is: ", result);
       setTicketNumber(result.data.ticketNumber);
       form.reset();
     } catch (error: unknown) {

@@ -138,8 +138,6 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
         eCat: values.eCat,
       };
 
-      console.log("Submitting data:", locationData);
-
       const response = await fetch("/api/locations", {
         method: "POST",
         headers: {
@@ -161,12 +159,11 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
 
       toast.success("Location created successfully!");
       form.reset();
-      console.log("Location created:", result);
       router.push("/dashboard");
     } catch (error) {
       console.error("Error creating location:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create location",
+        error instanceof Error ? error.message : "Failed to create location"
       );
     } finally {
       setIsSubmitting(false);
@@ -177,7 +174,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
   useEffect(() => {
     if (selectedOpdName) {
       const selectedOpd = opdData.find(
-        (opd) => opd.dataConfig.name === selectedOpdName,
+        (opd) => opd.dataConfig.name === selectedOpdName
       );
       if (selectedOpd?.dataConfig.opdType) {
         form.setValue("opdType", selectedOpd.dataConfig.opdType);
