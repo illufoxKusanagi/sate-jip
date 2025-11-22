@@ -1,6 +1,6 @@
 # Multi-stage build for production deployment
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM node:20.11.1-alpine3.19 AS deps
 WORKDIR /app
 
 # Install libc6-compat for compatibility
@@ -14,7 +14,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Stage 2: Builder
-FROM node:20-alpine AS builder
+FROM node:20.11.1-alpine3.19 AS builder
 WORKDIR /app
 
 # Copy dependencies from deps stage
@@ -40,12 +40,16 @@ ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 # but prevents Next.js from trying to evaluate them
 ARG DATABASE_URL=mysql://build:build@localhost:3306/build
 ARG DB_HOST=localhost
+ARG DB_PASSWORD=build_password
+ARG DB_NAME=build_db
 ARG RESEND_API_KEY=re_build
 ARG DB_TYPE=mysql
 
 # Set dummy environment variables for build only
 ENV DATABASE_URL=$DATABASE_URL
 ENV DB_HOST=$DB_HOST
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV DB_NAME=$DB_NAME
 ENV RESEND_API_KEY=$RESEND_API_KEY
 ENV DB_TYPE=$DB_TYPE
 
@@ -53,8 +57,8 @@ ENV DB_TYPE=$DB_TYPE
 # This generates the production build and the standalone output
 RUN npm run build
 
-# Stage 2: Production Runner Stage
-FROM node:18-alpine AS runner
+# Stage 3: Production Runner Stage
+FROM node:20.11.1-alpine3.19 AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -65,8 +69,8 @@ ENV SKIP_DB_WAIT=true
 RUN addgroup -g 1001 -S nextjs && \
     adduser -S -u 1001 -G nextjs nextjs
 
-# Install netcat for health checks in entrypoint
-RUN apk add --no-cache netcat-openbsd
+# Install netcat and wget for health checks
+RUN apk add --no-cache netcat-openbsd wget
 
 # Copy necessary files from builder
 # Copy the standalone server output
@@ -92,9 +96,13 @@ RUN chown -R nextjs:nextjs .
 # Switch to non-root user
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3006
 
-ENV PORT=3000
+ENV PORT=3006
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD wget --spider -q http://localhost:3006 || exit 1
 
 # Use entrypoint script instead of direct node command
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

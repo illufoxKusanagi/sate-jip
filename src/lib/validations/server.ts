@@ -5,7 +5,7 @@ import { z } from "zod";
  */
 export const serverSchema = z.object({
   rackName: z.enum(["Rak A", "Rak B", "Rak C", "Rak D"], {
-    errorMap: () => ({ message: "Invalid rack name" }),
+    message: "Invalid rack name",
   }),
   unitPosition: z
     .number()
@@ -32,11 +32,14 @@ export const serverSchema = z.object({
     .optional(),
   ipAddress: z
     .string()
-    .ip("Invalid IP address format")
+    .regex(
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+      "Invalid IP address format"
+    )
     .or(z.literal(""))
     .optional(),
   status: z.enum(["online", "offline", "maintenance", "standby"], {
-    errorMap: () => ({ message: "Invalid status" }),
+    message: "Invalid status",
   }),
   specification: z.string().nullable().optional(),
   installedApps: z.array(z.string()).default([]),

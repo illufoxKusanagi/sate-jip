@@ -24,7 +24,7 @@ export const locationSchema = z.object({
     .min(1, "OPD Pengampu is required")
     .max(255, "OPD Pengampu cannot exceed 255 characters"),
   opdType: z.enum(["OPD Utama", "OPD Pendukung", "Publik", "Non OPD"], {
-    errorMap: () => ({ message: "Invalid OPD type" }),
+    message: "Invalid OPD type",
   }),
   ispName: z
     .string()
@@ -39,10 +39,10 @@ export const locationSchema = z.object({
     .min(1, "Internet ratio is required")
     .max(50, "Internet ratio cannot exceed 50 characters"),
   internetInfrastructure: z.enum(["KABEL", "WIRELESS"], {
-    errorMap: () => ({ message: "Invalid infrastructure type" }),
+    message: "Invalid infrastructure type",
   }),
   jip: z.enum(["checked", "unchecked"], {
-    errorMap: () => ({ message: "Invalid JIP value" }),
+    message: "Invalid JIP value",
   }),
   dropPoint: z
     .string()
@@ -50,7 +50,7 @@ export const locationSchema = z.object({
     .optional(),
   eCat: z.string().max(255, "eCat cannot exceed 255 characters").optional(),
   status: z.enum(["active", "inactive", "maintenance"], {
-    errorMap: () => ({ message: "Invalid status" }),
+    message: "Invalid status",
   }),
 });
 

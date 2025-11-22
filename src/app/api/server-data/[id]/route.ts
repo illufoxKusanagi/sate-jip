@@ -13,11 +13,16 @@ import {
   validateSchema,
 } from "@/lib/api/errors";
 import { updateServerSchema } from "@/lib/validations/server";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { id } = await params;
     if (!id) {
@@ -102,6 +107,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { id } = await params;
 

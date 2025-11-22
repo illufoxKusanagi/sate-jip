@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db/connection";
 import { admins } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const data = await request.json();
     const { id } = await params;
@@ -38,6 +43,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { id } = await params;
 

@@ -37,8 +37,19 @@ if (isBuildMode) {
   const dbHost = process.env.DB_HOST || "localhost";
   const dbPort = parseInt(process.env.DB_PORT || "3306");
   const dbUser = process.env.DB_USER || "root";
-  const dbPassword = process.env.DB_PASSWORD || "12345678Haha";
-  const dbName = process.env.DB_NAME || "sate_jip_db";
+  const dbPassword = process.env.DB_PASSWORD;
+  const dbName = process.env.DB_NAME;
+
+  // Only validate credentials if not in build mode
+  if (!isBuildMode) {
+    if (!dbPassword) {
+      throw new Error("DB_PASSWORD environment variable is not set");
+    }
+    if (!dbName) {
+      throw new Error("DB_NAME environment variable is not set");
+    }
+  }
+
   if (dbHost && dbName && dbPassword) {
     try {
       const connection = mysql.createPool({
@@ -61,7 +72,9 @@ if (isBuildMode) {
       db = {} as any;
     }
   } else {
-    console.log("⚠️  MySQL configuration incomplete");
+    console.log(
+      "⚠️  MySQL configuration incomplete - missing required environment variables"
+    );
     db = {} as any;
   }
 }

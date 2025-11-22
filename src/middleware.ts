@@ -3,9 +3,12 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import { geolocation } from "@vercel/functions";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "your-secret-key",
-);
+const JWT_SECRET_STRING = process.env.JWT_SECRET;
+if (!JWT_SECRET_STRING || JWT_SECRET_STRING.length < 32) {
+  throw new Error("JWT_SECRET must be at least 32 characters long");
+}
+
+const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_STRING);
 
 const protectedRoutes = [
   "/admins",
@@ -50,7 +53,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route),
+    pathname.startsWith(route)
   );
 
   if (!isProtectedRoute) {
@@ -71,7 +74,7 @@ export async function middleware(request: NextRequest) {
       role: string;
     };
     const isAdminRoute = adminOnlyRoutes.some((route) =>
-      pathname.startsWith(route),
+      pathname.startsWith(route)
     );
 
     if (isAdminRoute && decoded.role !== "admin") {

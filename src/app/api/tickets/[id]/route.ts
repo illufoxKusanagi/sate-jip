@@ -5,11 +5,16 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { sendEmail } from "@/lib/email";
 import { ticketStatusChangedEmail } from "@/lib/email/templates";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const ticketId = (await params).id;
 
@@ -22,7 +27,7 @@ export async function GET(
     if (ticket.length === 0) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -49,15 +54,19 @@ export async function GET(
     console.error("Error fetching ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch ticket" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const ticketId = (await params).id;
     const body = await request.json();
@@ -71,7 +80,7 @@ export async function PUT(
     if (currentTicket.length === 0) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -118,15 +127,19 @@ export async function PUT(
     console.error("Error updating ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to update ticket" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const ticketId = (await params).id;
 
@@ -144,7 +157,7 @@ export async function DELETE(
     console.error("Error deleting ticket:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete ticket" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

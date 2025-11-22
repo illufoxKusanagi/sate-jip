@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { sendEmail } from "@/lib/email";
 import { ticketReplyEmail } from "@/lib/email/templates";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
 const replySchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -18,8 +19,12 @@ const replySchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const ticketId = (await params).id;
     const body = await request.json();
@@ -35,7 +40,7 @@ export async function POST(
     if (ticket.length === 0) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -84,7 +89,7 @@ export async function POST(
       if (!emailResult.success) {
         console.error(
           "Failed to send reply notification email:",
-          emailResult.error,
+          emailResult.error
         );
       }
     }
@@ -95,20 +100,20 @@ export async function POST(
         data: newReply,
         message: "Reply added successfully",
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, errors: error },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     console.error("Error adding reply:", error);
     return NextResponse.json(
       { success: false, error: "Failed to add reply" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

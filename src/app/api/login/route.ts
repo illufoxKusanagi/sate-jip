@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { users } from "@/lib/db/schema";
+import { rateLimit, getClientIdentifier } from "@/lib/ratelimit";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -13,6 +14,30 @@ const loginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting based on IP address
+    const identifier = getClientIdentifier(request);
+    const rateLimitResult = await rateLimit(`login:${identifier}`);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: "Too many login attempts. Please try again later.",
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(
+              Math.ceil((rateLimitResult.reset - Date.now()) / 1000)
+            ),
+            "X-RateLimit-Limit": String(rateLimitResult.limit),
+            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+            "X-RateLimit-Reset": String(rateLimitResult.reset),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
     const { username, password } = loginSchema.parse(body);
 
@@ -25,7 +50,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { error: "Invalid username or password" },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -33,7 +58,7 @@ export async function POST(request: NextRequest) {
     if (!isPasswordValid) {
       return NextResponse.json(
         { error: "Invalid username or password" },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -43,8 +68,8 @@ export async function POST(request: NextRequest) {
         username: user.username,
         role: user.role,
       },
-      process.env.JWT_SECRET || "your-secret-key",
-      { expiresIn: "7d" },
+      process.env.JWT_SECRET || "",
+      { expiresIn: "5h" }
     );
     const response = NextResponse.json({
       success: true,
@@ -75,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

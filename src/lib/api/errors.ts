@@ -62,10 +62,29 @@ export function handleApiError(error: unknown, context: string) {
 
   // Handle Zod validation errors
   if (error instanceof z.ZodError) {
-    const formattedErrors = error.errors.map((e) => ({
-      path: e.path,
-      message: e.message,
-    }));
+    // Use Zod's flattenError() method for better error formatting
+    const flattened = z.flattenError(error);
+    const formattedErrors = Object.entries(flattened.fieldErrors)
+      .filter(
+        (entry): entry is [string, string[]] =>
+          Array.isArray(entry[1]) && entry[1].length > 0
+      )
+      .map(([path, messages]) => ({
+        path: path.split("."),
+        message: messages[0],
+      }));
+
+    // Include form-level errors if any
+    if (
+      Array.isArray(flattened.formErrors) &&
+      flattened.formErrors.length > 0
+    ) {
+      formattedErrors.push({
+        path: [],
+        message: flattened.formErrors[0],
+      });
+    }
+
     return validationErrorResponse(formattedErrors);
   }
 
@@ -118,13 +137,29 @@ export function validateSchema<T>(schema: z.ZodSchema<T>, data: unknown): T {
     return schema.parse(data);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      throw new ValidationError(
-        "Validation failed",
-        error.errors.map((e) => ({
-          path: e.path,
-          message: e.message,
-        }))
-      );
+      const flattened = z.flattenError(error);
+      const formattedErrors = Object.entries(flattened.fieldErrors)
+        .filter(
+          (entry): entry is [string, string[]] =>
+            Array.isArray(entry[1]) && entry[1].length > 0
+        )
+        .map(([path, messages]) => ({
+          path: path.split("."),
+          message: messages[0],
+        }));
+
+      // Include form-level errors if any
+      if (
+        Array.isArray(flattened.formErrors) &&
+        flattened.formErrors.length > 0
+      ) {
+        formattedErrors.push({
+          path: [],
+          message: flattened.formErrors[0],
+        });
+      }
+
+      throw new ValidationError("Validation failed", formattedErrors);
     }
     throw error;
   }

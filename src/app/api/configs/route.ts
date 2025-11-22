@@ -1,8 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db/connection";
 import { dataConfig } from "@/lib/db/schema";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const configs = await db.select().from(dataConfig);
     return NextResponse.json(configs);
@@ -15,7 +20,11 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const { dataType, dataConfig: config } = body;

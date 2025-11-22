@@ -9,6 +9,7 @@ import {
 } from "@/lib/api/errors";
 import { serverSchema } from "@/lib/validations/server";
 import { and, eq } from "drizzle-orm";
+import { verifyApiToken } from "@/lib/auth/verify-api-token";
 
 export async function GET() {
   try {
@@ -40,6 +41,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const { authenticated, user } = await verifyApiToken(request);
+  if (!authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     // Parse and validate request body
     const body = await safeParseJson(request);
