@@ -221,7 +221,7 @@ export function PicDialog({
                   <FormLabel>NIP</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter 18-digit NIP (optional)"
+                      placeholder="Masukkan 18-digit NIP (opsional)"
                       {...field}
                     />
                   </FormControl>

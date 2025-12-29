@@ -111,23 +111,24 @@ export function TicketForm() {
 
   if (ticketNumber) {
     return (
-      <div className="flex flex-col max-w-2xl p-6 text-center justify-center content-center">
+      <div className="flex flex-col max-w-2xl p-6 text-center justify-center">
         <div className="rounded-lg border-2 border-green-500 bg-green-50 dark:bg-green-950 p-8">
           <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-4">
-            Ticket Submitted Successfully!
+            Tiket berhasil dikirim!
           </h2>
           <p className="text-lg mb-4">
-            Your ticket number is:
+            Nomor tiket Anda adalah:
             <span className="font-mono font-bold text-xl ml-2">
               {ticketNumber}
             </span>
           </p>
           <p className="text-muted-foreground mb-6">
-            We've sent a confirmation email to your address. You can track your
-            ticket status using the ticket number above.
+            Kami telah mengirimkan email konfirmasi ke alamat email yang Anda
+            berikan. Anda dapat memantau status tiket Anda menggunakan nomor
+            tiket di atas.
           </p>
           <Button onClick={() => setTicketNumber(null)}>
-            Submit Another Ticket
+            Kirim Tiket Lainnya
           </Button>
         </div>
       </div>
@@ -135,10 +136,11 @@ export function TicketForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="heading-1 mb-2">Submit Support Ticket</h1>
+    <div className="flex flex-col justify-center h-screen max-w-2xl mx-auto p-6">
+      <h1 className="heading-1 mb-2">Buat Tiket</h1>
       <p className="text-muted-foreground mb-6">
-        Please provide as much detail as possible to help us assist you quickly.
+        Berikan detail sebanyak mungkin untuk membantu tim kami menangani tiket
+        Anda dengan cepat.
       </p>
 
       <Form {...form}>
@@ -149,7 +151,7 @@ export function TicketForm() {
               name="submittedBy"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Name *</FormLabel>
+                  <FormLabel>Nama *</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -163,7 +165,7 @@ export function TicketForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address *</FormLabel>
+                  <FormLabel>Email *</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -183,7 +185,7 @@ export function TicketForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number (Optional)</FormLabel>
+                  <FormLabel>No. Telepon (Optional)</FormLabel>
                   <FormControl>
                     <Input placeholder="+62 812 3456 7890" {...field} />
                   </FormControl>
@@ -197,9 +199,9 @@ export function TicketForm() {
               name="categoryId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Kategory</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
+                    <FormControl className="w-full">
                       <SelectTrigger>
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
@@ -225,27 +227,21 @@ export function TicketForm() {
               <FormItem>
                 <FormLabel>Priority</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
+                  <FormControl className="w-full">
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="rendah">
-                      🟢 Rendah - General inquiry
-                    </SelectItem>
-                    <SelectItem value="sedang">
-                      🟡 Sedang - Normal issue
-                    </SelectItem>
-                    <SelectItem value="tinggi">
-                      🟠 Tinggi - Important issue
-                    </SelectItem>
-                    <SelectItem value="urgent">
-                      🔴 Urgent - Critical issue
-                    </SelectItem>
+                    <SelectItem value="rendah">🟢 Rendah</SelectItem>
+                    <SelectItem value="sedang">🟡 Sedang</SelectItem>
+                    <SelectItem value="tinggi">🟠 Tinggi</SelectItem>
+                    <SelectItem value="urgent">🔴 Urgent</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>How urgent is your issue?</FormDescription>
+                <FormDescription>
+                  Seberapa urgent issue yang Anda hadapi?
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -258,10 +254,7 @@ export function TicketForm() {
               <FormItem>
                 <FormLabel>Subject *</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Brief description of your issue"
-                    {...field}
-                  />
+                  <Input placeholder="Ringkasan masalah" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -273,17 +266,17 @@ export function TicketForm() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description *</FormLabel>
+                <FormLabel>Deskripsi *</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Please describe your issue in detail..."
+                    placeholder="Deskripsi masalah..."
                     rows={8}
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Minimum 20 characters. Include any error messages or steps to
-                  reproduce.
+                  Minimum 20 karakter. Termasuk pesan error atau langkah-langkah
+                  untuk mengulangi.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -292,7 +285,7 @@ export function TicketForm() {
 
           <Button type="submit" disabled={isSubmitting} size="lg">
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isSubmitting ? "Submitting..." : "Submit Ticket"}
+            {isSubmitting ? "Submitting..." : "Submit Tiket"}
           </Button>
         </form>
       </Form>

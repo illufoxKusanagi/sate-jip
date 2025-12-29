@@ -539,7 +539,7 @@ export function LocationDialog({
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <FormControl>
+                        <FormControl className="w-full">
                           <SelectTrigger>
                             <SelectValue placeholder="Pilih rasio" />
                           </SelectTrigger>
@@ -566,7 +566,7 @@ export function LocationDialog({
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <FormControl>
+                        <FormControl className="w-full">
                           <SelectTrigger>
                             <SelectValue placeholder="Pilih infrastruktur" />
                           </SelectTrigger>
@@ -595,7 +595,7 @@ export function LocationDialog({
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <FormControl>
+                        <FormControl className="w-full">
                           <SelectTrigger>
                             <SelectValue placeholder="Pilih status JIP" />
                           </SelectTrigger>
@@ -620,7 +620,7 @@ export function LocationDialog({
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <FormControl>
+                        <FormControl className="w-full">
                           <SelectTrigger>
                             <SelectValue placeholder="Pilih drop point (opsional)" />
                           </SelectTrigger>
@@ -648,7 +648,7 @@ export function LocationDialog({
                       E-Cat <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
+                      <FormControl className="w-full">
                         <SelectTrigger>
                           <SelectValue placeholder="Pilih kategori E-Cat" />
                         </SelectTrigger>
