@@ -131,7 +131,7 @@ export function LocationDialog({
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
     } catch (error) {
-      console.error("Unexpected error: ", error);
+      // console.error("Unexpected error: ", error);
       toast.error("Failed to load OPD and ISP data. Please refresh the page.");
     }
   };
@@ -195,8 +195,6 @@ export function LocationDialog({
         eCat: values.eCat,
       };
 
-      console.log("Submitting data:", locationData);
-
       const url = editingItem
         ? `/api/locations/${editingItem.id}`
         : "/api/locations";
@@ -224,15 +222,15 @@ export function LocationDialog({
       toast.success(
         editingItem
           ? "Location updated successfully!"
-          : "Location created successfully!",
+          : "Location created successfully!"
       );
       form.reset();
       onOpenChange(false);
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Error saving location:", error);
+      // console.error("Error saving location:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to save location",
+        error instanceof Error ? error.message : "Failed to save location"
       );
     } finally {
       setIsSubmitting(false);
@@ -243,7 +241,7 @@ export function LocationDialog({
   useEffect(() => {
     if (selectedOpdName) {
       const selectedOpd = opdData.find(
-        (opd) => opd.dataConfig.name === selectedOpdName,
+        (opd) => opd.dataConfig.name === selectedOpdName
       );
       if (selectedOpd?.dataConfig.opdType) {
         form.setValue("opdType", selectedOpd.dataConfig.opdType);
@@ -367,12 +365,12 @@ export function LocationDialog({
                             role="combobox"
                             className={cn(
                               "w-full justify-between",
-                              !field.value && "text-muted-foreground",
+                              !field.value && "text-muted-foreground"
                             )}
                           >
                             {field.value
                               ? opdData.find(
-                                  (opd) => opd.dataConfig.name === field.value,
+                                  (opd) => opd.dataConfig.name === field.value
                                 )?.dataConfig.name
                               : "Pilih OPD"}
                             <ChevronDown className="" />
@@ -391,7 +389,7 @@ export function LocationDialog({
                                   onSelect={() => {
                                     form.setValue(
                                       "opdPengampu",
-                                      opd.dataConfig.name,
+                                      opd.dataConfig.name
                                     );
                                     setOpen(false);
                                   }}
@@ -401,7 +399,7 @@ export function LocationDialog({
                                       "mr-2 h-4 w-4",
                                       opd.dataConfig.name === field.value
                                         ? "opacity-100"
-                                        : "opacity-0",
+                                        : "opacity-0"
                                     )}
                                   />
                                   {opd.dataConfig.name}
@@ -454,12 +452,12 @@ export function LocationDialog({
                             role="combobox"
                             className={cn(
                               "w-full justify-between",
-                              !field.value && "text-muted-foreground",
+                              !field.value && "text-muted-foreground"
                             )}
                           >
                             {field.value
                               ? ispData.find(
-                                  (isp) => isp.dataConfig.name === field.value,
+                                  (isp) => isp.dataConfig.name === field.value
                                 )?.dataConfig.name
                               : "Pilih ISP"}
                             <ChevronDown className="" />
@@ -478,7 +476,7 @@ export function LocationDialog({
                                   onSelect={() => {
                                     form.setValue(
                                       "ispName",
-                                      isp.dataConfig.name,
+                                      isp.dataConfig.name
                                     );
                                     setOpen(false);
                                   }}
@@ -488,7 +486,7 @@ export function LocationDialog({
                                       "mr-2 h-4 w-4",
                                       isp.dataConfig.name === field.value
                                         ? "opacity-100"
-                                        : "opacity-0",
+                                        : "opacity-0"
                                     )}
                                   />
                                   {isp.dataConfig.name}
@@ -696,8 +694,8 @@ export function LocationDialog({
                 {isSubmitting
                   ? "Saving..."
                   : editingItem
-                    ? "Update Location"
-                    : "Add Location"}
+                  ? "Update Location"
+                  : "Add Location"}
               </Button>
             </div>
           </form>

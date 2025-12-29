@@ -73,7 +73,7 @@ export function TicketForm() {
           setCategories(result.data);
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        // console.error("Error fetching categories:", error);
       }
     }
     fetchCategories();

@@ -163,7 +163,7 @@ export const columns: ColumnDef<LocationData>[] = [
       const checked =
         String(raw).trim().toLowerCase() === "true" ||
         ["1", "yes", "ya", "checked"].includes(
-          String(raw).trim().toLowerCase(),
+          String(raw).trim().toLowerCase()
         );
       return <Checkbox checked={checked} disabled aria-readonly />;
     },
@@ -180,8 +180,8 @@ export const columns: ColumnDef<LocationData>[] = [
         dp === "MMR"
           ? "bg-green-100 text-green-800 border-green-300"
           : dp === "MPP"
-            ? "bg-yellow-100 text-yellow-800 border-yellow-300"
-            : "bg-gray-100 text-gray-800 border-gray-300 w-12 h-6";
+          ? "bg-yellow-100 text-yellow-800 border-yellow-300"
+          : "bg-gray-100 text-gray-800 border-gray-300 w-12 h-6";
       return <Badge className={classes}>{dp ?? ""}</Badge>;
     },
   },
@@ -200,11 +200,11 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
   const [locationData, setlocationData] = useState<LocationData[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingLocation, setEditingLocation] = useState<LocationData | null>(
-    null,
+    null
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deletingLocation, setDeletingLocation] = useState<LocationData | null>(
-    null,
+    null
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const { isAdmin } = useAuth();
@@ -216,11 +216,11 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
         const data = await response.json();
         setlocationData(data);
       } else {
-        console.error("Failed to fetch locations");
+        // console.error("Failed to fetch locations");
         toast.error("Failed to fetch locations");
       }
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      // console.error("Error fetching locations:", error);
       toast.error("Error fetching locations");
     } finally {
       setLoading(false);
@@ -252,7 +252,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
       await fetchLocation();
       toast.success("Location deleted successfully!");
     } catch (error) {
-      console.error("Delete error: ", error);
+      // console.error("Delete error: ", error);
       toast.error("Failed to delete location");
     } finally {
       setIsDeleteDialogOpen(false);
@@ -307,7 +307,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                 onClick={() => {
                   window.open(
                     `https://www.google.com/maps/@${location.latitude},${location.longitude},15z`,
-                    "_blank",
+                    "_blank"
                   );
                 }}
               >
@@ -421,7 +421,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -444,7 +444,7 @@ export function LocationsTable({ onViewLocation }: LocationsTableProps) {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

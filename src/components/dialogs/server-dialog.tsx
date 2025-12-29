@@ -172,7 +172,7 @@ export function ServerDialog({
       onOpenChange(false);
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Error saving server:", error);
+      // console.error("Error saving server:", error);
       toast.error("Failed to save server");
     } finally {
       setIsSubmitting(false);

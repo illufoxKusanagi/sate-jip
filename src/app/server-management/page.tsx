@@ -36,7 +36,7 @@ export default function ServerManagement() {
         throw new Error("Failed to fetch server data");
       }
     } catch (error) {
-      console.error("Error fetching server data:", error);
+      // console.error("Error fetching server data:", error);
       toast.error("Failed to load server data");
     } finally {
       setLoading(false);

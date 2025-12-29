@@ -7,6 +7,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 ## Fitur Utama
 
 ### Manajemen Infrastruktur
+
 - Visualisasi peta interaktif lokasi infrastruktur menggunakan Mapbox
 - Data lokasi komprehensif termasuk koordinat, spesifikasi internet, dan jenis infrastruktur
 - Dukungan untuk berbagai kategori infrastruktur: kantor OPD, fasilitas publik, dan kantor kecamatan
@@ -14,6 +15,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - Informasi infrastruktur terperinci termasuk penyedia ISP, kecepatan internet, dan jenis koneksi
 
 ### Manajemen Administratif
+
 - Sistem informasi personel (PIC) untuk setiap kantor pemerintah
 - Manajemen kontak dengan integrasi WhatsApp
 - Kontrol akses berbasis peran (role-based access control)
@@ -21,6 +23,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - Manajemen sesi yang aman dengan enkripsi password menggunakan bcrypt
 
 ### Manajemen Server & Datacenter
+
 - **Visualisasi Rak Server**: Tampilan visual interaktif dari rak server (Rak A, B, C, D)
 - **Manajemen Unit Server**: Pelacakan posisi unit, ukuran, dan status setiap server
 - **Monitoring Status**: Pemantauan real-time status server (online, offline, maintenance, standby)
@@ -29,6 +32,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - **Dual View**: Mode visualisasi rak dan tabel data untuk kemudahan manajemen
 
 ### Sistem Helpdesk & Ticketing
+
 - **Pembuatan Tiket**: Form pengajuan tiket dukungan dari pengguna
 - **Kategori Tiket**: Klasifikasi tiket berdasarkan kategori yang dapat dikonfigurasi
 - **Prioritas Tiket**: Manajemen prioritas (rendah, sedang, tinggi, urgent)
@@ -41,6 +45,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - **Response Metrics**: Pelacakan waktu respon pertama dan waktu penyelesaian
 
 ### Kalender Aktivitas
+
 - Sistem kalender interaktif dengan berbagai mode tampilan (bulan, minggu, hari, tahun)
 - Pembuatan dan pengelolaan acara untuk kegiatan pemerintah
 - Kategorisasi acara berbasis OPD
@@ -50,6 +55,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - Pengaturan format waktu 12/24 jam
 
 ### Visualisasi Data
+
 - Dashboard statistik dengan diagram lingkaran dan tabel
 - Analitik distribusi lokasi
 - Statistik penyedia ISP
@@ -58,6 +64,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - Dashboard pusat data untuk monitoring menyeluruh
 
 ### Manajemen Konfigurasi
+
 - Konfigurasi OPD (Organisasi Perangkat Daerah)
 - Pengaturan penyedia ISP
 - Manajemen kategori tiket
@@ -66,6 +73,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 ## Stack Teknologi
 
 ### Frontend
+
 - **Framework**: Next.js 15.5.3 (React 19.1)
 - **Komponen UI**: Radix UI, shadcn/ui
 - **Styling**: Tailwind CSS v4
@@ -82,9 +90,10 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - **Theming**: next-themes untuk dark/light mode
 
 ### Backend
+
 - **Runtime**: Node.js 20+
 - **Database ORM**: Drizzle ORM v0.44
-- **Database**: MySQL 8.0+ / PostgreSQL (Multi-database support)
+- **Database**: MySQL 8.0+
 - **API**: Next.js API Routes dengan Vercel Functions
 - **Autentikasi**: JWT (JSON Web Tokens) dengan jose library
 - **Password Hashing**: bcryptjs
@@ -92,6 +101,7 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - **ID Generation**: UUID v13, NanoID v5
 
 ### Alat Pengembangan
+
 - **Bahasa**: TypeScript 5
 - **Package Manager**: npm
 - **Linting**: ESLint
@@ -100,20 +110,22 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 - **Environment Management**: dotenv-cli
 
 ### Deployment
+
 - **Containerization**: Docker dengan multi-stage builds
 - **Development**: Docker Compose dengan hot-reload
 - **Production**: Build standalone Next.js yang teroptimasi
-- **Multi-Database**: Support untuk MySQL dan PostgreSQL via Docker Compose
 
 ## Persyaratan Sistem
 
 ### Untuk Pengembangan
+
 - Node.js 20 atau lebih tinggi
 - npm 9 atau lebih tinggi
-- MySQL 8.0+ atau PostgreSQL 14+
+- MySQL 8.0+
 - Git
 
 ### Untuk Deployment Docker
+
 - Docker Engine 20.10 atau lebih tinggi
 - Docker Compose 2.0 atau lebih tinggi
 
@@ -122,22 +134,26 @@ SATE-ITIK (Sistem Akses Terpadu Infrastruktur Jaringan TIK) adalah aplikasi berb
 ### Setup Pengembangan Lokal
 
 1. Clone repository:
+
 ```bash
 git clone https://github.com/diskominfo-madiunkab/sate-itik-diskominfo.git
 cd sate-itik
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Konfigurasi environment variables:
+
 ```bash
 cp .env.local.example .env.local
 ```
 
 Edit `.env.local` dengan kredensial Anda:
+
 ```env
 # Database Configuration (MySQL)
 DB_TYPE=mysql
@@ -146,10 +162,6 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=sate_itik_db
-
-# Atau untuk PostgreSQL
-# DB_TYPE=postgres
-# DATABASE_URL=postgresql://user:password@localhost:5432/sate_itik_db
 
 # JWT Secret (generate dengan: openssl rand -base64 32)
 JWT_SECRET=your_jwt_secret_key
@@ -166,20 +178,19 @@ UPLOADTHING_APP_ID=your_uploadthing_app_id
 ```
 
 4. Jalankan migrasi database:
-```bash
-# Untuk MySQL
-npm run db:push
 
-# Untuk PostgreSQL
-DB_TYPE=postgres npm run db:push
+```bash
+npm run db:push
 ```
 
 5. Seed data admin awal (opsional):
+
 ```bash
 npm run db:seed
 ```
 
 6. Jalankan development server:
+
 ```bash
 npm run dev
 ```
@@ -191,36 +202,34 @@ Aplikasi akan tersedia di `http://localhost:3000`.
 #### Mode Development
 
 1. Jalankan dengan MySQL:
+
 ```bash
 npm run docker:up:mysql
 ```
 
-Atau dengan PostgreSQL:
-```bash
-npm run docker:up:postgres
-```
-
 Mode ini mencakup:
+
 - Fungsi hot-reload
 - Source code di-mount sebagai volume
 - Port 3000 diekspos
 - Database service terintegrasi
 
 2. Lihat logs:
+
 ```bash
 npm run docker:logs:mysql
-# atau
-npm run docker:logs:postgres
 ```
 
 #### Mode Production
 
 1. Build dan jalankan container production:
+
 ```bash
 docker compose -f docker-compose.prod.yml up -d
 ```
 
 Mode ini mencakup:
+
 - Build multi-stage yang teroptimasi
 - Server Next.js standalone
 - Konfigurasi production-ready
@@ -228,6 +237,7 @@ Mode ini mencakup:
 - Health checks
 
 2. Hentikan container:
+
 ```bash
 npm run docker:down
 ```
@@ -266,11 +276,13 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
 ### Manajemen Server (`/server-management`)
 
 1. **Visualisasi Rak**:
+
    - Lihat tampilan visual dari 4 rak server (A, B, C, D)
    - Setiap unit menampilkan status dengan kode warna
    - Klik unit untuk melihat detail server
 
 2. **Menambah Server**:
+
    - Klik tombol "Add Server"
    - Isi informasi: nama server, posisi unit, ukuran, rak, brand
    - Tambahkan nomor aset, serial number, IP address
@@ -286,6 +298,7 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
 ### Sistem Helpdesk (`/tickets`)
 
 1. **Mengajukan Tiket**:
+
    - Navigasi ke `/tickets`
    - Isi form tiket:
      - Subject (judul masalah)
@@ -296,6 +309,7 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
      - Upload file pendukung (opsional)
 
 2. **Manajemen Tiket** (`/tickets/help-desk`):
+
    - Lihat semua tiket yang masuk
    - Filter berdasarkan status, prioritas, kategori
    - Assign tiket ke staff
@@ -313,11 +327,13 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
 ### Kalender Aktivitas (`/activity-calendar`)
 
 1. **Melihat Acara**:
+
    - Beralih antara tampilan Bulan, Minggu, Hari, dan Tahun
    - Klik pada acara untuk melihat detail
    - Gunakan navigator tanggal untuk berpindah antar periode
 
 2. **Membuat Acara**:
+
    - Klik "Add Event" atau klik pada tanggal
    - Isi detail acara:
      - Judul (wajib)
@@ -329,6 +345,7 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
    - Klik "Create" untuk menyimpan
 
 3. **Mengedit Acara**:
+
    - Klik pada acara untuk membuka detail
    - Klik tombol "Edit"
    - Modifikasi informasi acara
@@ -351,11 +368,13 @@ Dashboard utama (`/dashboard`) menyediakan akses ke:
 ### Konfigurasi Data (`/data-config`)
 
 1. **Konfigurasi OPD**:
+
    - Tambahkan kantor pemerintah baru
    - Edit informasi OPD yang ada
    - Kelola jenis OPD dan alamat
 
 2. **Konfigurasi ISP**:
+
    - Tambahkan penyedia layanan internet
    - Update informasi penyedia
 
@@ -409,7 +428,6 @@ src/
 │   ├── data/                   # Data statis dan mock data
 │   ├── db/                     # Konfigurasi database
 │   │   ├── schema.mysql.ts    # Schema MySQL
-│   │   ├── schema.postgres.ts # Schema PostgreSQL
 │   │   └── connection.ts      # Database connection
 │   ├── mapbox/                 # Utilitas Mapbox
 │   ├── types/                  # TypeScript types
@@ -421,9 +439,10 @@ src/
 
 ### Skema Database
 
-Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel utama:
+Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL. Tabel utama:
 
 **locations** - Lokasi infrastruktur
+
 - `id`: Primary key (UUID)
 - `locationName`: Nama lokasi
 - `latitude`, `longitude`: Koordinat geografis
@@ -433,18 +452,21 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `status`: Status lokasi (active, inactive, maintenance)
 
 **admins** - Data PIC/Admin
+
 - `id`: Primary key (UUID)
 - `nama`, `nip`, `jabatan`: Informasi personel
 - `instansi`: Instansi tempat bekerja
 - `whatsapp`: Nomor kontak
 
 **users** - Pengguna sistem
+
 - `id`: Primary key (UUID)
 - `username`: Username (unique)
 - `password`: Password terenkripsi (bcrypt)
 - `role`: Peran (admin, user)
 
 **eventCalendar** - Event/Kegiatan
+
 - `id`: Primary key (UUID)
 - `title`, `description`: Informasi event
 - `startDate`, `endDate`: Waktu event
@@ -452,6 +474,7 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `color`: Warna kategori
 
 **serverData** - Data Server
+
 - `id`: Primary key (UUID)
 - `serverName`: Nama server
 - `unitPosition`, `unitSize`: Posisi di rak
@@ -463,6 +486,7 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `installedApps`: Aplikasi terinstal (JSON array)
 
 **tickets** - Tiket Helpdesk
+
 - `id`: Primary key (NanoID)
 - `ticketNumber`: Nomor tiket (unique)
 - `subject`, `description`: Isi tiket
@@ -474,6 +498,7 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `firstResponseAt`, `resolvedAt`, `closedAt`: Metrics
 
 **ticketCategories** - Kategori Tiket
+
 - `id`: Primary key (NanoID)
 - `name`, `description`: Informasi kategori
 - `color`, `icon`: Tampilan visual
@@ -481,6 +506,7 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `isActive`: Status aktif
 
 **ticketReplies** - Balasan Tiket
+
 - `id`: Primary key (NanoID)
 - `ticketId`: ID tiket (foreign key)
 - `message`, `messageHtml`: Isi balasan
@@ -489,92 +515,110 @@ Aplikasi menggunakan Drizzle ORM dengan dukungan MySQL dan PostgreSQL. Tabel uta
 - `isInternal`: Catatan internal
 
 **ticketAttachments** - File Attachment
+
 - `id`: Primary key (NanoID)
 - `ticketId`, `replyId`: Relasi
 - `fileName`, `fileUrl`: Informasi file
 - `fileSize`, `mimeType`: Metadata
 
-Lihat `src/lib/db/schema.mysql.ts` atau `src/lib/db/schema.postgres.ts` untuk definisi lengkap.
+Lihat `src/lib/db/schema.mysql.ts` untuk definisi lengkap.
 
 ### Endpoint API
 
 #### Autentikasi
 
 **POST /api/login**
+
 - Body: `{ username: string, password: string }`
 - Returns: JWT token dan user data
 
 **POST /api/logout**
+
 - Membersihkan sesi pengguna
 - Returns: Status sukses
 
 #### Manajemen Event
 
 **GET /api/event**
+
 - Mengambil semua event
 - Returns: Array objek event
 
 **POST /api/event**
+
 - Membuat event baru
 - Body: Data event sesuai schema
 - Returns: Objek event yang dibuat
 
 **GET /api/event/[id]**
+
 - Mengambil satu event
 - Returns: Objek event
 
 **PUT /api/event/[id]**
+
 - Update event
 - Returns: Objek event yang diupdate
 
 **DELETE /api/event/[id]**
+
 - Hapus event
 - Returns: Status sukses
 
 #### Manajemen Server
 
 **GET /api/server-data**
+
 - Mengambil semua data server
 - Returns: Array objek server
 
 **POST /api/server-data**
+
 - Menambah server baru
 - Body: Data server
 - Returns: Server yang dibuat
 
 **PUT /api/server-data/[id]**
+
 - Update data server
 - Returns: Server yang diupdate
 
 **DELETE /api/server-data/[id]**
+
 - Hapus server
 - Returns: Status sukses
 
 #### Manajemen Tiket
 
 **GET /api/tickets**
+
 - Mengambil semua tiket
 - Query params: status, priority, category untuk filter
 - Returns: Array tiket
 
 **POST /api/tickets**
+
 - Membuat tiket baru
 - Body: Data tiket
 - Returns: Tiket yang dibuat dengan nomor tiket otomatis
 
 **GET /api/tickets/[id]**
+
 - Mengambil detail tiket dengan replies dan attachments
 - Returns: Objek tiket lengkap
 
 **PUT /api/tickets/[id]**
+
 - Update tiket (status, assignment, dll)
 - Returns: Tiket yang diupdate
 
 **DELETE /api/tickets/[id]**
+
 - Hapus tiket
 - Returns: Status sukses
 
 **POST /api/tickets/[id]/reply**
+
 - Menambahkan balasan ke tiket
 - Body: Message, author info
 - Returns: Reply yang dibuat
@@ -591,34 +635,12 @@ Sistem menggunakan JWT (JSON Web Tokens) untuk autentikasi:
 
 Implementasi di `src/app/context/auth-context.tsx` dan middleware di API routes.
 
-### Multi-Database Support
-
-Aplikasi mendukung MySQL dan PostgreSQL:
-
-1. Set `DB_TYPE` di environment variable:
-   - `DB_TYPE=mysql` untuk MySQL
-   - `DB_TYPE=postgres` untuk PostgreSQL
-
-2. Database credentials:
-   - MySQL: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-   - PostgreSQL: `DATABASE_URL`
-
-3. Schema files:
-   - MySQL: `src/lib/db/schema.mysql.ts`
-   - PostgreSQL: `src/lib/db/schema.postgres.ts`
-
-4. Generate migrations:
-```bash
-npm run db:generate:mysql
-# atau
-npm run db:generate:postgres
-```
-
 ### Menambahkan Fitur Baru
 
 #### Menambahkan Halaman Baru
 
 1. Buat file halaman di `src/app/halaman-baru/page.tsx`:
+
 ```typescript
 "use client";
 
@@ -640,8 +662,9 @@ export default function HalamanBaru() {
 #### Menambahkan Tabel Database
 
 1. Tambahkan definisi tabel di schema:
+
 ```typescript
-// src/lib/db/schema.mysql.ts atau schema.postgres.ts
+// src/lib/db/schema.mysql.ts
 export const tableBaru = mysqlTable("table_baru", {
   id: varchar("id", { length: 50 })
     .primaryKey()
@@ -652,11 +675,13 @@ export const tableBaru = mysqlTable("table_baru", {
 ```
 
 2. Generate migration:
+
 ```bash
 npm run db:generate
 ```
 
 3. Push ke database:
+
 ```bash
 npm run db:push
 ```
@@ -664,6 +689,7 @@ npm run db:push
 #### Menambahkan API Endpoint
 
 1. Buat file route di `src/app/api/endpoint-baru/route.ts`:
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db/connection";
@@ -697,10 +723,6 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=sate_itik_db
-
-# PostgreSQL Alternative
-# DB_TYPE=postgres
-# DATABASE_URL=postgresql://user:password@localhost:5432/sate_itik_db
 
 # JWT Secret
 JWT_SECRET=your_secret_key_minimum_32_chars
@@ -749,11 +771,6 @@ npm run docker:up:mysql
 npm run docker:logs:mysql
 npm run docker:down:mysql
 
-# Development dengan PostgreSQL
-npm run docker:up:postgres
-npm run docker:logs:postgres
-npm run docker:down:postgres
-
 # Production
 docker compose -f docker-compose.prod.yml up -d
 docker compose -f docker-compose.prod.yml down
@@ -787,7 +804,7 @@ Sebelum deployment:
 - [ ] Verifikasi persistensi data
 - [ ] Cek responsive design (mobile, tablet, desktop)
 - [ ] Test upload file dan email notifications
-- [ ] Verifikasi Docker builds (MySQL & PostgreSQL)
+- [ ] Verifikasi Docker builds
 - [ ] Test role-based access control
 
 ## Referensi API
@@ -795,266 +812,12 @@ Sebelum deployment:
 ### API Tiket Helpdesk
 
 **Skema Tiket**:
+
 ```typescript
 {
-  subject: string;              // Wajib
-  description: string;          // Wajib
-  submittedBy: string;         // Wajib
-  email: string;               // Wajib, format email
-  phone?: string;              // Opsional
-  categoryId: string;          // Wajib
-  priority: "rendah" | "sedang" | "tinggi" | "urgent";
+  subject: string; // Wajib
+  categoryId: string; // Wajib
+  priority: string; // Wajib
+  description: string; // Wajib
 }
 ```
-
-**Skema Balasan**:
-```typescript
-{
-  ticketId: string;            // Wajib
-  message: string;             // Wajib
-  authorId: string;            // Wajib
-  authorName: string;          // Wajib
-  authorEmail: string;         // Wajib
-  isStaffReply: boolean;       // Default: false
-  isInternal?: boolean;        // Default: false
-}
-```
-
-## Deployment
-
-### Checklist Deployment Production
-
-1. **Environment Variables**:
-   - Set semua environment variables untuk production
-   - Generate JWT_SECRET yang kuat
-   - Konfigurasi database credentials
-   - Setup email service (Resend API key)
-   - Konfigurasi UploadThing untuk file upload
-
-2. **Database**:
-   - Backup database development
-   - Setup database production (MySQL/PostgreSQL)
-   - Jalankan migrations
-   - Seed data awal jika diperlukan
-
-3. **Docker Build**:
-```bash
-docker compose -f docker-compose.prod.yml build
-```
-
-4. **Jalankan Services**:
-```bash
-docker compose -f docker-compose.prod.yml up -d
-```
-
-5. **Verifikasi**:
-```bash
-docker compose -f docker-compose.prod.yml logs -f
-```
-
-6. **Testing Production**:
-   - Test semua fungsionalitas kritis
-   - Verifikasi autentikasi dan autorisasi
-   - Test email notifications
-   - Cek file upload functionality
-
-7. **Monitoring**:
-   - Setup logging
-   - Konfigurasi monitoring
-   - Setup backup otomatis database
-
-### Konfigurasi Docker Production
-
-File `docker-compose.prod.yml` menggunakan:
-- Multi-stage builds untuk optimasi
-- Health checks untuk database dan app
-- Non-root user untuk keamanan
-- Volume untuk persistensi data
-- Network isolation
-- Restart policy untuk high availability
-
-### Database Backup
-
-Backup MySQL:
-```bash
-docker exec mysql-container mysqldump -u root -p sate_itik_db > backup.sql
-```
-
-Backup PostgreSQL:
-```bash
-docker exec postgres-container pg_dump -U postgres sate_itik_db > backup.sql
-```
-
-Restore:
-```bash
-# MySQL
-docker exec -i mysql-container mysql -u root -p sate_itik_db < backup.sql
-
-# PostgreSQL
-docker exec -i postgres-container psql -U postgres sate_itik_db < backup.sql
-```
-
-## Troubleshooting
-
-### Masalah Umum
-
-**Koneksi Database Gagal**
-- Verifikasi credentials di `.env.local`
-- Cek service database berjalan: `docker ps`
-- Periksa port tidak konflik
-- Verifikasi database exists dan accessible
-- Check logs: `npm run docker:logs:mysql` atau `npm run docker:logs:postgres`
-
-**JWT Token Invalid**
-- Pastikan JWT_SECRET sama di semua environment
-- Clear localStorage dan login ulang
-- Periksa token expiration settings
-
-**Docker Build Gagal**
-- Bersihkan cache: `docker system prune -a`
-- Rebuild tanpa cache: `docker compose build --no-cache`
-- Cek ketersediaan ruang disk: `df -h`
-- Periksa Docker daemon status
-
-**Upload File Gagal**
-- Verifikasi UploadThing credentials
-- Cek file size limits
-- Periksa network connectivity
-- Review browser console untuk error
-
-**Email Tidak Terkirim**
-- Verifikasi Resend API key valid
-- Cek email format valid
-- Review email service logs
-- Test dengan: `npm run test:resend`
-
-**Tiket Tidak Muncul**
-- Periksa database connection
-- Verifikasi API endpoint: `/api/tickets`
-- Check browser network tab untuk errors
-- Review server logs
-
-**Server Visualization Kosong**
-- Pastikan data server ada di database
-- Periksa endpoint `/api/server-data`
-- Verifikasi format data sesuai schema
-
-**Peta Tidak Ditampilkan**
-- Verifikasi Mapbox token valid
-- Cek browser console untuk errors
-- Pastikan koordinat geografis valid
-- Review network requests
-
-**Kalender Event Tidak Tersimpan**
-- Validasi data event terhadap schema
-- Cek endpoint `/api/event`
-- Review form validation errors
-- Periksa database constraints
-
-### Debug Mode
-
-Enable debug logging:
-```typescript
-// Di component
-console.log("Debug info:", data);
-
-// Di API route
-console.error("Error details:", error);
-```
-
-Check server logs:
-```bash
-# Docker
-docker compose logs -f app
-
-# Local development
-# Logs akan muncul di terminal
-```
-
-### Performance Issues
-
-**Slow Page Load**
-- Enable Next.js caching
-- Optimize images dengan Next Image
-- Lazy load components
-- Review database queries
-- Add indexes ke frequently queried columns
-
-**Large Bundle Size**
-- Analyze bundle: `npm run build`
-- Use dynamic imports
-- Remove unused dependencies
-- Optimize third-party libraries
-
-### Mendapatkan Bantuan
-
-Untuk masalah yang tidak tercakup:
-1. Review dokumentasi di folder `/docs`
-2. Check existing issues di repository
-3. Inspeksi browser console untuk client-side errors
-4. Review server logs untuk API errors
-5. Gunakan Drizzle Studio untuk debug database: `npm run db:studio`
-
-## Fitur Mendatang
-
-Berdasarkan TODO dan roadmap pengembangan:
-- [ ] Enhanced ticket card view
-- [ ] Advanced filtering untuk ticket dashboard
-- [ ] Email template customization
-- [ ] Export data ke Excel/PDF
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app companion
-- [ ] Real-time notifications dengan WebSocket
-- [ ] Multi-language support
-
-## Kontribusi
-
-Ketika berkontribusi pada proyek ini:
-
-1. Fork repository
-2. Buat feature branch: `git checkout -b feature/nama-fitur`
-3. Ikuti gaya kode dan konvensi yang ada
-4. Tulis commit message yang jelas dan deskriptif
-5. Test secara menyeluruh sebelum submit
-6. Update dokumentasi sesuai kebutuhan
-7. Submit pull request dengan deskripsi detail
-8. Pastikan semua tests pass
-9. Review feedback dan lakukan perbaikan
-
-### Commit Message Convention
-
-```
-feat: menambahkan fitur baru
-fix: memperbaiki bug
-docs: update dokumentasi
-style: formatting, missing semicolons, etc
-refactor: refactoring code
-test: menambahkan test
-chore: update dependencies, build config, etc
-```
-
-## Lisensi
-
-Proyek ini adalah perangkat lunak proprietary yang dikembangkan untuk Dinas Komunikasi dan Informatika Kabupaten Madiun.
-
----
-
-<div align="center">
-
-**Informasi Proyek**
-
-Versi: 2.0.0 | Terakhir Diperbarui: Januari 2025
-
-Dipelihara oleh: [Arief Satria](https://github.com/illufoxKusanagi)
-
-Organisasi: Dinas Komunikasi dan Informatika Kabupaten Madiun
-
-**Tech Stack**
-
-Next.js 15 • React 19 • TypeScript • Tailwind CSS v4 • Drizzle ORM • MySQL/PostgreSQL • Docker
-
----
-
-© 2025 Dinas Komunikasi dan Informatika Kabupaten Madiun. Hak cipta dilindungi.
-
-</div>

@@ -126,9 +126,9 @@ export function AdminTable() {
       setAdminData(data);
       setError(null);
     } catch (error) {
-      console.error("Error fetching admins:", error);
+      // console.error("Error fetching admins:", error);
       setError(
-        error instanceof Error ? error.message : "Failed to fetch admins",
+        error instanceof Error ? error.message : "Failed to fetch admins"
       );
     } finally {
       setLoading(false);
@@ -160,7 +160,7 @@ export function AdminTable() {
       await fetchAdmins();
       toast.success("Admin deleted successfully!");
     } catch (error) {
-      console.error("Delete error: ", error);
+      // console.error("Delete error: ", error);
       toast.error("Failed to delete admin");
     } finally {
       setIsDeleteDialogOpen(false);
@@ -319,7 +319,7 @@ export function AdminTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -342,7 +342,7 @@ export function AdminTable() {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

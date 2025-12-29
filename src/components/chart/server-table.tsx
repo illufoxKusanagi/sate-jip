@@ -225,7 +225,7 @@ export function ServerTable({
       toast.success("Server deleted successfully!");
       if (onDataChange) onDataChange();
     } catch (error) {
-      console.error("Delete error:", error);
+      // console.error("Delete error:", error);
       toast.error("Failed to delete server");
     } finally {
       setIsDeleteDialogOpen(false);
@@ -369,7 +369,7 @@ export function ServerTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -401,7 +401,7 @@ export function ServerTable({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

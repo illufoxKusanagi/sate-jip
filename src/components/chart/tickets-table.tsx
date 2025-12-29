@@ -237,7 +237,7 @@ export function TicketsTable({
       const result = await response.json();
       setData(Array.isArray(result.data) ? result.data : []);
     } catch (error) {
-      console.error("Error fetching tickets:", error);
+      // console.error("Error fetching tickets:", error);
       toast.error("Failed to fetch tickets");
       setData([]);
     } finally {

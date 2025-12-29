@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
       } catch (error) {
-        console.error("Error parsing user data:", error);
+        // console.error("Error parsing user data:", error);
         localStorage.removeItem("auth-token");
         localStorage.removeItem("authUser");
       }
@@ -57,7 +57,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await fetch("/api/logout", { method: "POST" });
     } catch (error) {
-      console.error("Error calling logout API:", error);
+      // console.error("Error calling logout API:", error);
+      toast.error("Failed to logout");
     }
 
     localStorage.removeItem("auth-token");

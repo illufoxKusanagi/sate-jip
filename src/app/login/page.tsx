@@ -82,7 +82,7 @@ function LoginPageContent() {
       const redirectTo = redirect || "/dashboard";
       router.push(redirectTo);
     } catch (error) {
-      console.error("Login error:", error);
+      // console.error("Login error:", error);
       toast.error("Login gagal, silahkan coba lagi");
     }
   };

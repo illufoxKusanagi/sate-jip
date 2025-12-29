@@ -18,11 +18,10 @@ export function Calendar() {
       try {
         setIsLoading(true);
         const data = await getEvents();
-        console.log("Fetched events:", data);
         setEvents(data);
         setError(null);
       } catch (err) {
-        console.error("Error loading events:", err);
+        // console.error("Error loading events:", err);
         setError(err instanceof Error ? err.message : "Failed to load events");
       } finally {
         setIsLoading(false);

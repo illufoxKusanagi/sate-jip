@@ -101,7 +101,7 @@ export function PicDialog({
 
       setOpdData(opdConfigs);
     } catch (error) {
-      console.error("Unexpected error: ", error);
+      // console.error("Unexpected error: ", error);
       toast.error("Failed to load OPD and ISP data. Please refresh the page.");
     }
   };
@@ -172,7 +172,7 @@ export function PicDialog({
       onOpenChange(false);
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Error saving admin:", error);
+      // console.error("Error saving admin:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to save admin"
       );

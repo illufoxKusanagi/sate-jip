@@ -59,6 +59,7 @@ export async function middleware(request: NextRequest) {
   if (!isProtectedRoute) {
     return NextResponse.next();
   }
+  
   const token = request.cookies.get("auth-token")?.value;
 
   if (!token) {

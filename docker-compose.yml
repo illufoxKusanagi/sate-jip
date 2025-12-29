@@ -1,6 +1,4 @@
 # Gunakan perintah: docker compose up -d --build
-# For MySQL: docker compose up mysql app -d
-# For PostgreSQL: docker compose up postgres app -d
 services:
   # MySQL Database
   mysql:
@@ -35,33 +33,13 @@ services:
       timeout: 5s
       retries: 5
 
-  # PostgreSQL Database
-  postgres:
-    image: postgres:16-alpine
-    container_name: sate-jip-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-sate_jip_db}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - sate-jip-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   # Next.js Application
   app:
     build:
       context: .
       dockerfile: Dockerfile
       target: runner
+      network: host
     container_name: sate-jip-app-diskominfo
     restart: unless-stopped
     ports:
@@ -71,17 +49,9 @@ services:
     environment:
       - NODE_ENV=production
       - HOSTNAME=0.0.0.0
-    # App can depend on either MySQL or PostgreSQL based on DB_TYPE env var
-    # Uncomment the appropriate database dependency:
-    # For MySQL:
     depends_on:
       mysql:
         condition: service_healthy
-    # For PostgreSQL (comment mysql above and uncomment this):
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
-    # Tidak ada volume untuk source code di produksi agar image bersifat immutable.
     networks:
       - sate-jip-network
     # Remove volumes for production - app is self-contained in the image
@@ -108,4 +78,3 @@ networks:
 
 volumes:
   mysql-data:
-  postgres-data:

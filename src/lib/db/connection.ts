@@ -1,11 +1,7 @@
 import { drizzle as drizzleMysql } from "drizzle-orm/mysql2";
-import { drizzle as drizzlePostgres } from "drizzle-orm/postgres-js";
 import mysql from "mysql2/promise";
-import postgres from "postgres";
 import * as mysqlSchema from "./schema.mysql";
-import * as postgresSchema from "./schema.postgres";
 
-const DB_TYPE = process.env.DB_TYPE || "mysql";
 let db: any;
 const isBuildMode =
   process.env.NODE_ENV === "production" &&
@@ -15,24 +11,6 @@ const isBuildMode =
 if (isBuildMode) {
   console.log("⚠️  Build mode - database not initialized");
   db = {} as any;
-} else if (DB_TYPE === "postgres") {
-  const connectionString = process.env.DATABASE_URL || "";
-
-  if (
-    connectionString &&
-    connectionString !== "postgresql://build:build@localhost:5432/build"
-  ) {
-    const client = postgres(connectionString, {
-      max: 10,
-      idle_timeout: 20,
-      connect_timeout: 10,
-    });
-    db = drizzlePostgres(client, { schema: postgresSchema });
-    console.log("✅ Using PostgreSQL database");
-  } else {
-    console.log("⚠️  PostgreSQL connection string not configured");
-    db = {} as any;
-  }
 } else {
   const dbHost = process.env.DB_HOST || "localhost";
   const dbPort = parseInt(process.env.DB_PORT || "3306");

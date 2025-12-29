@@ -85,12 +85,11 @@ export function CalendarProvider({
       ...DEFAULT_SETTINGS,
       badgeVariant: badge,
       view: view,
-    },
+    }
   );
 
   const migratedView = migrateViewValue(settings.view);
   if (migratedView !== settings.view) {
-    console.log(`Migrating view from ${settings.view} to ${migratedView}`);
     setSettings({
       ...settings,
       view: migratedView,
@@ -98,12 +97,12 @@ export function CalendarProvider({
   }
 
   const [badgeVariant, setBadgeVariantState] = useState<"dot" | "colored">(
-    settings.badgeVariant,
+    settings.badgeVariant
   );
   const [currentView, setCurrentViewState] =
     useState<TCalendarView>(migratedView);
   const [use24HourFormat, setUse24HourFormatState] = useState<boolean>(
-    settings.use24HourFormat,
+    settings.use24HourFormat
   );
   const [agendaModeGroupBy, setAgendaModeGroupByState] = useState<
     "date" | "color"
@@ -111,7 +110,7 @@ export function CalendarProvider({
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
-    "all",
+    "all"
   );
   const [selectedColors, setSelectedColors] = useState<TEventColor[]>([]);
 
@@ -148,7 +147,7 @@ export function CalendarProvider({
 
   const applyColorFilter = (
     eventsList: IEvent[],
-    colors: TEventColor[] = selectedColors,
+    colors: TEventColor[] = selectedColors
   ) => {
     if (colors.length === 0) return eventsList;
     return eventsList.filter((event) => colors.includes(event.color || "blue"));

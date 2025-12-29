@@ -127,7 +127,7 @@ export function ChartPie({
           }))
         );
       } catch (error) {
-        console.error(`Error fetching ${dataKey}:`, error);
+        // console.error(`Error fetching ${dataKey}:`, error);
         setError(
           error instanceof Error ? error.message : "Failed to load data"
         );

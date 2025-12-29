@@ -109,7 +109,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
     } catch (error) {
-      console.error("Unexpected error: ", error);
+      // console.error("Unexpected error: ", error);
       toast.error("Failed to load OPD and ISP data. Please refresh the page.");
     }
   };
@@ -161,7 +161,7 @@ export function LocationForm({ className, ...props }: ComponentProps<"div">) {
       form.reset();
       router.push("/dashboard");
     } catch (error) {
-      console.error("Error creating location:", error);
+      // console.error("Error creating location:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to create location"
       );

@@ -40,10 +40,12 @@ import {
 } from "../ui/collapsible";
 import { CardDescription } from "../ui/card";
 import { useAuth } from "@/app/context/auth-context";
+import { usePathname } from "next/navigation";
 
 export function AppSidebar() {
   const { open } = useSidebar();
   const { isAuthenticated } = useAuth();
+  const pathname = usePathname();
 
   const user = {
     name: "arief",
@@ -118,19 +120,19 @@ export function AppSidebar() {
   ];
 
   const visibleTikItems = tikItems.filter(
-    (item) => !item.adminOnly || isAuthenticated,
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const visibleDataCentralItems = dataCentralItem.filter(
-    (item) => !item.adminOnly || isAuthenticated,
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const visibleCalendarItems = calendarItem.filter(
-    (item) => !item.adminOnly || isAuthenticated,
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   const visibleTicketItems = ticketItems.filter(
-    (item) => !item.adminOnly || isAuthenticated,
+    (item) => !item.adminOnly || isAuthenticated
   );
 
   return (
@@ -140,7 +142,7 @@ export function AppSidebar() {
           "overflow-hidden transition-all duration-500 ease-in-out",
           open
             ? "px-4 pt-4 block opacity-100"
-            : "px-2 pt-4 flex items-center justify-center opacity-100",
+            : "px-2 pt-4 flex items-center justify-center opacity-100"
         )}
       >
         <SidebarMenu>
@@ -169,7 +171,7 @@ export function AppSidebar() {
       <SidebarContent
         className={cn(
           "flex flex-col gap-4 transition-all duration-300",
-          open ? "px-4 py-2" : "px-2 pt-4",
+          open ? "px-4 py-2" : "px-2 pt-4"
         )}
       >
         <SidebarMenu>
@@ -180,7 +182,7 @@ export function AppSidebar() {
                   <CollapsibleTrigger
                     className={cn(
                       "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                      !open && "justify-center px-2",
+                      !open && "justify-center px-2"
                     )}
                   >
                     <Building className={cn(!open && "h-5 w-5")} />
@@ -193,7 +195,11 @@ export function AppSidebar() {
                 <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                   <div className="mt-1 space-y-1">
                     {visibleTikItems.map((item) => (
-                      <SidebarMenuButton key={item.title} asChild>
+                      <SidebarMenuButton
+                        key={item.title}
+                        asChild
+                        isActive={pathname === item.url}
+                      >
                         <Link
                           href={item.url}
                           className={cn(!open && "justify-center px-2")}
@@ -217,7 +223,7 @@ export function AppSidebar() {
                   <CollapsibleTrigger
                     className={cn(
                       "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                      !open && "justify-center px-2",
+                      !open && "justify-center px-2"
                     )}
                   >
                     <Database className={cn(!open && "h-5 w-5")} />
@@ -230,7 +236,11 @@ export function AppSidebar() {
                 <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                   <div className="mt-1 space-y-1">
                     {visibleDataCentralItems.map((item) => (
-                      <SidebarMenuButton key={item.title} asChild>
+                      <SidebarMenuButton
+                        key={item.title}
+                        asChild
+                        isActive={pathname === item.url}
+                      >
                         <Link
                           href={item.url}
                           className={cn(!open && "justify-center px-2")}
@@ -253,7 +263,7 @@ export function AppSidebar() {
                 <CollapsibleTrigger
                   className={cn(
                     "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                    !open && "justify-center px-2",
+                    !open && "justify-center px-2"
                   )}
                 >
                   <Ticket className={cn(!open && "h-5 w-5")} />
@@ -266,7 +276,11 @@ export function AppSidebar() {
               <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                 <div className="mt-1 space-y-1">
                   {visibleTicketItems.map((item) => (
-                    <SidebarMenuButton key={item.title} asChild>
+                    <SidebarMenuButton
+                      key={item.title}
+                      asChild
+                      isActive={pathname === item.url}
+                    >
                       <Link
                         href={item.url}
                         className={cn(!open && "justify-center px-2")}
@@ -288,7 +302,7 @@ export function AppSidebar() {
                 <CollapsibleTrigger
                   className={cn(
                     "w-full text-primary-600 dark:text-primary-300 hover:text-primary-500 transition-colors",
-                    !open && "justify-center px-2",
+                    !open && "justify-center px-2"
                   )}
                 >
                   <Calendar className={cn(!open && "h-5 w-5")} />
@@ -301,7 +315,11 @@ export function AppSidebar() {
               <CollapsibleContent className="overflow-hidden data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                 <div className="mt-1 space-y-1">
                   {visibleCalendarItems.map((item) => (
-                    <SidebarMenuButton key={item.title} asChild>
+                    <SidebarMenuButton
+                      key={item.title}
+                      asChild
+                      isActive={pathname === item.url}
+                    >
                       <Link
                         href={item.url}
                         className={cn(!open && "justify-center px-2")}
@@ -320,7 +338,7 @@ export function AppSidebar() {
       <SidebarFooter
         className={cn(
           "w-full bg-accent/50 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
-          open ? "p-4" : "p-2",
+          open ? "p-4" : "p-2"
         )}
       >
         {open ? (

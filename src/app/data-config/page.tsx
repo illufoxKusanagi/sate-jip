@@ -83,7 +83,7 @@ export default function InputDataConfigPage() {
       await fetchAllData();
       toast.success("Configuration deleted successfully!");
     } catch (error) {
-      console.error("Delete error: ", error);
+      // console.error("Delete error: ", error);
       toast.error("Failed to delete configuration");
     } finally {
       setIsDeleteDialogOpen(false);
@@ -188,7 +188,7 @@ export default function InputDataConfigPage() {
       setOpdData(opdConfigs);
       setIspData(ispConfigs);
     } catch (error) {
-      console.error("Fetch error details:", error);
+      // console.error("Fetch error details:", error);
       toast.error(
         "Failed to fetch configurations. Please check your connection."
       );
@@ -268,7 +268,7 @@ export default function InputDataConfigPage() {
 
       if (!response.ok) {
         const errorData = await response.text();
-        console.error("Server response error:", response.status, errorData);
+        // console.error("Server response error:", response.status, errorData);
         throw new Error(
           `HTTP Error! status: ${response.status} - ${errorData}`
         );
@@ -284,7 +284,7 @@ export default function InputDataConfigPage() {
           : "Configuration created successfully!"
       );
     } catch (error) {
-      console.error("Submit error details:", error);
+      // console.error("Submit error details:", error);
       toast.error(
         editingItem
           ? "Failed to update configuration. Please check your connection."

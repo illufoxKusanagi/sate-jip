@@ -28,12 +28,12 @@ export default function MainMap() {
         if (Array.isArray(data)) {
           setLocationData(data);
         } else {
-          console.error("Received data is not an array:", data);
+          // console.error("Received data is not an array:", data);
           setLocationData([]);
           setError("Invalid data format received");
         }
       } catch (error) {
-        console.error("Error fetching locations:", error);
+        // console.error("Error fetching locations:", error);
         setLocationData([]);
         setError(
           error instanceof Error ? error.message : "Failed to fetch locations"
